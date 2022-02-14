@@ -1,0 +1,1 @@
+export const LOGINDATA_UPDATE = 'LOGINDATA_UPDATE';
