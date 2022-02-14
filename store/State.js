@@ -5,7 +5,7 @@ import Reducer from "./reducer";
 import * as actionTypes from "./actions";
 function State(props) {
   const intialState = {
-    login_data: { username: '100009', password: '' }
+    login_data: { login: "", password: "" }
   }
 
   const [state, dispatch] = useReducer(Reducer, intialState)

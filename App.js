@@ -19,26 +19,34 @@ import State from './store/State';
 
 
 function App() {
-  const [Database, setDatabase] = useState(null)
+  const [token, setToken] = useState(null)
   useEffect(() => {
     readData()
   }, []);
   const NavStack = createStackNavigator();
+  useEffect(() => {
+    readData()
+  }, []);
+  setTimeout(async () => {
+    const Token = await AsyncStorage.removeItem('token');
+    setToken(null)
+  }, 10800000);
+
   const readData = async () => {
     try {
-      const userId = await AsyncStorage.getItem('id')
-      if (userId !== null) {
-        setDatabase(userId)
+      const Token = await AsyncStorage.getItem('token')
+      if (Token !== null) {
+        setToken(Token)
       }
     } catch (e) {
       console.log('Failed to fetch the data from storage .App')
     }
   }
-  console.log(Database == null ? "Login" : "BottomNav", "App Login BottomNav")
+  console.log(token, token == null ? "Login" : "BottomNav")
   return (
     <State>
       <NavigationContainer independent={true}>
-        <NavStack.Navigator initialRouteName={Database == null ? Login : BottomNav}>
+        <NavStack.Navigator initialRouteName={token == null ? Login : BottomNav}>
           <NavStack.Screen
             name="Login"
             component={Login}
