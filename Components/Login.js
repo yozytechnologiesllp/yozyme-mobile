@@ -3,21 +3,58 @@ import {
   Text,
   View,
   Image,
-  TextInput,
-  AsyncStorage
+  TextInput
 } from 'react-native';
 import axios from 'axios'
 import styles from '../css/LoginStyle';
 import StoreContext from "../store/StoreContext";
 import axios1 from '../axios'
 import Cookies from "universal-cookie";
+import AsyncStorage from '@react-native-community/async-storage';
 
 
 function Login({ navigation }) {
   const cookies = new Cookies();
   const { login_data, LoginOnChange } = useContext(StoreContext);
+  const { user_name, ChangeUser } = useContext(StoreContext);
+  const { employee_Id, ChangeId } = useContext(StoreContext);
   const [loginValidation, setLoginValidation] = useState(false)
+  const [token, setToken] = useState(null)
 
+  useEffect(() => {
+    readData()
+  }, [])
+  const readData = async () => {
+    try {
+      const Token = await AsyncStorage.getItem('token')
+      const username = await AsyncStorage.getItem('username')
+      // const password = await AsyncStorage.getItem('password')
+      if (Token !== null) {
+        // navigation.navigate('BottomNav')
+        ChangeId(username)
+        console.log(Token, username)
+
+      }
+    } catch (e) {
+      console.log('Failed to fetch the data from storage .login', e)
+    }
+  }
+  const storeToken = async (data) => {
+    try {
+      await AsyncStorage.setItem('token', data)
+      navigation.navigate('BottomNav')
+    } catch (e) {
+      console.log('Failed to save the data to the storage')
+    }
+  }
+  const storeDetails = async () => {
+    try {
+      await AsyncStorage.setItem('username', login_data.login)
+      // await AsyncStorage.setItem('password', login_data.password)
+    } catch (e) {
+      console.log('Failed to save the data to the storage')
+    }
+  }
   const submit = () => {
     if (login_data.login != "" && login_data.password != "") {
       let config = {
@@ -32,8 +69,7 @@ function Login({ navigation }) {
       };
       axios(config)
         .then((res) => {
-          console.log("token", res.data.token)
-          // localStorage.setItem("token", res.data.login);
+          storeToken(res.data.token)
           cookies.set("token", res.data.token, {
             path: "/",
             expires: new Date(new Date().getTime() + 10800000),
@@ -42,36 +78,18 @@ function Login({ navigation }) {
             config.headers.Authorization = "Bearer " + res.data.token;
             return config;
           });
-          readData()
-          storeToken(res.data.token)
-          // setToken(res.data.login);
+          storeDetails(login_data)
+          ChangeId(login_data.login)
+          navigation.navigate('BottomNav')
+
         })
-        .catch((errors) => console.log(errors));
+        .catch((errors) => console.log("Login" + errors));
     }
     else {
       setLoginValidation(true)
     }
 
   };
-  const readData = async () => {
-    try {
-      const Token = await AsyncStorage.getItem('token')
-      if (Token !== null) {
-        console.log("Async", Token)
-        navigation.navigate('BottomNav')
-      }
-    } catch (e) {
-      console.log('Failed to fetch the data from storage .login')
-    }
-  }
-  const storeToken = async (data) => {
-    try {
-      await AsyncStorage.setItem('token', data)
-      navigation.navigate('BottomNav')
-    } catch (e) {
-      console.log('Failed to save the data to the storage')
-    }
-  }
 
   return (
     <View style={styles.loginbg}>
@@ -88,7 +106,7 @@ function Login({ navigation }) {
           />
         </View>
       </View>
-      <Text style={styles.signin}>Login to Continue</Text>
+      <Text style={styles.signin}>Login to Continue{token}</Text>
       <View style={styles.textInputView}>
         <TextInput
           style={styles.textInputStyle}

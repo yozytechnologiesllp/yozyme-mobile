@@ -13,6 +13,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import Profile from './Profile';
 import Apps from './Apps';
 import Search from './Search';
+import Logger from './Logger';
 
 
 // function HomePage({ route }) {
@@ -227,6 +228,28 @@ function Tabs({ navigation }) {
           // headerRight: () => (<Entypo name="login" color="green" onPress={() => logout()} size={33} style={{ marginRight: 15 }} />)
         }}
       />
+      <Tab.Screen name="Logger" component={Logger}
+        options={{
+          headerStyle: {
+            // backgroundColor: '#C3EFD7',
+          },
+          headerTintColor: '#257B50',
+          headerTitleStyle: {
+            display: 'none'
+            // fontFamily: 'Montserrat-Bold',
+            // fontWeight: '700',
+            // alignContent: 'center'
+          },
+          headerLeft: () => (<Image
+            style={styles.headerImage}
+            source={require('../images/yozy.png')}
+          />),
+          headerRight: () => (
+            <>
+              {/* <Avatar.Image size={33} /> */}
+              <Ionicons name="ios-notifications" color="blue" onPress={() => logout()} size={33} style={{ marginRight: 15 }} />
+            </>)
+        }} />
     </Tab.Navigator>
 
   )

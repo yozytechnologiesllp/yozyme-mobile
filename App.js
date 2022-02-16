@@ -1,16 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {
-  AppRegistry,
-  StyleSheet,
-  Text,
-  View,
-  Alert,
-  TouchableOpacity,
-  ScrollView,
-  Platform,
-  TextInput,
-  AsyncStorage,
-} from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 import Login from './Components/Login'
@@ -19,34 +8,30 @@ import State from './store/State';
 
 
 function App() {
-  const [token, setToken] = useState(null)
-  useEffect(() => {
-    readData()
-  }, []);
+  // const [initialPath, setInitialPath] = useState("Login")
   const NavStack = createStackNavigator();
-  useEffect(() => {
-    readData()
-  }, []);
-  setTimeout(async () => {
-    const Token = await AsyncStorage.removeItem('token');
-    setToken(null)
-  }, 10800000);
 
-  const readData = async () => {
-    try {
-      const Token = await AsyncStorage.getItem('token')
-      if (Token !== null) {
-        setToken(Token)
-      }
-    } catch (e) {
-      console.log('Failed to fetch the data from storage .App')
-    }
-  }
-  console.log(token, token == null ? "Login" : "BottomNav")
+  // useEffect(() => {
+  //   readData()
+  // }, [])
+  // const readData = async () => {
+  //   try {
+  //     const Token = await AsyncStorage.getItem('token')
+  //     if (Token !== null) {
+  //       console.log("Async", Token)
+  //       setInitialPath("BottomNav")
+  //     }
+  //   } catch (e) {
+  //     console.log('Failed to fetch the data from storage .login')
+  //   }
+  // }
+
   return (
     <State>
       <NavigationContainer independent={true}>
-        <NavStack.Navigator initialRouteName={token == null ? Login : BottomNav}>
+        <NavStack.Navigator
+        //initialRouteName={initialPath}
+        >
           <NavStack.Screen
             name="Login"
             component={Login}

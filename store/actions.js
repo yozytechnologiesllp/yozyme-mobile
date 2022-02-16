@@ -1,1 +1,3 @@
 export const LOGINDATA_UPDATE = 'LOGINDATA_UPDATE';
+export const USER_NAME = "USER_NAME";
+export const EMPLOYEE_ID = "EMPLOYEE_ID";
