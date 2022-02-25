@@ -7,7 +7,9 @@ function State(props) {
   const intialState = {
     login_data: { login: "", password: "" },
     employee_Id: "",
-    user_name: "",
+    user_detail: "",
+    employee_Image: null,
+    employee_Data: []
   }
 
   const [state, dispatch] = useReducer(Reducer, intialState)
@@ -20,9 +22,9 @@ function State(props) {
     })
 
   }
-  const ChangeUser = (data) => {
+  const ChangeDetail = (data) => {
     dispatch({
-      type: actionTypes.USER_NAME,
+      type: actionTypes.USER_DETAIL,
       data: data
     })
 
@@ -34,15 +36,33 @@ function State(props) {
     })
 
   }
+  const ChangeEmployeeImage = (data) => {
+    dispatch({
+      type: actionTypes.EMPLOYEE_IMAGE,
+      data: data
+    })
+
+  }
+  const ChangeEmployeeData = (data) => {
+    dispatch({
+      type: actionTypes.EMPLOYEE_DATA,
+      data: data
+    })
+
+  }
 
   return <Store.Provider value={{
     login_data: state.login_data,
     empDetails: state.empDetails,
     employee_Id: state.employee_Id,
+    user_detail: state.user_detail,
+    employee_Image: state.employee_Image,
+    employee_Data: state.employee_Data,
     LoginOnChange,
-    user_name: state.user_name,
-    ChangeUser,
-    ChangeId
+    ChangeDetail,
+    ChangeId,
+    ChangeEmployeeImage,
+    ChangeEmployeeData
   }}>{props.children}</Store.Provider>;
 }
 

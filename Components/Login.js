@@ -11,6 +11,7 @@ import StoreContext from "../store/StoreContext";
 import axios1 from '../axios'
 import Cookies from "universal-cookie";
 import AsyncStorage from '@react-native-community/async-storage';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 
 
 function Login({ navigation }) {
@@ -20,37 +21,63 @@ function Login({ navigation }) {
   const { employee_Id, ChangeId } = useContext(StoreContext);
   const [loginValidation, setLoginValidation] = useState(false)
   const [token, setToken] = useState(null)
+  const [visibility, setVisibility] = useState(false)
 
   useEffect(() => {
     readData()
   }, [])
+
   const readData = async () => {
     try {
-      const Token = await AsyncStorage.getItem('token')
+      // const Token = await AsyncStorage.getItem('token')
       const username = await AsyncStorage.getItem('username')
+      const password = await AsyncStorage.getItem('password')
       // const password = await AsyncStorage.getItem('password')
-      if (Token !== null) {
+      if (username !== null) {
+        //cookies.set("token", Token)
         // navigation.navigate('BottomNav')
         ChangeId(username)
-        console.log(Token, username)
-
+        let config = {
+          method: "post",
+          url: "https://api.yozytech.com/users/signIn",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          data: {
+            login: username, password: String(password)
+          }
+        };
+        axios(config)
+          .then((res) => {
+            // storeToken(res.data.token)
+            cookies.set("token", res.data.token, {
+              path: "/",
+              expires: new Date(new Date().getTime() + 10800000),
+            });
+            axios1.interceptors.request.use((config) => {
+              config.headers.Authorization = "Bearer " + res.data.token;
+              return config;
+            });
+            navigation.navigate('BottomNav')
+          })
+          .catch((errors) => console.log("Login" + errors))
       }
     } catch (e) {
       console.log('Failed to fetch the data from storage .login', e)
     }
   }
-  const storeToken = async (data) => {
-    try {
-      await AsyncStorage.setItem('token', data)
-      navigation.navigate('BottomNav')
-    } catch (e) {
-      console.log('Failed to save the data to the storage')
-    }
-  }
+  // const storeToken = async (data) => {
+  //   try {
+  //     await AsyncStorage.setItem('token', data)
+  //     navigation.navigate('BottomNav')
+  //   } catch (e) {
+  //     console.log('Failed to save the data to the storage')
+  //   }
+  // }
   const storeDetails = async () => {
     try {
       await AsyncStorage.setItem('username', login_data.login)
-      // await AsyncStorage.setItem('password', login_data.password)
+      await AsyncStorage.setItem('password', login_data.password)
     } catch (e) {
       console.log('Failed to save the data to the storage')
     }
@@ -69,7 +96,7 @@ function Login({ navigation }) {
       };
       axios(config)
         .then((res) => {
-          storeToken(res.data.token)
+          // storeToken(res.data.token)
           cookies.set("token", res.data.token, {
             path: "/",
             expires: new Date(new Date().getTime() + 10800000),
@@ -81,16 +108,22 @@ function Login({ navigation }) {
           storeDetails(login_data)
           ChangeId(login_data.login)
           navigation.navigate('BottomNav')
-
+          // cookies.get("token")
         })
-        .catch((errors) => console.log("Login" + errors));
+        .catch((errors) => {
+          console.log("Login" + errors)
+          setLoginValidation(true)
+        });
     }
     else {
       setLoginValidation(true)
     }
 
   };
-
+  const passwordVisibility = visibility ?
+    <FontAwesome5 style={styles.iconStyle} color="black" name='eye' onPress={() => { setVisibility(!visibility) }} />
+    :
+    <FontAwesome5 style={styles.iconStyle} color="black" name='eye-slash' onPress={() => { setVisibility(!visibility) }} />
   return (
     <View style={styles.loginbg}>
       {/* <StatusBar 
@@ -120,17 +153,19 @@ function Login({ navigation }) {
           keyboardType="numeric"
         />
         <Text />
-
-        <TextInput
-          style={styles.textInputStyle} onChangeText={value => {
-            LoginOnChange('password', value)
-          }}
-          value={login_data.password}
-          secureTextEntry={true}
-          placeholder="Password"
-          placeholderTextColor="grey"
-          password={true}
-        />
+        <View style={styles.eyeIcon}>
+          <TextInput
+            style={styles.textInputStyle5} onChangeText={value => {
+              LoginOnChange('password', value)
+            }}
+            value={login_data.password}
+            secureTextEntry={!visibility}
+            placeholder="Password"
+            placeholderTextColor="grey"
+            password={true}
+          />
+          {passwordVisibility}
+        </View>
         {loginValidation ? (
           <Text style={styles.alertMessage}>
             Please enter valid Username and Password

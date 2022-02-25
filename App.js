@@ -6,25 +6,12 @@ import Login from './Components/Login'
 import BottomNav from './Components/BottomNav'
 import State from './store/State';
 
-
 function App() {
-  // const [initialPath, setInitialPath] = useState("Login")
+
   const NavStack = createStackNavigator();
 
-  // useEffect(() => {
-  //   readData()
-  // }, [])
-  // const readData = async () => {
-  //   try {
-  //     const Token = await AsyncStorage.getItem('token')
-  //     if (Token !== null) {
-  //       console.log("Async", Token)
-  //       setInitialPath("BottomNav")
-  //     }
-  //   } catch (e) {
-  //     console.log('Failed to fetch the data from storage .login')
-  //   }
-  // }
+
+
 
   return (
     <State>

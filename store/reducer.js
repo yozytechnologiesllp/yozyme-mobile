@@ -8,15 +8,25 @@ const Reducer = (state, action) => {
                     ...state,
                     login_data: { ...state.login_data, [action.field]: action.value }
                 }
-            case actionTypes.USER_NAME:
+            case actionTypes.USER_DETAIL:
                 return {
                     ...state,
-                    user_name: action.data
+                    user_detail: action.data
                 }
             case actionTypes.EMPLOYEE_ID:
                 return {
                     ...state,
                     employee_Id: action.data
+                }
+            case actionTypes.EMPLOYEE_IMAGE:
+                return {
+                    ...state,
+                    employee_Image: action.data
+                }
+            case actionTypes.EMPLOYEE_DATA:
+                return {
+                    ...state,
+                    employee_Data: action.data
                 }
             default:
                 return state

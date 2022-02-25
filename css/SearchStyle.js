@@ -1,42 +1,55 @@
-import {StyleSheet} from 'react-native';
+import { StyleSheet } from 'react-native';
 export default StyleSheet.create({
-    overallContent:{paddingTop:20, paddingLeft:24, paddingRight:24, backgroundColor: '#C3EFD7',},
-  textInputStyle:{
-      color:'black', 
-  width:'100%', 
-  backgroundColor:'white', 
-  padding:10, 
-  fontSize:15, 
-  //height:50,
-borderRadius:10},
-mobileTextInput:{
-    color:'black', width:'100%', backgroundColor:'white', padding:10, fontSize:15, 
+  overallContent: { paddingTop: 20, paddingLeft: 24, paddingRight: 24, backgroundColor: '#C3EFD7', },
+  textInputStyle: {
+    color: 'black',
+    width: '100%',
+    backgroundColor: 'white',
+    padding: 10,
+    fontSize: 15,
     //height:50,
-    borderRadius:10
-},
-mob:{
-flexDirection:'row'
-},
-textStyle:{
-    fontSize:15,
-    paddingLeft:5
-},
-otpButton:{ alignContent:'center', 
-color:'black', 
-backgroundColor:'#FFEDD3', 
-width:'36%', 
-borderRadius:10, 
-marginLeft:10,
-paddingTop:15,
-paddingLeft:20,
-fontWeight:'bold'
-},
-alertMessage: {
+    borderRadius: 10
+  },
+  mobileTextInput: {
+    color: 'black', width: '100%', backgroundColor: 'white', padding: 10, fontSize: 15,
+    //height:50,
+    borderRadius: 10
+  },
+  mob: {
+    flexDirection: 'row'
+  },
+  textStyle: {
+    fontSize: 15,
+    paddingLeft: 5
+  },
+  otpButton: {
+    alignContent: 'center',
+    color: 'black',
+    backgroundColor: '#FFEDD3',
+    width: '36%',
+    borderRadius: 10,
+    marginLeft: 10,
+    paddingTop: 15,
+    paddingLeft: 20,
+    fontWeight: 'bold'
+  },
+  alertMessage: {
     color: 'white',
     fontFamily: 'Montserrat-Regular',
     fontFamily: '500',
   },
-  RegisterButton:{
-    borderRadius:80,
-  }
+  RegisterButton: {
+    borderRadius: 80,
+  },
+  headerImage: {
+    height: 29,
+    width: 90,
+    marginLeft: '2%',
+    marginRight: '31%'
+  },
+  headerText: {
+    width: '20%'
+  },
+  header: { flexDirection: 'row', padding: '2%', backgroundColor: '#fff' },
+  notificationStyle: { marginRight: '2%' }
 });

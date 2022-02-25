@@ -12,12 +12,9 @@ export default StyleSheet.create({
     elevation: 8,
 
     // backgroundColor: '#0a428f',
-    marginLeft: 15,
-    marginRight: 15,
-    marginTop: 15,
+    margin: '5%',
     paddingTop: 10,
     paddingBottom: 10,
-    marginBottom: 10,
     borderRadius: 15,
   },
   bg1: {
@@ -178,10 +175,13 @@ export default StyleSheet.create({
     marginRight: 40
   },
   headerImage: {
-    height: 27,
+    height: 29,
     width: 90,
-    marginLeft: 5,
-    marginRight: 42
+    marginLeft: '2%',
+    marginRight: '31%'
+  },
+  headerText: {
+    width: '20%'
   },
   taskCardContent: {
     flexDirection: 'row',
@@ -227,10 +227,51 @@ export default StyleSheet.create({
     // marginRight: '7%',
     marginLeft: '4%'
   },
-
-
-
-
-
-
+  cardStyle: {
+    borderRadius: 20,
+    margin: 15,
+    borderColor: 'black',
+    backgroundColor: '#fff',
+    padding: 20,
+    borderColor: 'grey',
+    borderWidth: 1,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.20,
+    shadowRadius: 4.65,
+    elevation: 7,
+    // alignItems: 'center',
+    // justifyContent: 'center'
+  },
+  cardStyle4: {
+    borderColor: 'grey',
+    borderWidth: 1,
+    borderRadius: 20,
+    margin: 15,
+    backgroundColor: '#fff',
+    padding: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.20,
+    shadowRadius: 4.65,
+    elevation: 7,
+  },
+  titleStyle: {
+    fontWeight: 'bold', fontSize: 18, color: 'black', marginTop: 9, alignItems: 'center', marginBottom: 5,
+    justifyContent: 'center'
+  },
+  textStyle: { color: 'black', fontSize: 14, textAlign: 'left', paddingLeft: '5%' },
+  viewStyle: { flexDirection: 'row', margin: 5 },
+  imageStyle: { height: 100 },
+  iconStyle: { width: '9%' },
+  header: { flexDirection: 'row', padding: '2%', backgroundColor: '#fff' },
+  notificationStyle: { marginRight: '2%' }
 });

@@ -73,6 +73,22 @@ export default StyleSheet.create({
     textAlign: 'center',
     borderRadius: 15
   },
+  textInputStyle5: {
+    color: 'black',
+    width: '90%',
+    backgroundColor: 'white',
+    // paddingTop: 5,
+    // paddingLeft: 5,
+    // paddingBottom: 5,
+    fontSize: 15,
+    borderColor: '#3498db',
+    // borderBottomWidth: 2,
+    // borderLeftWidth: 2,
+    // borderTopWidth: 2,
+    // //height:50,
+    textAlign: 'center',
+    borderRadius: 15
+  },
   Forgotp: {
     color: '#00008B',
     fontSize: 16,
@@ -82,5 +98,24 @@ export default StyleSheet.create({
   },
   direction: {
     flexDirection: 'row',
+  },
+  eyeIcon: {
+    flexDirection: 'row',
+    backgroundColor: 'white',
+    // paddingTop: 5,
+    // paddingLeft: 5,
+    // paddingBottom: 5,
+    borderWidth: 2,
+    borderColor: '#3498db',
+    borderRadius: 15,
+    height: 40,
+    width: '95%'
+  },
+  iconStyle: {
+    paddingTop: 9,
+    borderColor: '#3498db',
+    //height:50,
+    textAlign: 'center',
+    borderRadius: 15
   }
 });
