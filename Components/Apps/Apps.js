@@ -60,7 +60,8 @@ function Apps({ navigation }) {
                 display.push({ "name": "Attendance", "value": "Dashboard", "iconName": "user", "color": "#F6BE00" })
             }
             if (MenuId == 4) {
-                display.push({ "name": "Leave", "value": "Dashboard", "iconName": "sign-in-alt", "color": "red" })
+                //Leave
+                display.push({ "name": "Leave", "value": "Leave", "iconName": "sign-in-alt", "color": "red" })
             }
             if (MenuId == 5) {
                 //My Assets

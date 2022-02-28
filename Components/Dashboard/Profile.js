@@ -28,7 +28,7 @@ function Profile({ }) {
     useEffect(() => {
         axios.get(
             "rpc/fun_empprojectinfo?eid=" + employee_Id +
-            "&select=allocpercentage,projectname,client,employeeroleinproject,enddate,startdate,projmanagerfirstname,projmanagerlastname")
+            "&select=projectname,client,employeeroleinproject,projectenddate,projectstartdate")
             .then((res) => { setProjectDetails(res.data) })
         axios.get("/rpc/fun_emporgdetails?empid=" + employee_Id)
             .then((res) => { ChangeDetail(res.data[0]) }).catch((e) => { console.log("Dashborad Error" + e) })
@@ -127,7 +127,7 @@ function Profile({ }) {
 
                                     <DataTable.Row>
                                         <DataTable.Cell>{e.projectname}</DataTable.Cell>
-                                        <DataTable.Cell>{moment(new Date()).diff(new Date(e.enddate)) > 0 ? "No" : "Yes"}</DataTable.Cell>
+                                        <DataTable.Cell>{moment(new Date()).diff(new Date(e.projectenddate)) > 0 ? "No" : "Yes"}</DataTable.Cell>
                                         {/* <DataTable.Cell>{moment(e.enddate).format("DD MMM YYYY")}</DataTable.Cell> */}
                                         <DataTable.Cell>{e.employeeroleinproject}</DataTable.Cell>
                                     </DataTable.Row>
