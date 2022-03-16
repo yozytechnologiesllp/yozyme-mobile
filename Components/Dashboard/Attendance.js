@@ -116,8 +116,8 @@ function Attendance({ EmpData }) {
             <DataTable>
                 <DataTable.Header>
                     <DataTable.Title>DATE&nbsp;&nbsp;&nbsp;&nbsp;</DataTable.Title>
-                    <DataTable.Title>IN</DataTable.Title>
-                    <DataTable.Title>OUT</DataTable.Title>
+                    <DataTable.Title>IN TIME</DataTable.Title>
+                    <DataTable.Title>OUT TIME</DataTable.Title>
                     <DataTable.Title>HOURS WORKED</DataTable.Title>
                 </DataTable.Header>
                 {displayDate()}

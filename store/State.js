@@ -9,7 +9,8 @@ function State(props) {
     employee_Id: "",
     user_detail: "",
     employee_Image: null,
-    employee_Data: []
+    employee_Data: [],
+    publicHoliday: []
   }
 
   const [state, dispatch] = useReducer(Reducer, intialState)
@@ -50,6 +51,13 @@ function State(props) {
     })
 
   }
+  const setPublicHoliday = (data) => {
+    dispatch({
+      type: actionTypes.PUBLIC_HOLIDAY,
+      data: data
+    })
+
+  }
 
   return <Store.Provider value={{
     login_data: state.login_data,
@@ -58,11 +66,13 @@ function State(props) {
     user_detail: state.user_detail,
     employee_Image: state.employee_Image,
     employee_Data: state.employee_Data,
+    publicHoliday: state.publicHoliday,
     LoginOnChange,
     ChangeDetail,
     ChangeId,
     ChangeEmployeeImage,
-    ChangeEmployeeData
+    ChangeEmployeeData,
+    setPublicHoliday
   }}>{props.children}</Store.Provider>;
 }
 

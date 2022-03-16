@@ -57,7 +57,7 @@ function Apps({ navigation }) {
             }
             if (MenuId == 3) {
                 //Attendance
-                display.push({ "name": "Attendance", "value": "Dashboard", "iconName": "user", "color": "#F6BE00" })
+                display.push({ "name": "Attendance", "value": "SubAttendance", "iconName": "user", "color": "#F6BE00" })
             }
             if (MenuId == 4) {
                 //Leave
@@ -122,7 +122,7 @@ function Apps({ navigation }) {
                 display.push({ "iconName": "book", "name": "Company Policy", "value": "Dashboard", "color": "green" })
             }
             if (MenuId == 19) {
-                display.push({ "iconName": "list-alt", "name": "Agile Delivery", "value": "Dashboard", "color": "#F6BE00" })
+                display.push({ "iconName": "list-alt", "name": "Agile Delivery", "value": "KanbanBoard", "color": "#F6BE00" })
             }
             if (MenuId == 20) {
                 display.push({ "iconName": "search-dollar", "name": "Presales", "value": "Dashboard", "color": "red" })

@@ -28,6 +28,11 @@ const Reducer = (state, action) => {
                     ...state,
                     employee_Data: action.data
                 }
+            case actionTypes.PUBLIC_HOLIDAY:
+                return {
+                    ...state,
+                    publicHoliday: action.data
+                }
             default:
                 return state
 

@@ -158,7 +158,7 @@ function Profile({ }) {
                                         <DataTable.Cell>{e.technology}</DataTable.Cell>
                                         <DataTable.Cell>{e.level}</DataTable.Cell>
                                         {/* <DataTable.Cell>{moment(e.enddate).format("DD MMM YYYY")}</DataTable.Cell> */}
-                                        <DataTable.Cell>{e.expinmonths}</DataTable.Cell>
+                                        <DataTable.Cell>{e.expinmonths}&nbsp;&nbsp;Months</DataTable.Cell>
                                     </DataTable.Row>
                                 ))
                             }
@@ -185,9 +185,9 @@ function Profile({ }) {
 
                                     <DataTable.Row>
                                         <DataTable.Cell>{e.leavetypecodeinfo}</DataTable.Cell>
-                                        <DataTable.Cell>{e.leavetaken == null ? 0 : e.leavetaken}</DataTable.Cell>
+                                        <DataTable.Cell>{e.leavetaken == null ? 0 : e.leavetaken}&nbsp;&nbsp;Days</DataTable.Cell>
                                         {/* <DataTable.Cell>{moment(e.enddate).format("DD MMM YYYY")}</DataTable.Cell> */}
-                                        <DataTable.Cell>{e.maxleavesallowed - e.leavetaken}</DataTable.Cell>
+                                        <DataTable.Cell>{e.maxleavesallowed - e.leavetaken}&nbsp;&nbsp;Days</DataTable.Cell>
                                     </DataTable.Row>
                                 ))
                             }

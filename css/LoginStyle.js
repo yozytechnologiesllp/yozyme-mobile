@@ -69,8 +69,7 @@ export default StyleSheet.create({
     fontSize: 15,
     borderColor: '#3498db',
     borderWidth: 2,
-    //height:50,
-    textAlign: 'center',
+    // height: 45,
     borderRadius: 15
   },
   textInputStyle5: {
@@ -85,8 +84,7 @@ export default StyleSheet.create({
     // borderBottomWidth: 2,
     // borderLeftWidth: 2,
     // borderTopWidth: 2,
-    // //height:50,
-    textAlign: 'center',
+    // height: 45,
     borderRadius: 15
   },
   Forgotp: {

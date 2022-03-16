@@ -12,6 +12,8 @@ import Apps from './Apps/Apps';
 import Search from './Search';
 import Dashboard from './Dashboard/Dashboard';
 import Leave from './Apps/Leave/Leave';
+import SubAttendance from './Apps/SubAttendance';
+import KanbanBoard from './Apps/Jira/KanbanBoard';
 
 
 function AppsFunc({ route }) {
@@ -27,6 +29,21 @@ function AppsFunc({ route }) {
         <NavStack.Screen
           name="Leave"
           component={Leave}
+          options={{ headerShown: false }}
+        />
+        <NavStack.Screen
+          name="SubAttendance"
+          component={SubAttendance}
+          options={{ headerShown: false }}
+        />
+        <NavStack.Screen
+          name="KanbanBoard"
+          component={KanbanBoard}
+          options={{ headerShown: false }}
+        />
+        <NavStack.Screen
+          name="Dashboard"
+          component={Dashboard}
           options={{ headerShown: false }}
         />
       </NavStack.Navigator>

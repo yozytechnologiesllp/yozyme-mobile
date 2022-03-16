@@ -45,7 +45,7 @@ function EmployeeExperience() {
                     backgroundColor: '#1cc910',
                     backgroundGradientFrom: 'white',
                     backgroundGradientTo: 'white',
-                    // decimalPlaces: 0.2,
+                    decimalPlaces: 0,
                     color: (opacity = 255) => '#e14eca',
                     style: {
                         borderRadius: 12, padding: 10

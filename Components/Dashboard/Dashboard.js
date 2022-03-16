@@ -15,10 +15,11 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 import fileaxios from '../../fileaxios'
 import { Buffer } from "buffer"
 import HeaderView from '../HeaderView';
+import moment from "moment";
 
 
 export default function Dashboard({ navigation }) {
-    const { login_data, employee_Id, ChangeEmployeeImage, ChangeEmployeeData, employee_Data } = useContext(StoreContext);
+    const { login_data, employee_Id, ChangeEmployeeImage, ChangeEmployeeData, employee_Data, setPublicHoliday } = useContext(StoreContext);
 
 
 
@@ -30,8 +31,13 @@ export default function Dashboard({ navigation }) {
                     ChangeEmployeeData(res.data[0])
                 }
             )
-        fileaxios.get("EmployeeImages/" + employee_Id + ".jpg", { responseType: "arraybuffer", })
-            .then((res) => { ChangeEmployeeImage("data:image/jpeg;base64," + Buffer.from(res.data, "binary").toString("base64")) });
+        axios
+            .get("public_holiday_master?HolidayYear=eq." + moment().year() + "&HolidayType=eq." + "Mandatory")
+            .then((res) => {
+                setPublicHoliday(res.data);
+            });
+        // fileaxios.get("EmployeeImages/" + employee_Id + ".jpg", { responseType: "arraybuffer", })
+        //     .then((res) => { ChangeEmployeeImage("data:image/jpeg;base64," + Buffer.from(res.data, "binary").toString("base64")) });
         const backHandler = BackHandler.addEventListener('hardwareBackPress', () =>
             handleBackButton(),
         );
