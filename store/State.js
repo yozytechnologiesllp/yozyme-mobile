@@ -10,7 +10,10 @@ function State(props) {
     user_detail: "",
     employee_Image: null,
     employee_Data: [],
-    publicHoliday: []
+    publicHoliday: [],
+    data: [],
+    ragStatus: [],
+    currentIssue: []
   }
 
   const [state, dispatch] = useReducer(Reducer, intialState)
@@ -58,6 +61,27 @@ function State(props) {
     })
 
   }
+  const setData = (data) => {
+    dispatch({
+      type: actionTypes.SET_DATA,
+      data: data
+    })
+
+  }
+  const setRagStatus = (data) => {
+    dispatch({
+      type: actionTypes.SET_RAGSTATUS,
+      data: data
+    })
+
+  }
+  const setCurrentIssue = (data) => {
+    dispatch({
+      type: actionTypes.SET_CURRENTISSUE,
+      data: data
+    })
+
+  }
 
   return <Store.Provider value={{
     login_data: state.login_data,
@@ -67,12 +91,18 @@ function State(props) {
     employee_Image: state.employee_Image,
     employee_Data: state.employee_Data,
     publicHoliday: state.publicHoliday,
+    data: state.data,
+    ragStatus: state.ragStatus,
+    currentIssue: state.currentIssue,
     LoginOnChange,
     ChangeDetail,
     ChangeId,
     ChangeEmployeeImage,
     ChangeEmployeeData,
-    setPublicHoliday
+    setPublicHoliday,
+    setData,
+    setRagStatus,
+    setCurrentIssue,
   }}>{props.children}</Store.Provider>;
 }
 

@@ -33,6 +33,21 @@ const Reducer = (state, action) => {
                     ...state,
                     publicHoliday: action.data
                 }
+            case actionTypes.SET_DATA:
+                return {
+                    ...state,
+                    data: action.data
+                }
+            case actionTypes.SET_RAGSTATUS:
+                return {
+                    ...state,
+                    ragStatus: action.data
+                }
+            case actionTypes.SET_CURRENTISSUE:
+                return {
+                    ...state,
+                    currentIssue: action.data
+                }
             default:
                 return state
 

@@ -4,3 +4,6 @@ export const EMPLOYEE_ID = "EMPLOYEE_ID";
 export const EMPLOYEE_IMAGE = "EMPLOYEE_IMAGE";
 export const EMPLOYEE_DATA = "EMPLOYEE_DATA";
 export const PUBLIC_HOLIDAY = "PUBLIC_HOLIDAY";
+export const SET_DATA = "SET_DATA";
+export const SET_RAGSTATUS = "SET_RAGSTATUS";
+export const SET_CURRENTISSUE = "SET_CURRENTISSUE";

@@ -12,15 +12,13 @@ import StoreContext from '../../../store/StoreContext';
 import { Avatar, Card } from 'react-native-paper'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import { NavigationContainer } from '@react-navigation/native';
-import Popup from './Popup';
+import ShowPopup from './ShowPopup';
 
 
 function KanbanBoard({ navigation }) {
-    const { employee_Id, user_detail } = useContext(StoreContext)
+    const { employee_Id, user_detail, data, ragstatus, setData, setRagStatus, setCurrentIssue } = useContext(StoreContext)
     const [status, setStatus] = useState("Backlog")
     const [modalVisible, setModalVisible] = useState(false);
-    const [data, setData] = useState([])
-    const [ragstatus, setRagstatus] = useState([]);
 
     useEffect(() => {
         axios.get('agile_issue_details?AssignedTo=eq.' + employee_Id)
@@ -32,7 +30,7 @@ function KanbanBoard({ navigation }) {
         axios.get("agile_issue_progress?order=UpdatedDate.desc")
             .then((res) => {
                 console.log(res.data, 'rag status')
-                setRagstatus(res.data)
+                setRagStatus(res.data)
             })
             .catch((e) => { console.log(e) })
     }, [])
@@ -43,7 +41,7 @@ function KanbanBoard({ navigation }) {
             <HeaderView />
 
             <ScrollView style={styles.bgStyle}>
-                <Popup modalVisible={modalVisible} setModalVisible={setModalVisible} />
+                <ShowPopup modalVisible={modalVisible} setModalVisible={setModalVisible} />
                 <Text style={styles.titleStyle}>Kanban Board</Text>
                 <View style={styles.buttonStyle}>
                     <Text style={status == "Backlog" ? styles.selectedText : styles.text} onPress={() => { setStatus("Backlog") }}>Backlog</Text>
@@ -55,7 +53,11 @@ function KanbanBoard({ navigation }) {
 
                 {
                     data.filter(e => e.CurrentStage[0].StageName == status).map((e) => (
-                        <Card style={styles.cardStyle} onPress={() => setModalVisible(true)}>
+                        <Card style={styles.cardStyle}
+                        // onPress={() => {
+                        //     setModalVisible(true)
+                        //     setCurrentIssue(e)}}
+                        >
                             <Text style={styles.issueTitle}>{e.IssueTitle}</Text>
                             <View style={styles.direction}>
                                 <Text style={[styles.epicAndId, { backgroundColor: '#cda3e3', fontWeight: '500' }]}>{e.LinkToEpic[0].Title}</Text>
@@ -77,11 +79,7 @@ function KanbanBoard({ navigation }) {
                                                     'blue'
                                     } size={24} style={styles.iconStyle} />
 
-                                <Text style={[styles.issueTypeStyle, e.IssueType == "Story" ? { borderColor: "#00cc00" } :
-                                    e.IssueType == "Task" ? { borderColor: 'skyblue' } :
-                                        e.IssueType == "Bug" ? { borderColor: "#cc0000" } :
-                                            e.IssueType == "Epic" ? { borderColor: "#8a00e6" } :
-                                                { borderColor: "skyblue" }]}>
+                                <Text style={[styles.issueTypeStyle]}>
                                     <FontAwesome
                                         style={styles.issueIcon}
                                         name={e.IssueType == "Story" ? 'bookmark' :
@@ -107,7 +105,11 @@ function KanbanBoard({ navigation }) {
                                                 .RiskofDelivery} size={24} color={ragstatus.filter((c) => c.IssueId == e.IssueId)[0]
                                                     .RiskofDelivery === "A" ? 'black' : 'white'} /> </Text>
                                 ) : null}
-
+                                <FontAwesome name='eye' color='black' size={22} style={styles.iconStyleShow} onPress={() => {
+                                    setModalVisible(true)
+                                    setCurrentIssue(e)
+                                }} />
+                                <FontAwesome name='edit' color='black' size={20} style={styles.iconStyleShow} />
                             </View>
 
                         </Card>

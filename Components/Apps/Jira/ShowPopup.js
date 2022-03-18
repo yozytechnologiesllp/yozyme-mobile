@@ -12,11 +12,12 @@ import StoreContext from '../../../store/StoreContext';
 import { Avatar } from 'react-native-paper'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import { NavigationContainer } from '@react-navigation/native';
+import RenderHtml from 'react-native-render-html';
 
 
-function Popup({ navigation, modalVisible, setModalVisible }) {
-    const { employee_Id, user_detail } = useContext(StoreContext)
-
+function ShowPopup({ navigation, modalVisible, setModalVisible }) {
+    const { employee_Id, user_detail, currentIssue } = useContext(StoreContext)
+    console.log(currentIssue, 'current issue')
 
     return (
         <ScrollView>
@@ -24,6 +25,7 @@ function Popup({ navigation, modalVisible, setModalVisible }) {
                 animationType="slide"
                 transparent={true}
                 visible={modalVisible}
+                style={{ zIndex: 1100 }}
                 onRequestClose={() => {
                     Alert.alert("Modal has been closed.");
                     setModalVisible(!modalVisible);
@@ -31,8 +33,23 @@ function Popup({ navigation, modalVisible, setModalVisible }) {
             >
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
-                        <Text style={styles.issueTitle}>Issue Title</Text>
-                        <Text>Description</Text>
+                        <Text style={[styles.issueTitle]}>
+                            <FontAwesome
+                                style={styles.titleIcon}
+                                name={currentIssue.IssueType == "Story" ? 'bookmark' :
+                                    currentIssue.IssueType == "Task" ? 'check-circle' :
+                                        currentIssue.IssueType == "Bug" ? 'dot-circle-o' :
+                                            currentIssue.IssueType == "Epic" ? 'bolt' : 'pencil-square-o'}
+
+                                color={currentIssue.IssueType == "Story" ? 'green' :
+                                    currentIssue.IssueType == "Task" ? 'skyblue' :
+                                        currentIssue.IssueType == "Bug" ? 'red' :
+                                            currentIssue.IssueType == "Epic" ? '#cda3e3' : 'skyblue'} size={22} />{currentIssue.IssueTitle} </Text>
+                        <RenderHtml
+                            // contentWidth={110}
+                            source={{ html: currentIssue.Description }}
+                        />
+                        {/* <Text>{currentIssue.Description.rendered.replace(/<img .*?>/g, "")}</Text> */}
                         <Text></Text>
                         <Text></Text>
                         <Text></Text>
@@ -44,4 +61,4 @@ function Popup({ navigation, modalVisible, setModalVisible }) {
     )
 }
 
-export default Popup
+export default ShowPopup

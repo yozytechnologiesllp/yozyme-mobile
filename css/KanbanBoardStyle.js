@@ -13,9 +13,10 @@ export default StyleSheet.create({
         borderWidth: 2,
         borderColor: 'skyblue',
         marginBottom: '2%',
+        // fontSize: 22,
         // height: 45,
         // backgroundColor: 'white',
-        color: 'black',
+        // color: 'black',
         // textAlign: 'center'
         // justifyContent: 'center',
         // textAlign: 'center'
@@ -33,14 +34,18 @@ export default StyleSheet.create({
         alignContent: 'center'
     },
     text: {
-        padding: '2.9%',
+        padding: '2.2%',
         backgroundColor: 'skyblue',
-        color: 'black'
+        color: 'black',
+        fontSize: 15,
+        fontWeight: 'bold'
     },
     selectedText: {
-        padding: '2.9%',
+        padding: '2.2%',
         backgroundColor: 'darkblue',
-        color: 'white'
+        color: 'white',
+        fontSize: 15,
+        fontWeight: 'bold'
     },
     cardStyle: {
         shadowColor: "#000",
@@ -82,15 +87,24 @@ export default StyleSheet.create({
     },
     centeredView: {
         flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-        marginTop: 22,
+        alignItems: 'center',
+        flexDirection: 'column',
+        justifyContent: 'space-around',
+        backgroundColor: '#rgba(0, 0, 0, 0.7)',
+        zIndex: 1000
     },
     direction: {
         flex: 1,
         flexDirection: 'row',
         marginTop: '4%',
         alignContent: 'center'
+    },
+    directionRow: {
+        flex: 1,
+        flexDirection: 'row',
+        marginTop: '4%',
+        alignContent: 'center',
+        width: '90%'
     },
     epicAndId: {
         width: '50%',
@@ -100,18 +114,22 @@ export default StyleSheet.create({
         borderRadius: 9
     },
     iconStyle: { width: '9%' },
+    iconStyleShow: { width: '9%', alignSelf: 'stretch' },
     issueTypeStyle: {
         width: '9%',
         // borderWidth: 2, 
         alignItems: 'center'
     },
     issueIcon: { alignItems: 'center' },
+    titleIcon: { marginRight: '2%' },
     name: {
         // marginLeft: '2%',
         marginRight: '2%',
         backgroundColor: '#b1dcf5',
         borderRadius: 15,
         padding: '2%',
-        textAlign: 'center'
+        textAlign: 'center',
+        fontWeight: 'bold',
+        // width: '60%'
     }
 })
