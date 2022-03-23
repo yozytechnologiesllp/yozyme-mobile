@@ -220,49 +220,54 @@ function Leave({ navigation }) {
             resetValue();
         }
         else if (leaveCodeId == null) {
-            Alert.alert(
-                "Alert",
-                "Please Choose Leave Type"
-                [
-                { text: "OK", onPress: () => console.log("OK Pressed") }
-                ]
-            );
+            ToastAndroid.show('Please Choose Leave Type', ToastAndroid.SHORT)
+            // Alert.alert(
+            //     "Alert",
+            //     "Please Choose Leave Type"
+            //     [
+            //     { text: "OK", onPress: () => console.log("OK Pressed") }
+            //     ]
+            // );
         }
         else if (doesOverlap || doesInclude) {
-            Alert.alert(
-                "Alert",
-                "Already applied leave for this date"
-                [
-                { text: "OK", onPress: () => console.log("OK Pressed") }
-                ]
-            );
+            ToastAndroid.show('Already applied leave for this date', ToastAndroid.SHORT)
+            // Alert.alert(
+            //     "Alert",
+            //     "Already applied leave for this date"
+            //     [
+            //     { text: "OK", onPress: () => console.log("OK Pressed") }
+            //     ]
+            // );
         }
         else if (excludeHoliday == 0 || temp < 0) {
-            Alert.alert(
-                "Alert",
-                "Choose a valid days for leave without including weekend / holidays"
-                [
-                { text: "OK", onPress: () => console.log("OK Pressed") }
-                ]
-            );
+            ToastAndroid.show('Choose a valida days for leave without including weekend / holidays', ToastAndroid.SHORT)
+            // Alert.alert(
+            //     "Alert",
+            //     "Choose a valid days for leave without including weekend / holidays"
+            //     [
+            //     { text: "OK", onPress: () => console.log("OK Pressed") }
+            //     ]
+            // );
         }
         else if (leavesLeft.length === 0) {
-            Alert.alert(
-                "Alert",
-                leaveTypeCodeInfo + " is not applicable for you"
-                [
-                { text: "OK", onPress: () => console.log("OK Pressed") }
-                ]
-            );
+            ToastAndroid.show(leaveTypeCodeInfo + ' is not applicable for you', ToastAndroid.SHORT)
+            // Alert.alert(
+            //     "Alert",
+            //     leaveTypeCodeInfo + " is not applicable for you"
+            //     [
+            //     { text: "OK", onPress: () => console.log("OK Pressed") }
+            //     ]
+            // );
         }
         else if (excludeHoliday > leavesLeft) {
-            Alert.alert(
-                "Alert",
-                "Allowed leaves are " + leavesLeft + " only"
-                [
-                { text: "OK", onPress: () => console.log("OK Pressed") }
-                ]
-            );
+            ToastAndroid.show('Allowed leaves are' + leavesLeft + ' only', ToastAndroid.SHORT)
+            // Alert.alert(
+            //     "Alert",
+            //     "Allowed leaves are " + leavesLeft + " only"
+            //     [
+            //     { text: "OK", onPress: () => console.log("OK Pressed") }
+            //     ]
+            // );
         }
     }
     console.log(user_detail.level1managereid, 'level1 manager')

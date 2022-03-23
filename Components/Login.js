@@ -3,7 +3,8 @@ import {
   Text,
   View,
   Image,
-  TextInput
+  TextInput,
+  Modal
 } from 'react-native';
 import axios from 'axios'
 import styles from '../css/LoginStyle';
@@ -12,19 +13,20 @@ import axios1 from '../axios'
 import Cookies from "universal-cookie";
 import AsyncStorage from '@react-native-community/async-storage';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
+import TwoAuthVerify from './TwoAuthVerify';
 
 
 function Login({ navigation }) {
   const cookies = new Cookies();
-  const { login_data, LoginOnChange } = useContext(StoreContext);
+  const { login_data, LoginOnChange, ChangeToken, TwoAuthDataChange } = useContext(StoreContext);
   const { user_name, ChangeUser } = useContext(StoreContext);
   const { employee_Id, ChangeId } = useContext(StoreContext);
   const [loginValidation, setLoginValidation] = useState(false)
-  const [token, setToken] = useState(null)
+  // const [token, setToken] = useState(null)
   const [visibility, setVisibility] = useState(false)
 
   useEffect(() => {
-    readData()
+    // readData()
   }, [])
 
   const readData = async () => {
@@ -50,6 +52,8 @@ function Login({ navigation }) {
         axios(config)
           .then((res) => {
             // storeToken(res.data.token)
+            // setRedirect({ Redirect: true, Empid: res.data.login, Token: res.data.token })
+            ChangeToken(res.data.token)
             cookies.set("token", res.data.token, {
               path: "/",
               expires: new Date(new Date().getTime() + 10800000),
@@ -96,7 +100,9 @@ function Login({ navigation }) {
       };
       axios(config)
         .then((res) => {
+          TwoAuthDataChange(true)
           // storeToken(res.data.token)
+          ChangeToken(res.data.token)
           cookies.set("token", res.data.token, {
             path: "/",
             expires: new Date(new Date().getTime() + 10800000),
@@ -107,7 +113,7 @@ function Login({ navigation }) {
           });
           storeDetails(login_data)
           ChangeId(login_data.login)
-          navigation.navigate('BottomNav')
+          navigation.navigate('TwoAuthVerify')
           // cookies.get("token")
         })
         .catch((errors) => {
@@ -126,11 +132,6 @@ function Login({ navigation }) {
     <FontAwesome5 style={styles.iconStyle} color="black" name='eye-slash' onPress={() => { setVisibility(!visibility) }} />
   return (
     <View style={styles.loginbg}>
-      {/* <StatusBar 
-      backgroundColor= '#C3EFD7' /> */}
-      {/* <StatusBar 
-      //backgroundColor="#77ACF1"
-      backgroundColor= '#0a428f' /> */}
       <View style={styles.logocontaienr}>
         <View>
           <Image
@@ -139,7 +140,7 @@ function Login({ navigation }) {
           />
         </View>
       </View>
-      <Text style={styles.signin}>Login to Continue{token}</Text>
+      <Text style={styles.signin}>Login to Continue</Text>
       <View style={styles.textInputView}>
         <TextInput
           style={styles.textInputStyle}
@@ -183,6 +184,10 @@ function Login({ navigation }) {
         </View>
 
       </View>
+
+
+
+
     </View>
   );
 }

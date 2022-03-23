@@ -8,6 +8,7 @@ import State from './store/State';
 import Leave from './Components/Apps/Leave/Leave';
 import SubAttendance from './Components/Apps/SubAttendance';
 import KanbanBoard from './Components/Apps/Jira/KanbanBoard';
+import TwoAuthVerify from './Components/TwoAuthVerify';
 
 function App() {
 
@@ -31,12 +32,12 @@ function App() {
             component={BottomNav}
             options={{ headerShown: false }}
           />
-          {/* <NavStack.Screen
-            name="Leave"
-            component={Leave}
+          <NavStack.Screen
+            name="TwoAuthVerify"
+            component={TwoAuthVerify}
             options={{ headerShown: false }}
           />
-          <NavStack.Screen
+          {/*<NavStack.Screen
             name="SubAttendance"
             component={SubAttendance}
             options={{ headerShown: false }}

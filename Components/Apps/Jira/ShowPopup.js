@@ -44,7 +44,7 @@ function ShowPopup({ navigation, modalVisible, setModalVisible }) {
                                 color={currentIssue.IssueType == "Story" ? 'green' :
                                     currentIssue.IssueType == "Task" ? 'skyblue' :
                                         currentIssue.IssueType == "Bug" ? 'red' :
-                                            currentIssue.IssueType == "Epic" ? '#cda3e3' : 'skyblue'} size={22} />{currentIssue.IssueTitle} </Text>
+                                            currentIssue.IssueType == "Epic" ? '#cda3e3' : 'skyblue'} size={22} />&nbsp;&nbsp;{currentIssue.IssueTitle} </Text>
                         <RenderHtml
                             // contentWidth={110}
                             source={{ html: currentIssue.Description }}

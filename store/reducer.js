@@ -8,6 +8,11 @@ const Reducer = (state, action) => {
                     ...state,
                     login_data: { ...state.login_data, [action.field]: action.value }
                 }
+            case actionTypes.TWOAUTH_DATA_CHANGE:
+                return {
+                    ...state,
+                    twoAuthData: { ...state.twoAuthData, [action.field]: action.value }
+                }
             case actionTypes.USER_DETAIL:
                 return {
                     ...state,
@@ -47,6 +52,11 @@ const Reducer = (state, action) => {
                 return {
                     ...state,
                     currentIssue: action.data
+                }
+            case actionTypes.CHANGE_TOKEN:
+                return {
+                    ...state,
+                    tokenData: action.data
                 }
             default:
                 return state

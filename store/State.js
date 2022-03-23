@@ -13,7 +13,9 @@ function State(props) {
     publicHoliday: [],
     data: [],
     ragStatus: [],
-    currentIssue: []
+    currentIssue: [],
+    tokenData: '',
+    twoAuthData: { Redirect: "", Empid: "", Token: "" },
   }
 
   const [state, dispatch] = useReducer(Reducer, intialState)
@@ -24,11 +26,26 @@ function State(props) {
       field: field,
       value: value
     })
-
   }
+
+  const TwoAuthDataChange = (field, value) => {
+    dispatch({
+      type: actionTypes.TWOAUTH_DATA_CHANGE,
+      field: field,
+      value: value
+    })
+  }
+
   const ChangeDetail = (data) => {
     dispatch({
       type: actionTypes.USER_DETAIL,
+      data: data
+    })
+
+  }
+  const ChangeToken = (data) => {
+    dispatch({
+      type: actionTypes.CHANGE_TOKEN,
       data: data
     })
 
@@ -94,6 +111,8 @@ function State(props) {
     data: state.data,
     ragStatus: state.ragStatus,
     currentIssue: state.currentIssue,
+    tokenData: state.tokenData,
+    twoAuthData: state.twoAuthData,
     LoginOnChange,
     ChangeDetail,
     ChangeId,
@@ -103,6 +122,8 @@ function State(props) {
     setData,
     setRagStatus,
     setCurrentIssue,
+    ChangeToken,
+    TwoAuthDataChange,
   }}>{props.children}</Store.Provider>;
 }
 

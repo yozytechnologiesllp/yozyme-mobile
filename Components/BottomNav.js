@@ -14,6 +14,7 @@ import Dashboard from './Dashboard/Dashboard';
 import Leave from './Apps/Leave/Leave';
 import SubAttendance from './Apps/SubAttendance';
 import KanbanBoard from './Apps/Jira/KanbanBoard';
+import Settings from './Settings'
 
 
 function AppsFunc({ route }) {
@@ -77,6 +78,9 @@ function Tabs({ navigation }) {
           else if (route.name === 'Profile') {
             iconName = 'user-alt';
           }
+          else if (route.name === 'Settings') {
+            iconName = 'cog';
+          }
 
           // You can return any component that you like here!
           return <FontAwesome5 name={iconName} size={size} color={color} />;
@@ -96,6 +100,9 @@ function Tabs({ navigation }) {
         options={{ headerShown: false }}
       />
       <Tab.Screen name="Profile" component={Profile}
+        options={{ headerShown: false }}
+      />
+      <Tab.Screen name="Settings" component={Settings}
         options={{ headerShown: false }}
       />
     </Tab.Navigator>

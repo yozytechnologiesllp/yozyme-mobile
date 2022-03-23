@@ -13,12 +13,14 @@ import { Avatar, Card } from 'react-native-paper'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import { NavigationContainer } from '@react-navigation/native';
 import ShowPopup from './ShowPopup';
+import EditPopup from './EditPoup';
 
 
 function KanbanBoard({ navigation }) {
     const { employee_Id, user_detail, data, ragstatus, setData, setRagStatus, setCurrentIssue } = useContext(StoreContext)
     const [status, setStatus] = useState("Backlog")
     const [modalVisible, setModalVisible] = useState(false);
+    const [editVisible, setEditVisible] = useState(false)
 
     useEffect(() => {
         axios.get('agile_issue_details?AssignedTo=eq.' + employee_Id)
@@ -42,6 +44,7 @@ function KanbanBoard({ navigation }) {
 
             <ScrollView style={styles.bgStyle}>
                 <ShowPopup modalVisible={modalVisible} setModalVisible={setModalVisible} />
+                <EditPopup editVisible={editVisible} setEditVisible={setEditVisible} />
                 <Text style={styles.titleStyle}>Kanban Board</Text>
                 <View style={styles.buttonStyle}>
                     <Text style={status == "Backlog" ? styles.selectedText : styles.text} onPress={() => { setStatus("Backlog") }}>Backlog</Text>
@@ -105,11 +108,22 @@ function KanbanBoard({ navigation }) {
                                                 .RiskofDelivery} size={24} color={ragstatus.filter((c) => c.IssueId == e.IssueId)[0]
                                                     .RiskofDelivery === "A" ? 'black' : 'white'} /> </Text>
                                 ) : null}
-                                <FontAwesome name='eye' color='black' size={22} style={styles.iconStyleShow} onPress={() => {
-                                    setModalVisible(true)
-                                    setCurrentIssue(e)
-                                }} />
-                                <FontAwesome name='edit' color='black' size={20} style={styles.iconStyleShow} />
+                                <FontAwesome name='eye' color='black' size={22} style={styles.iconStyleShow}
+                                    onPress={() => {
+                                        setModalVisible(true)
+                                        setCurrentIssue(e)
+                                    }} />
+                                {
+                                    status == "In Development" || status == "User Acceptace Testing" ?
+
+                                        <FontAwesome name='edit' color='black' size={20} style={styles.iconStyleShow}
+                                            onPress={() => {
+                                                setEditVisible(true)
+                                                setCurrentIssue(e)
+                                            }} />
+                                        :
+                                        null
+                                }
                             </View>
 
                         </Card>

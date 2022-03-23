@@ -131,5 +131,25 @@ export default StyleSheet.create({
         textAlign: 'center',
         fontWeight: 'bold',
         // width: '60%'
-    }
+    },
+    updateText: {
+        marginTop: '5%',
+        backgroundColor: 'white',
+        borderColor: 'grey',
+        borderWidth: 1,
+        width: 270,
+        textAlign: 'center',
+        alignContent: 'center'
+    },
+    submitStyle: {
+        backgroundColor: 'darkblue',
+        color: 'white',
+        fontSize: 15,
+        fontWeight: 'bold',
+        padding: '3%',
+        width: '45%',
+        borderRadius: 18,
+        textAlign: 'center',
+        alignContent: 'center'
+    },
 })
