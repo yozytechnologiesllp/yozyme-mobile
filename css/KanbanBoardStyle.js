@@ -2,12 +2,21 @@ import { StyleSheet } from "react-native";
 export default StyleSheet.create({
     bgStyle: {
         // paddingTop: '1.5',
-        paddingLeft: '3.6%',
-        paddingRight: '3.6%',
-        paddingBottom: '3.6%',
+        paddingLeft: '2%',
+        paddingRight: '2%',
+        paddingBottom: '2%',
         backgroundColor: 'white'
     },
-    labelStyle: { fontSize: 16, color: 'black', fontWeight: '500', marginTop: '2%', marginBottom: '2%' },
+    labelStyle: { fontSize: 16, color: 'black', fontWeight: '500', width: '50%', textAlign: 'left' },
+    card: {
+        borderRadius: 24,
+        padding: '5%',
+        marginTop: '5%',
+        marginBottom: '5%',
+        marginLeft: '2%',
+        marginRight: '2%',
+        backgroundColor: '#F8F8F8'
+    },
     buttonStyle: {
         borderRadius: 9,
         borderWidth: 2,
@@ -71,10 +80,10 @@ export default StyleSheet.create({
         padding: '1%',
     },
     modalView: {
-        margin: 20,
+        // margin: 20,
         backgroundColor: "white",
         borderRadius: 20,
-        padding: 35,
+        padding: '2%',
         alignItems: "center",
         shadowColor: "#000",
         shadowOffset: {
@@ -84,6 +93,23 @@ export default StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 4,
         elevation: 5
+    },
+    popupView: {
+        // margin: 20,
+        backgroundColor: "white",
+        // borderRadius: 20,
+        padding: '2%',
+        // alignItems: "center",
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+        height: '100%',
+        weight: '100%'
     },
     centeredView: {
         flex: 1,
@@ -97,7 +123,8 @@ export default StyleSheet.create({
         flex: 1,
         flexDirection: 'row',
         marginTop: '4%',
-        alignContent: 'center'
+        alignItems: 'center',
+        justifyContent: 'center'
     },
     directionRow: {
         flex: 1,
@@ -137,11 +164,31 @@ export default StyleSheet.create({
         backgroundColor: 'white',
         borderColor: 'grey',
         borderWidth: 1,
-        width: 270,
+        width: '99.5%',
         textAlign: 'center',
         alignContent: 'center'
     },
+    textStyle: {
+        borderRadius: 9,
+        borderWidth: 2,
+        borderColor: 'skyblue',
+        // marginBottom: '2%',
+        padding: '2%',
+        // height: '15%',
+        width: '9%',
+        // backgroundColor: 'white',
+        color: 'black',
+        textAlign: 'center',
+        // justifyContent: 'center',
+        // textAlign: 'center'
+        // flexDirection: 'row'
+    },
+    submitView: {
+        marginTop: '2%',
+        alignItems: 'center'
+    },
     submitStyle: {
+        alignItems: "center",
         backgroundColor: 'darkblue',
         color: 'white',
         fontSize: 15,
@@ -151,5 +198,15 @@ export default StyleSheet.create({
         borderRadius: 18,
         textAlign: 'center',
         alignContent: 'center'
+    },
+    dropdownStyle: {
+        width: '100%',
+        // height: 150,
+        borderRadius: 9,
+        borderWidth: 2,
+        borderColor: 'skyblue',
+        //paddingLeft:18,
+        //  fontSize: 30,
+        color: 'black',
     },
 })

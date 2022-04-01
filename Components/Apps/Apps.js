@@ -53,7 +53,7 @@ function Apps({ navigation }) {
             }
             if (MenuId == 2) {
                 //Timesheet
-                display.push({ "name": "Timesheet", "value": "Dashboard", "iconName": "calendar-alt", "color": "green" })
+                display.push({ "name": "Timesheet", "value": "Timesheet", "iconName": "calendar-alt", "color": "green" })
             }
             if (MenuId == 3) {
                 //Attendance

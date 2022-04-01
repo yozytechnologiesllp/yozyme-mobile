@@ -15,6 +15,8 @@ import Leave from './Apps/Leave/Leave';
 import SubAttendance from './Apps/SubAttendance';
 import KanbanBoard from './Apps/Jira/KanbanBoard';
 import Settings from './Settings'
+import EditPopup from './Apps/Jira/EditPopup';
+import Timesheet from './Apps/Timesheet'
 
 
 function AppsFunc({ route }) {
@@ -45,6 +47,16 @@ function AppsFunc({ route }) {
         <NavStack.Screen
           name="Dashboard"
           component={Dashboard}
+          options={{ headerShown: false }}
+        />
+        <NavStack.Screen
+          name="EditPopup"
+          component={EditPopup}
+          options={{ headerShown: false }}
+        />
+        <NavStack.Screen
+          name="Timesheet"
+          component={Timesheet}
           options={{ headerShown: false }}
         />
       </NavStack.Navigator>

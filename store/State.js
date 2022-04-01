@@ -16,6 +16,10 @@ function State(props) {
     currentIssue: [],
     tokenData: '',
     twoAuthData: { Redirect: "", Empid: "", Token: "" },
+    apidata: [],
+    loading: false,
+    originalestimatedata: [],
+    stageDetails: []
   }
 
   const [state, dispatch] = useReducer(Reducer, intialState)
@@ -46,6 +50,13 @@ function State(props) {
   const ChangeToken = (data) => {
     dispatch({
       type: actionTypes.CHANGE_TOKEN,
+      data: data
+    })
+
+  }
+  const setStageDetails = (data) => {
+    dispatch({
+      type: actionTypes.STAGE_DETAILS,
       data: data
     })
 
@@ -85,6 +96,28 @@ function State(props) {
     })
 
   }
+
+  const setApidata = (data) => {
+    dispatch({
+      type: actionTypes.SETAPIDATA,
+      data: data
+    })
+
+  }
+  const setLoading = (data) => {
+    dispatch({
+      type: actionTypes.SETLOADING,
+      data: data
+    })
+
+  }
+  const setOriginalestimatedata = (data) => {
+    dispatch({
+      type: actionTypes.SETORIGINALESTIMATEDATA,
+      data: data
+    })
+
+  }
   const setRagStatus = (data) => {
     dispatch({
       type: actionTypes.SET_RAGSTATUS,
@@ -113,6 +146,10 @@ function State(props) {
     currentIssue: state.currentIssue,
     tokenData: state.tokenData,
     twoAuthData: state.twoAuthData,
+    apidata: state.apidata,
+    loading: state.loading,
+    originalestimatedata: state.originalestimatedata,
+    stageDetails: state.stageDetails,
     LoginOnChange,
     ChangeDetail,
     ChangeId,
@@ -124,6 +161,10 @@ function State(props) {
     setCurrentIssue,
     ChangeToken,
     TwoAuthDataChange,
+    setApidata,
+    setLoading,
+    setOriginalestimatedata,
+    setStageDetails
   }}>{props.children}</Store.Provider>;
 }
 

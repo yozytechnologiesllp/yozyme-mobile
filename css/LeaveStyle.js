@@ -63,7 +63,8 @@ export default StyleSheet.create({
         width: '45%',
         borderRadius: 18,
         textAlign: 'center',
-        alignContent: 'center'
+        alignContent: 'center',
+        margin: '5%'
     },
     checkboxStyle: {
         flexDirection: 'row',

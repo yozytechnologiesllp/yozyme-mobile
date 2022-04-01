@@ -58,6 +58,26 @@ const Reducer = (state, action) => {
                     ...state,
                     tokenData: action.data
                 }
+            case actionTypes.SETAPIDATA:
+                return {
+                    ...state,
+                    apidata: action.data
+                }
+            case actionTypes.SETLOADING:
+                return {
+                    ...state,
+                    loading: action.data
+                }
+            case actionTypes.SETORIGINALESTIMATEDATA:
+                return {
+                    ...state,
+                    originalestimatedata: action.data
+                }
+            case actionTypes.STAGE_DETAILS:
+                return {
+                    ...state,
+                    stageDetails: action.data
+                }
             default:
                 return state
 

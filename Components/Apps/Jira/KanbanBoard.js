@@ -13,38 +13,95 @@ import { Avatar, Card } from 'react-native-paper'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import { NavigationContainer } from '@react-navigation/native';
 import ShowPopup from './ShowPopup';
-import EditPopup from './EditPoup';
+import { RefreshControl } from 'react-native-web';
 
 
 function KanbanBoard({ navigation }) {
-    const { employee_Id, user_detail, data, ragstatus, setData, setRagStatus, setCurrentIssue } = useContext(StoreContext)
+    const { employee_Id, user_detail, data, ragstatus, setData, setRagStatus, setCurrentIssue, setApidata,
+        setLoading, setOriginalestimatedata, stageDetails, setStageDetails, employee_Data } = useContext(StoreContext)
     const [status, setStatus] = useState("Backlog")
     const [modalVisible, setModalVisible] = useState(false);
-    const [editVisible, setEditVisible] = useState(false)
+    const [testerid, setTesterId] = useState([]);
+    const [uatDropdown, setUatDropdown] = useState([]);
+    // console.log(employee_Data, employee_Data.ReportingManager)
+    const api = user_detail.rolecode == "ITMGR1" ? `rpc/fun_mgrprojects?managerid=${employee_Id}`
+        : user_detail.rolecode == "ITMGR2" ? `rpc/fun_mgrprojects?managerid=${employee_Id}`
+            : `rpc/fun_mgrprojects?managerid=${employee_Data.ReportingManager}&empid=eq.${employee_Id}`
+
+    // agile All cards detais 
+    const api2 = user_detail.rolecode == "ITMGR1" ?
+        `agile_issue_details?or=(AssignedTo.eq.${employee_Id},CreatedBy.eq.${employee_Id},CreatedBy.eq.${TestersId})`
+        : `agile_issue_details?or=(AssignedToUAT.eq.${employee_Id},AssignedTo.eq.${employee_Id},CreatedBy.eq.${employee_Id})`
+
+
+    // Create issue button epic and releted to 
+    const api3 = `agile_issue_details?or=(AssignedTo.eq.${employee_Data.ReportingManager},CreatedBy.eq.${user_detail.level1managereid})`
+
+    // Assign to UAT
+    const UATDrop = user_detail.rolecode == "ITMGR1" ? `rpc/fun_mgrprojects?managerid=${employee_Id}&projectrole=eq.508`
+        : `rpc/fun_mgrprojects?managerid=${employee_Data.ReportingManager}&projectrole=eq.508`
 
     useEffect(() => {
-        axios.get('agile_issue_details?AssignedTo=eq.' + employee_Id)
+        refresh()
+        // Reupdatedata()
+    }, [])
+
+    function refresh() {
+        axios.get(UATDrop).then((res) => {
+            // console.log(res.data)
+            setUatDropdown(res.data);
+        });
+        axios.get(api2)
             .then((res) => {
-                console.log(res.data.map(e =>
-                    e.ActualRelease), 'agile data')
+                // console.log(res.data.map(e =>
+                //     e.ActualRelease), 'agile data')
                 setData(res.data.filter(e => e.ActualRelease == null || e.ActualRelease == ''))
             })
         axios.get("agile_issue_progress?order=UpdatedDate.desc")
             .then((res) => {
-                console.log(res.data, 'rag status')
+                // console.log(res.data, 'rag status')
                 setRagStatus(res.data)
             })
             .catch((e) => { console.log(e) })
-    }, [])
+        axios.get('agile_issue_stages').then((res) => {
+            setStageDetails(res.data[0].StageDetails)
+        })
+        axios
+            .get(
+                "rpc/fun_mgrprojects?managerid=" +
+                user_detail.level1managereid +
+                "&empid=eq." +
+                user_detail.empid
+            )
+            .then((res) => {
+                setTesterId(res.data);
+            });
+    }
+    // function Reupdatedata() {
+    //     axios
+    //         .get("agile_issue_progress?IssueId=eq." + currentIssue.IssueId)
+    //         .then((res) => {
+    //             setApidata(res.data);
+    //             setLoading(false);
+    //         });
 
+    //     axios
+    //         .get("agile_issue_progress?IssueId=eq." + currentIssue.IssueId + "&limit=1")
+    //         .then((res) => {
+    //             console.log(res.data, 'res data')
+    //             setOriginalestimatedata(res.data);
+    //         })
+    //         .catch((e) => console.log(e))
+    // }
 
     return (
         <>
             <HeaderView />
 
             <ScrollView style={styles.bgStyle}>
-                <ShowPopup modalVisible={modalVisible} setModalVisible={setModalVisible} />
-                <EditPopup editVisible={editVisible} setEditVisible={setEditVisible} />
+                <ShowPopup modalVisible={modalVisible} setModalVisible={setModalVisible} stageDetails={stageDetails} uatDropdown={uatDropdown} refresh={refresh} />
+                {/* <EditPopup editVisible={editVisible} setEditVisible={setEditVisible} apidata={apidata} 
+                    setApidata={setApidata} loading={loading} setLoading={setLoading} originalestimatedata={originalestimatedata} setOriginalestimatedata={setOriginalestimatedata} />  */}
                 <Text style={styles.titleStyle}>Kanban Board</Text>
                 <View style={styles.buttonStyle}>
                     <Text style={status == "Backlog" ? styles.selectedText : styles.text} onPress={() => { setStatus("Backlog") }}>Backlog</Text>
@@ -118,8 +175,22 @@ function KanbanBoard({ navigation }) {
 
                                         <FontAwesome name='edit' color='black' size={20} style={styles.iconStyleShow}
                                             onPress={() => {
-                                                setEditVisible(true)
+
                                                 setCurrentIssue(e)
+
+                                                axios
+                                                    .get("agile_issue_progress?IssueId=eq." + e.IssueId)
+                                                    .then((res) => {
+                                                        setApidata(res.data);
+                                                        setLoading(false);
+                                                    });
+
+                                                axios
+                                                    .get("agile_issue_details?IssueId=eq." + e.IssueId)
+                                                    .then((res) => {
+                                                        setOriginalestimatedata(res.data);
+                                                    });
+                                                navigation.navigate('EditPopup', { refresh: refresh })
                                             }} />
                                         :
                                         null

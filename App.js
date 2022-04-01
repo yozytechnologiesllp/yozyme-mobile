@@ -9,6 +9,8 @@ import Leave from './Components/Apps/Leave/Leave';
 import SubAttendance from './Components/Apps/SubAttendance';
 import KanbanBoard from './Components/Apps/Jira/KanbanBoard';
 import TwoAuthVerify from './Components/TwoAuthVerify';
+import Logout from './Components/Logout';
+import HeaderView from './Components/HeaderView';
 
 function App() {
 
@@ -35,6 +37,16 @@ function App() {
           <NavStack.Screen
             name="TwoAuthVerify"
             component={TwoAuthVerify}
+            options={{ headerShown: false }}
+          />
+          <NavStack.Screen
+            name="Logout"
+            component={Logout}
+            options={{ headerShown: false }}
+          />
+          <NavStack.Screen
+            name="HeaderView"
+            component={HeaderView}
             options={{ headerShown: false }}
           />
           {/*<NavStack.Screen

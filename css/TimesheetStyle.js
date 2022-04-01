@@ -7,13 +7,13 @@ export default StyleSheet.create({
         paddingBottom: '3.6%',
         backgroundColor: 'white'
     },
-    labelStyle: { fontSize: 16, color: 'black', fontWeight: '500', marginTop: '2%', marginBottom: '2%' },
+    labelStyle: { fontSize: 16, color: 'black', fontWeight: '500', marginTop: '1.1%', marginBottom: '1.1%', width: '45%' },
     textStyle: {
-        borderRadius: 9,
-        borderWidth: 2,
+        // borderRadius: 9,
+        // borderWidth: 2,
         borderColor: 'skyblue',
-        marginBottom: '2%',
-        padding: '2%',
+        marginTop: '1.1%',
+        marginBottom: '1.1%',
         // height: 45,
         // backgroundColor: 'white',
         color: 'black',
@@ -52,7 +52,9 @@ export default StyleSheet.create({
         // width: '50%',
         borderRadius: 18,
         textAlign: 'center',
-        alignContent: 'center'
+        alignContent: 'center',
+        marginBottom: '5%',
+        marginTop: '2%'
     },
     submitStyle: {
         backgroundColor: 'darkblue',
@@ -63,7 +65,8 @@ export default StyleSheet.create({
         width: '45%',
         borderRadius: 18,
         textAlign: 'center',
-        alignContent: 'center'
+        alignContent: 'center',
+        margin: '5%'
     },
     checkboxStyle: {
         flexDirection: 'row',
@@ -79,11 +82,11 @@ export default StyleSheet.create({
         color: 'black',
         fontWeight: '500',
         marginTop: '1%',
-        marginBottom: '2%',
+
 
     },
     submitView: {
-        marginTop: '9%',
+        marginTop: '2%',
         alignItems: 'center'
     }
 })

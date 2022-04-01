@@ -11,7 +11,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 
 
 const TwoAuthVerify = ({ navigation }) => {
-    const { employee_Id, tokenData, twoAuthData } = useContext(StoreContext);
+    const { employee_Id, tokenData, twoAuthData, employee_Data } = useContext(StoreContext);
 
     const cookies = new Cookies();
 
@@ -21,12 +21,6 @@ const TwoAuthVerify = ({ navigation }) => {
     const [codeValidation, setCodeValidation] = useState(false)
     // const theme = useTheme();
     // const fullScreen = useMediaQuery(theme.breakpoints.down('lg'));
-
-
-    function close() {
-        setModalVisible(false)
-    }
-
 
     let NotificationTwostepVerivication = {
         method: "GET",
@@ -39,25 +33,15 @@ const TwoAuthVerify = ({ navigation }) => {
     };
 
 
-
-    let FindmanagerID = {
-        method: "GET",
-        url: `https://api.yozytech.com/employee_master?EmpId=eq.${employee_Id}`,
-        headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + tokenData,
-        },
-    };
-
-
     useEffect(() => {
+        console.log('use effect', tokenData)
         axios(NotificationTwostepVerivication)
             .then(res => {
+
                 if (res.data.length != 0) {
+                    console.log(res.data, 'notification two step verification')
                     setAuthenticatedata(res.data)
                     setModalVisible(true)
-                    axios(FindmanagerID)
-                        .then(Res => setManager(Res.data))
                 }
                 else {
                     // localStorage.setItem("token", data.Empid);
@@ -82,14 +66,11 @@ const TwoAuthVerify = ({ navigation }) => {
 
     }, [])
 
-
-
-    let Mname = 100021
-
+    console.log(employee_Data.ReportingManager)
     let notificationData = {
         CreatedDate: moment().utcOffset("+05:30").format("YYYY-MM-DDTHH:mm:ss"),
         CreatedBy: employee_Id,
-        NotifyTo: Mname[0],
+        NotifyTo: employee_Data.ReportingManager,
         AudienceType: "Individual",
         Priority: "High",
         Subject: "Request for 2FA",
@@ -102,7 +83,7 @@ const TwoAuthVerify = ({ navigation }) => {
 
     let NodificationPOST = {
         method: "POST",
-        url: `https://api.yozytech.com/notification?NotifyTo=eq." + ${Mname[0]}`,
+        url: "https://api.yozytech.com/notification?NotifyTo=eq." + employee_Data.ReportingManager,
         headers: {
             "Content-Type": "application/json",
             Authorization: "Bearer " + tokenData,
@@ -116,7 +97,7 @@ const TwoAuthVerify = ({ navigation }) => {
     function RequestTomanager() {
         axios(NodificationPOST)
             .then((res) => {
-                console.log(res.data)
+                console.log(res.data, 'res data')
                 ToastAndroid.show('Request Send Successfully', ToastAndroid.SHORT)
                 // toast.success(`Request Send Successfully`, {
                 //     transition: Slide,

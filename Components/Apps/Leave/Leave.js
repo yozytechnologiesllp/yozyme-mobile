@@ -167,7 +167,9 @@ function Leave({ navigation }) {
 
                 axios.patch('leave_entitlement?Year=eq.' + moment().year() + '&LeaveTypeCodeId=eq.' + 11003 + '&EmpId=eq.' + employee_Id, {
                     TotalLeaveTaken: parseInt(leave) + parseFloat(excludeHoliday)
-                }).then((res) => { console.log(res.data) })
+                }).then((res) => {
+                    // console.log(res.data) 
+                })
                     .catch((e) => { console.log(e) })
             }
             axios
@@ -184,7 +186,7 @@ function Leave({ navigation }) {
                     Year: moment().format("YYYY")
                 })
                 .then((res) => {
-                    console.log(leaveCodeId)
+                    // console.log(leaveCodeId)
                     let notificationData = {
                         CreatedDate: moment()
                             .utcOffset("+05:30")
@@ -200,7 +202,10 @@ function Leave({ navigation }) {
                     };
                     axios
                         .post("notification?NotifyTo=eq." + user_detail.level1managereid, notificationData)
-                        .then((res) => console.log(res))
+                        .then((res) => {
+                            // console.log(res)
+                        }
+                        )
                         .catch((error) => console.log(error));
                     Alert.alert(
                         "Alert",

@@ -18,7 +18,7 @@ import TwoAuthVerify from './TwoAuthVerify';
 
 function Login({ navigation }) {
   const cookies = new Cookies();
-  const { login_data, LoginOnChange, ChangeToken, TwoAuthDataChange } = useContext(StoreContext);
+  const { login_data, LoginOnChange, ChangeToken, TwoAuthDataChange, ChangeEmployeeData, employee_Data } = useContext(StoreContext);
   const { user_name, ChangeUser } = useContext(StoreContext);
   const { employee_Id, ChangeId } = useContext(StoreContext);
   const [loginValidation, setLoginValidation] = useState(false)
@@ -26,7 +26,7 @@ function Login({ navigation }) {
   const [visibility, setVisibility] = useState(false)
 
   useEffect(() => {
-    // readData()
+    readData()
   }, [])
 
   const readData = async () => {
@@ -98,10 +98,10 @@ function Login({ navigation }) {
           login: login_data.login, password: String(login_data.password)
         }
       };
+
       axios(config)
         .then((res) => {
           TwoAuthDataChange(true)
-          // storeToken(res.data.token)
           ChangeToken(res.data.token)
           cookies.set("token", res.data.token, {
             path: "/",
@@ -113,19 +113,52 @@ function Login({ navigation }) {
           });
           storeDetails(login_data)
           ChangeId(login_data.login)
-          navigation.navigate('TwoAuthVerify')
-          // cookies.get("token")
+          let checkTwoStepVerification = {
+            method: "GET",
+            // url: `https://api.yozytech.com/employee_master?EmpId=eq.${employee_Id}`,
+            url: `https://api.yozytech.com/employee_twofactor_auth?EmpId=eq.${login_data.login}&IsActive=eq.Y`,
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Bearer " + res.data.token,
+            },
+          };
+          let emp_data = {
+            method: "GET",
+            url: "https://api.yozytech.com/employee_master?EmpId=eq." + login_data.login,
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Bearer " + res.data.token,
+            },
+          };
+          axios(emp_data)
+            .then((res5) => {
+              console.log(res5.data[0])
+              ChangeEmployeeData(res5.data[0])
+            })
+          axios(checkTwoStepVerification)
+            .then((res) => {
+              console.log(res.data)
+              if (res.data.length == 0) {
+                navigation.navigate('BottomNav')
+              }
+              else {
+                navigation.navigate('TwoAuthVerify')
+              }
+
+            })
         })
         .catch((errors) => {
           console.log("Login" + errors)
           setLoginValidation(true)
         });
+
     }
     else {
       setLoginValidation(true)
     }
 
   };
+  console.log(employee_Data, 'change employee data')
   const passwordVisibility = visibility ?
     <FontAwesome5 style={styles.iconStyle} color="black" name='eye' onPress={() => { setVisibility(!visibility) }} />
     :

@@ -214,13 +214,13 @@ function SubAttendance({ navigation }) {
                     [
                         {
                             text: "Okay", onPress: () => {
-
+                                resetData();
+                                loadData();
                             }
                         }
                     ]
                 )
-                resetData();
-                loadData();
+
             });
         }
         else if (hoursDifference != 9) {
@@ -483,6 +483,8 @@ function SubAttendance({ navigation }) {
                     style={styles.dropdownStyle}
                     itemStyle={{
                         justifyContent: 'flex-start',
+                        // maxHeight: 5,
+                        // minHeight: 5
                     }}
                     placeholder="Select Reason"
                     onChangeItem={item => dropdownChange(item)}
