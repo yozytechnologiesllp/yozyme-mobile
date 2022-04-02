@@ -22,6 +22,22 @@ export default StyleSheet.create({
         // textAlign: 'center'
         flexDirection: 'row'
     },
+    textboxStyle: {
+        borderRadius: 9,
+        width: '50%',
+        borderWidth: 2,
+        borderColor: 'skyblue',
+        // marginTop: '1.1%',
+        marginBottom: '1.1%',
+        height: 40,
+        marginLeft: '2%',
+        backgroundColor: 'white',
+        color: 'black',
+        // textAlign: 'center'
+        // justifyContent: 'center',
+        // textAlign: 'center'
+        flexDirection: 'row'
+    },
     dropdownStyle: {
         borderRadius: 9,
         borderWidth: 2,

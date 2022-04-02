@@ -478,7 +478,8 @@ function SubAttendance({ navigation }) {
                 <DropDownPicker
                     items={options}
                     // defaultValue={selected}
-                    // containerStyle={{ height: 40, width: '99.5%' }}
+                    containerStyle={{ height: 40, width: '99.5%' }}
+                    dropDownMaxHeight={90}
                     labelStyle={{ color: 'black', flexWrap: 'wrap' }}
                     style={styles.dropdownStyle}
                     itemStyle={{

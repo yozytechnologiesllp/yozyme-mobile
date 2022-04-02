@@ -218,6 +218,7 @@ function ShowPopup({ navigation, modalVisible, setModalVisible, stageDetails, ua
                                         items={UatOptions}
                                         // value={leaveCodeId}
                                         containerStyle={{ height: 40, width: '45%' }}
+                                        // dropDownMaxHeight={150}
                                         labelStyle={{ color: 'black', flexWrap: 'wrap' }}
                                         style={styles.dropdownStyle}
                                         itemStyle={{
