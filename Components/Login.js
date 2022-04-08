@@ -111,7 +111,7 @@ function Login({ navigation }) {
             config.headers.Authorization = "Bearer " + res.data.token;
             return config;
           });
-          storeDetails(login_data)
+          // storeDetails(login_data)
           ChangeId(login_data.login)
           let checkTwoStepVerification = {
             method: "GET",

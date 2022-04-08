@@ -265,7 +265,7 @@ export default StyleSheet.create({
     elevation: 7,
   },
   titleStyle: {
-    fontWeight: 'bold', fontSize: 18, color: 'black', marginTop: 9, alignItems: 'center', marginBottom: 5,
+    fontWeight: 'bold', fontSize: 16, color: 'black', marginTop: '2%', alignItems: 'center', marginBottom: '2%',
     justifyContent: 'center'
   },
   textStyle: { color: 'black', fontSize: 14, textAlign: 'left', paddingLeft: '5%' },

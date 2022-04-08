@@ -12,9 +12,8 @@ import { Menu, MenuItem } from 'react-native-material-menu';
 import HeaderView from '../HeaderView';
 
 
-
 function Apps({ navigation }) {
-    const { employee_Id, employee_Image, employee_Data } = useContext(StoreContext);
+    const { employee_Id, employee_Image, employee_Data, user_detail } = useContext(StoreContext);
     const [ScreenControl, setScreenControl] = useState(null);
     const [AllowedScreen, setAllowedScreen] = useState([])
     const [menu, setMenu] = useState([])
@@ -22,7 +21,7 @@ function Apps({ navigation }) {
 
     useEffect(() => {
         axios.get("/rpc/fun_emporgdetails?empid=" + employee_Id).then((res) => {
-            console.log(res.data[0].allowedmenuaccess[0].MenuIds)
+            // console.log(res.data[0].allowedmenuaccess[0].MenuIds, user_detail)
             let temp = res.data[0].allowedmenuaccess[0].MenuIds;
             setAllowedScreen(res.data[0].allowedscreencontrols);
             let allowMenu = temp.split(",");
@@ -33,6 +32,7 @@ function Apps({ navigation }) {
                 });
                 let menu = res.data;
                 let temp1 = menu.sort((a, b) => a.MenuId - b.MenuId);
+                // console.log(temp1, menu)
                 setMenu(
                     temp1.filter((e) => {
                         for (let i = 0; i < allowMenu.length; i++) {
@@ -77,7 +77,7 @@ function Apps({ navigation }) {
             }
             if (MenuId == 8) {
                 //Finance
-                if (user_iconName.rolecode == "FINMGR") {
+                if (user_detail.rolecode == "FINMGR") {
                     display.push({ "name": "Finance", "value": "Dashboard", "iconName": "wallet", "color": "red" })
                 }
                 else {

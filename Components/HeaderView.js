@@ -37,10 +37,10 @@ function HeaderView({ navigation }) {
                 source={require('../images/yozy.png')}
             />
             <Ionicons name="ios-notifications" color="darkblue" size={33} style={styles.notificationStyle} />
-            <View style={styles.headerText}>
-                <Text style={{ color: 'darkblue', fontWeight: 'bold' }}>{employee_Data.Firstname + " " + employee_Data.Lastname}</Text>
+            {/* <View style={styles.headerText}>
+                <Text style={{ color: 'darkblue', fontWeight: 'bold' }}>{employee_Data.Firstname}</Text>
                 <Text style={{ color: 'darkblue', fontWeight: 'bold' }}>{employee_Data.EmpId}</Text>
-            </View>
+            </View> */}
             <Menu
                 visible={visible}
                 anchor={<Text onPress={showMenu}><Avatar.Image size={40} source={{ uri: employee_Image }} /></Text>}

@@ -7,7 +7,8 @@ export default StyleSheet.create({
         marginRight: '29%'
     },
     headerText: {
-        width: '24%'
+        width: '22%',
+        alignItems: "center",
     },
     header: { flexDirection: 'row', padding: '3%', backgroundColor: '#F5F5F5', height: '7.6%' },
     notificationStyle: { marginRight: '2%' }

@@ -11,7 +11,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 
 
 const TwoAuthVerify = ({ navigation }) => {
-    const { employee_Id, tokenData, twoAuthData, employee_Data } = useContext(StoreContext);
+    const { employee_Id, tokenData, twoAuthData, employee_Data, login_data } = useContext(StoreContext);
 
     const cookies = new Cookies();
 
@@ -92,13 +92,21 @@ const TwoAuthVerify = ({ navigation }) => {
     };
 
 
-
+    const storeDetails = async () => {
+        try {
+            await AsyncStorage.setItem('username', login_data.login)
+            await AsyncStorage.setItem('password', login_data.password)
+        } catch (e) {
+            console.log('Failed to save the data to the storage')
+        }
+    }
 
     function RequestTomanager() {
         axios(NodificationPOST)
             .then((res) => {
                 console.log(res.data, 'res data')
                 ToastAndroid.show('Request Send Successfully', ToastAndroid.SHORT)
+                storeDetails(login_data)
                 // toast.success(`Request Send Successfully`, {
                 //     transition: Slide,
                 //     position: toast.POSITION.TOP_RIGHT,

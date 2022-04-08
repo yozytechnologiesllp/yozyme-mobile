@@ -15,21 +15,23 @@ import { NavigationContainer } from '@react-navigation/native';
 import RenderHtml from 'react-native-render-html';
 
 
-function ShowPopup({ navigation, modalVisible, setModalVisible, stageDetails, uatDropdown, refresh }) {
+function ShowPopup({ navigation, modalVisible, setModalVisible, stageDetails, uatDropdown, refresh, stageLabel, setStageLabel, assignedDropdown }) {
     const { employee_Id, user_detail, currentIssue } = useContext(StoreContext)
-    const [EmpDropDownData, setEmpDropDownData] = useState([]);
     const [stageData, setStageData] = useState()
     const [uatData, setUatData] = useState()
     const [updateFrom, setUpdateFrom] = useState([])
     const [updateTo, setUpdateTo] = useState([])
     const [updateField, setUpdateField] = useState([])
+    const [assignedData, setAssignedData] = useState()
+
 
     // console.log(currentIssue, 'current issue')
     const stageDetailsDropdown = stageDetails.map((x) => ({
         label: x.StageName,
         value: x.StageCode
     }))
-    let UatOptions = uatDropdown.length != 0 ? uatDropdown.map((x) => {
+    console.log(currentIssue.length != 0 ? currentIssue.CurrentStage[0].StageCode : null, stageLabel)
+    let UatOptions = uatDropdown.map((x) => {
         return {
             value: x.empid,
             label: x.empfn + " " + x.empln,
@@ -37,8 +39,8 @@ function ShowPopup({ navigation, modalVisible, setModalVisible, stageDetails, ua
             lastname: x.empln
             //   icon:<Avatar className="progressName">{x.empfn.charAt(0) + x.empln.charAt(0)}</Avatar>
         };
-    }) : [];
-    console.log(user_detail, 'user detail')
+    });
+    console.log(user_detail, assignedData, stageData, uatData, 'user detail')
     function update() {
         console.log(stageData != undefined,
             uatData
@@ -49,11 +51,11 @@ function ShowPopup({ navigation, modalVisible, setModalVisible, stageDetails, ua
                 updateTo.push(stageData.label)
                 updateField.push('StageName')
             }
-            //   if ((constAssignedId != assignedId && issueType != "Epic" && issueType != "SubTask") || (historyUpdate)) {
-            //     updateFrom.push(constAssignedId)
-            //     updateTo.push(assignedId)
-            //     updateField.push("Assigned To")
-            //   }
+            if ((assignedData != undefined && assignedData.value != currentIssue.AssignedTo && currentIssue.IssueType != "Epic")) {
+                updateFrom.push(currentIssue.AssignedTo)
+                updateTo.push(assignedData.value)
+                updateField.push("Assigned To")
+            }
             if (uatData != undefined && uatData.value != currentIssue.AssignedToUAT) {
                 updateFrom.push(currentIssue.AssignedToUAT)
                 updateTo.push(uatData.value)
@@ -63,19 +65,27 @@ function ShowPopup({ navigation, modalVisible, setModalVisible, stageDetails, ua
                 ||
                 (uatData != undefined
                     && uatData.value != currentIssue.AssignedToUAT
-                )) {
-                axios.patch('agile_issue_details?IssueId=eq.' + currentIssue.IssueId,
-                    {
-                        CurrentStage: stageData == undefined ? currentIssue.CurrentStage : [{ StageCode: stageData.value, StageName: stageData.label, DateMoved: moment().format("YYYY-MM-DD") }],
-                        // AssignedTo: issueType == "Epic" ? null : assignedId,
-                        // AssignedToDetails: { FN: issueType == "Epic" ? null : assignedTo.split(" ")[0], LN: issueType == "Epic" ? null : assignedTo.split(" ")[1] },
-                        // AssignedToDetails: { FN: issueType == "Epic" ? null : Firstname, LN: issueType == "Epic" ? null : Lastname },
-                        AssignedToUAT: uatData == undefined ? currentIssue.AssignedToUAT : uatData.value,
-                        AssignedToUATDetails: uatData == undefined ? currentIssue.AssignedToUATDetails : { FN: uatData.firstname, LN: uatData.lastname },
-                    })
+                )
+                ||
+                (assignedData != undefined && assignedData.value != currentIssue.AssignedTo)) {
+                console.log((stageData != undefined && stageData.value != currentIssue.CurrentStage[0].StageCode),
+                    (uatData != undefined && uatData.value != currentIssue.AssignedToUAT),
+                    (assignedData != undefined && assignedData.value != currentIssue.AssignedTo))
+                console.log({ FN: assignedData == undefined ? currentIssue.AssignedToDetails.FN : assignedData.firstname, LN: assignedData == undefined ? currentIssue.AssignedToDetails.LN : assignedData.LN })
+                console.log(stageData == undefined ? currentIssue.CurrentStage : [{ StageCode: stageData.value, StageName: stageData.label, DateMoved: moment().format("YYYY-MM-DD") }])
+                let patchData = {
+                    CurrentStage: stageData == undefined ? currentIssue.CurrentStage : [{ StageCode: stageData.value, StageName: stageData.label, DateMoved: moment().format("YYYY-MM-DD") }],
+                    AssignedTo: assignedData == undefined ? currentIssue.AssignedTo : assignedData.value,
+                    // AssignedToDetails: { FN: issueType == "Epic" ? null : assignedTo.split(" ")[0], LN: issueType == "Epic" ? null : assignedTo.split(" ")[1] },
+                    AssignedToDetails: { FN: assignedData == undefined ? currentIssue.AssignedToDetails.FN : assignedData.firstname, LN: assignedData == undefined ? currentIssue.AssignedToDetails.LN : assignedData.lastname },
+                    AssignedToUAT: uatData == undefined ? currentIssue.AssignedToUAT : uatData.value,
+                    AssignedToUATDetails: uatData == undefined ? currentIssue.AssignedToUATDetails : { FN: uatData.firstname, LN: uatData.lastname },
+                }
+                console.log(patchData, 'patch Data')
+                axios.patch('agile_issue_details?IssueId=eq.' + currentIssue.IssueId, patchData)
                     .then((res) => {
                         ToastAndroid.show('Updated Successfully', ToastAndroid.SHORT)
-                        refresh()
+
                         axios.post('agile_issue_history', {
                             IssueId: currentIssue.IssueId,
                             ChangedBy: employee_Id,
@@ -93,6 +103,7 @@ function ShowPopup({ navigation, modalVisible, setModalVisible, stageDetails, ua
                             IsActive: "Y",
                             Status: null
                         })
+                            .catch((e) => { console.log(e, 'agile history') })
                         let notificationData = {
                             CreatedDate: moment()
                                 .utcOffset("+05:30")
@@ -111,7 +122,12 @@ function ShowPopup({ navigation, modalVisible, setModalVisible, stageDetails, ua
                             .then((res) => console.log(res))
                             .catch((error) => console.log(error));
                         setModalVisible(false)
+                        setAssignedData()
+                        setStageData()
+                        setUatData()
+                        refresh()
                     })
+                    .catch((e) => { console.log(e, 'patch alert') })
             }
         }
         else {
@@ -119,7 +135,16 @@ function ShowPopup({ navigation, modalVisible, setModalVisible, stageDetails, ua
         }
 
     }
-    console.log(currentIssue, 'stage name')
+    console.log(currentIssue, 'current issue')
+    let Assetoptions = assignedDropdown.map((x) => {
+        return {
+            value: x.empid,
+            label: x.empfn + " " + x.empln,
+            firstname: x.empfn,
+            lastname: x.empln,
+            projectRole: x.projectrole,
+        };
+    });
     return (
         <ScrollView>
             <Modal
@@ -149,19 +174,18 @@ function ShowPopup({ navigation, modalVisible, setModalVisible, stageDetails, ua
 
                         <View style={styles.card}>
                             <RenderHtml
-
                                 // contentWidth={110}
                                 source={{ html: currentIssue.Description }}
                             />
                         </View>
                         {
-                            (currentIssue.IssueType != "Epic") && (currentIssue.length != 0 ? currentIssue.CurrentStage[0].StageCode == "BLG" || currentIssue.CurrentStage[0].StageCode == "DEV" : false) ?
+                            (currentIssue.length != 0 ? currentIssue.OriginalEstimate != null : false) ?
                                 <View style={{ flexDirection: 'row', margin: '2%' }}>
                                     <Text style={styles.labelStyle}>Stage Update:</Text>
                                     <DropDownPicker
                                         defaultValue={currentIssue.length != 0 ? currentIssue.CurrentStage[0].StageCode : null}
                                         items={stageDetailsDropdown}
-                                        // value={leaveCodeId}
+                                        // value={stageLabel}
                                         containerStyle={{ height: 40, width: '45%' }}
                                         labelStyle={{ color: 'black', flexWrap: 'wrap' }}
                                         style={styles.dropdownStyle}
@@ -170,14 +194,8 @@ function ShowPopup({ navigation, modalVisible, setModalVisible, stageDetails, ua
                                         }}
                                         // placeholder="Select Leave"
                                         onChangeItem={item => {
-                                            if (currentIssue.length != 0) {
-                                                if ((currentIssue.CurrentStage[0].StageCode == "BLG" && item.label != "In Development" && item.label != "User Acceptace Testing" && item.label != "Done") ||
-                                                    (currentIssue.CurrentStage[0].StageCode == "DEV" && item.label != "Backlog" && item.label != "Refined" && item.label != "Done")) {
-                                                    console.log(currentIssue.CurrentStage[0].StageCode == "BLG", item.label != "In Development", item.label != "User Acceptace Testing", item.label != "Done",
-                                                        currentIssue.CurrentStage[0].StageCode == "DEV", item.label != "Backlog", item.label != "Refined", item.label != "Done")
-                                                    setStageData(item)
-                                                }
-                                            }
+                                            setStageLabel(item.value)
+                                            setStageData(item)
                                         }}
                                     />
                                 </View>
@@ -189,8 +207,8 @@ function ShowPopup({ navigation, modalVisible, setModalVisible, stageDetails, ua
                                 <View style={{ flexDirection: 'row', margin: '2%' }}>
                                     <Text style={styles.labelStyle}>Assigned To:</Text>
                                     <DropDownPicker
-                                        // defaultValue={currentIssue.StageName}
-                                        items={stageDetailsDropdown}
+                                        defaultValue={currentIssue.length != 0 ? currentIssue.AssignedTo : null}
+                                        items={Assetoptions}
                                         // value={leaveCodeId}
                                         containerStyle={{ height: 40, width: '45%' }}
                                         labelStyle={{ color: 'black', flexWrap: 'wrap' }}
@@ -198,10 +216,9 @@ function ShowPopup({ navigation, modalVisible, setModalVisible, stageDetails, ua
                                         itemStyle={{
                                             justifyContent: 'flex-start',
                                         }}
-                                        // placeholder="Select Leave"
+                                        placeholder="Select Assigned To"
                                         onChangeItem={item => {
-                                            setStageData(item)
-                                            console.log(item)
+                                            setAssignedData(item)
                                         }}
                                     />
                                 </View>
@@ -209,8 +226,7 @@ function ShowPopup({ navigation, modalVisible, setModalVisible, stageDetails, ua
                                 null
                         }
                         {
-                            currentIssue.IssueType != "Epic" ?
-
+                            currentIssue.IssueType != "Epic" && uatDropdown.length != 0 ?
                                 <View style={{ flexDirection: 'row', margin: '2%' }}>
                                     <Text style={styles.labelStyle}>Assigned To UAT:</Text>
                                     <DropDownPicker
@@ -233,10 +249,15 @@ function ShowPopup({ navigation, modalVisible, setModalVisible, stageDetails, ua
                         }
                         {/* <Text>{currentIssue.Description.rendered.replace(/<img .*?>/g, "")}</Text> */}
                         {/* <Text></Text>
-                        <Text></Text>
                         <Text></Text> */}
-                        <Text style={styles.submitStyle} onPress={() => update()}>
-                            {currentIssue.IssueType != "Epic" ? "Update" : "Close"}</Text>
+                        {
+                            assignedData != undefined || uatData != undefined || stageData != undefined ?
+
+                                <Text style={styles.submitStyle} onPress={() => update()}>
+                                    Update</Text>
+                                :
+                                null
+                        }
                     </View>
                 </View>
             </Modal>
