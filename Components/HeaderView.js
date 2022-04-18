@@ -19,6 +19,7 @@ import RNRestart from 'react-native-restart';
 function HeaderView({ navigation }) {
     const { employee_Data, employee_Image } = useContext(StoreContext)
     const [visible, setVisible] = useState(false);
+    const [test, setTest] = useState(0)
 
     const hideMenu = () => setVisible(false);
 
@@ -29,6 +30,11 @@ function HeaderView({ navigation }) {
         AsyncStorage.removeItem('username')
         // navigation.navigate('Logout')
         RNRestart.Restart()
+        // for (let i = 0; i < 5; i++) {
+        //     setTest(test + 1)
+        //     console.log(test + 1, prev => prev + 1)
+        // }
+        // console.log(test)
     }
     return (
         <View style={styles.header}>
@@ -37,10 +43,10 @@ function HeaderView({ navigation }) {
                 source={require('../images/yozy.png')}
             />
             <Ionicons name="ios-notifications" color="darkblue" size={33} style={styles.notificationStyle} />
-            {/* <View style={styles.headerText}>
+            <View style={styles.headerText}>
                 <Text style={{ color: 'darkblue', fontWeight: 'bold' }}>{employee_Data.Firstname}</Text>
                 <Text style={{ color: 'darkblue', fontWeight: 'bold' }}>{employee_Data.EmpId}</Text>
-            </View> */}
+            </View>
             <Menu
                 visible={visible}
                 anchor={<Text onPress={showMenu}><Avatar.Image size={40} source={{ uri: employee_Image }} /></Text>}

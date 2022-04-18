@@ -86,7 +86,7 @@ function Apps({ navigation }) {
             }
             if (MenuId == 9) {
                 //Manager Approval
-                display.push({ "name": "Manager Approval", "value": "Dashboard", "iconName": "tasks", "color": "darkblue" })
+                display.push({ "name": "Manager Approval", "value": "Approval", "iconName": "tasks", "color": "darkblue" })
             }
             if (MenuId == 10) {
                 //Master Data

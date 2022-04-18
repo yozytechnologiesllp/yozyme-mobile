@@ -69,7 +69,15 @@ function Profile({ }) {
             }
         });
     }
-
+    const username = async () => {
+        try {
+            const username = await AsyncStorage.setItem('username')
+            console.log(username, 'user name')
+        } catch (e) {
+            console.log('Failed to save the data to the storage')
+        }
+    }
+    console.log(username, 'user name')
     return (
 
         <ScrollView>

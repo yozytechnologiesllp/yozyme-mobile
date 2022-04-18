@@ -106,7 +106,7 @@ const TwoAuthVerify = ({ navigation }) => {
             .then((res) => {
                 console.log(res.data, 'res data')
                 ToastAndroid.show('Request Send Successfully', ToastAndroid.SHORT)
-                storeDetails(login_data)
+                storeDetails()
                 // toast.success(`Request Send Successfully`, {
                 //     transition: Slide,
                 //     position: toast.POSITION.TOP_RIGHT,
@@ -142,13 +142,16 @@ const TwoAuthVerify = ({ navigation }) => {
                 .then((res) => {
                     if (res.data.msg === "verification passed") {
                         // localStorage.setItem("token", data.Empid);
+                        storeDetails()
+                        navigation.navigate('BottomNav')
                         cookies.set("token", tokenData, {
                             path: "/",
                             expires: new Date(new Date().getTime() + 10800000),
                         });
                         ToastAndroid.show('Successfully Login', ToastAndroid.SHORT)
                         console.log(res.data);
-                        navigation.navigate('BottomNav')
+
+
                         // toast.success(`Successfully Login`, {
                         //     transition: Slide,
                         //     position: toast.POSITION.TOP_RIGHT,

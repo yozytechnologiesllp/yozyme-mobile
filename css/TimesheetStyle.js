@@ -24,19 +24,51 @@ export default StyleSheet.create({
     },
     textboxStyle: {
         borderRadius: 9,
-        width: '50%',
+        width: '25%',
         borderWidth: 2,
         borderColor: 'skyblue',
         // marginTop: '1.1%',
         marginBottom: '1.1%',
         height: 40,
-        marginLeft: '2%',
+        marginLeft: '5%',
+        marginRight: '5%',
         backgroundColor: 'white',
         color: 'black',
-        // textAlign: 'center'
-        // justifyContent: 'center',
+        textAlign: 'center',
+        justifyContent: 'center',
         // textAlign: 'center'
         flexDirection: 'row'
+    },
+    updateStyle: {
+        borderRadius: 9,
+        width: '9%',
+        borderWidth: 2,
+        borderColor: 'skyblue',
+        // marginTop: '1.1%',
+        fontSize: 25,
+        marginBottom: '1.1%',
+        height: 40,
+        // marginLeft: '4%',
+        marginRight: '1.5%',
+        backgroundColor: 'white',
+        color: 'black',
+        textAlign: 'center',
+        justifyContent: 'center',
+        // textAlign: 'center'
+        flexDirection: 'row'
+    },
+    dayLabel: {
+        color: 'darkblue',
+        fontWeight: 'bold',
+        marginTop: '4%',
+        marginBottom: '0.5%',
+        fontSize: 18
+    },
+    rowStyle: {
+        padding: '2%',
+        backgroundColor: '#F4FBFF',
+        borderRadius: 20,
+        marginTop: '4%'
     },
     dropdownStyle: {
         borderRadius: 9,

@@ -229,7 +229,10 @@ export default StyleSheet.create({
     },
     cardStyle: {
         borderRadius: 20,
-        margin: '9%',
+        marginTop: '5%',
+        marginLeft: '9%',
+        marginRight: '9%',
+        marginBottom: '4%',
         borderColor: 'black',
         backgroundColor: '#D4F1F4',
         padding: '2%',
@@ -245,6 +248,18 @@ export default StyleSheet.create({
         elevation: 7,
         alignItems: 'center',
         justifyContent: 'center'
+    },
+    alertStyle: {
+
+        marginTop: '5%',
+        marginLeft: '9%',
+        marginRight: '9%',
+        marginBottom: '4%',
+        padding: '2%',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontSize: 24,
+        fontWeight: 'bold'
     },
     buttonView: {
         flexDirection: 'row'

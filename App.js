@@ -12,6 +12,7 @@ import TwoAuthVerify from './Components/TwoAuthVerify';
 import Logout from './Components/Logout';
 import HeaderView from './Components/HeaderView';
 import Approval from './Components/Apps/MangerApproval/Approval'
+import Timesheet from './Components/Apps/Timesheet'
 
 function App() {
 
@@ -26,7 +27,7 @@ function App() {
         <NavStack.Navigator
         //initialRouteName={initialPath}
         >
-          {/* <NavStack.Screen
+          <NavStack.Screen
             name="Login"
             component={Login}
             options={{ headerShown: false }}
@@ -49,7 +50,7 @@ function App() {
             name="HeaderView"
             component={HeaderView}
             options={{ headerShown: false }}
-          /> */}
+          />
           {/*<NavStack.Screen
             name="SubAttendance"
             component={SubAttendance}
@@ -60,11 +61,11 @@ function App() {
             component={KanbanBoard}
             options={{ headerShown: false }}
           /> */}
-          <NavStack.Screen
-            name="ManagerApproval"
-            component={Approval}
+          {/* <NavStack.Screen
+            name="Timesheet"
+            component={Timesheet}
             options={{ headerShown: false }}
-          />
+          /> */}
         </NavStack.Navigator>
       </NavigationContainer>
     </State>
