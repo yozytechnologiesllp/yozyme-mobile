@@ -19,7 +19,8 @@ function State(props) {
     apidata: [],
     loading: false,
     originalestimatedata: [],
-    stageDetails: []
+    stageDetails: [],
+    projectCode: ''
   }
 
   const [state, dispatch] = useReducer(Reducer, intialState)
@@ -57,6 +58,13 @@ function State(props) {
   const setStageDetails = (data) => {
     dispatch({
       type: actionTypes.STAGE_DETAILS,
+      data: data
+    })
+
+  }
+  const setProjectCode = (data) => {
+    dispatch({
+      type: actionTypes.SET_PROJECTCODE,
       data: data
     })
 
@@ -150,6 +158,7 @@ function State(props) {
     loading: state.loading,
     originalestimatedata: state.originalestimatedata,
     stageDetails: state.stageDetails,
+    projectCode: state.projectCode,
     LoginOnChange,
     ChangeDetail,
     ChangeId,
@@ -164,7 +173,8 @@ function State(props) {
     setApidata,
     setLoading,
     setOriginalestimatedata,
-    setStageDetails
+    setStageDetails,
+    setProjectCode
   }}>{props.children}</Store.Provider>;
 }
 

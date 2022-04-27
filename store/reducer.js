@@ -53,6 +53,11 @@ const Reducer = (state, action) => {
                     ...state,
                     currentIssue: action.data
                 }
+            case actionTypes.SET_PROJECTCODE:
+                return {
+                    ...state,
+                    projectCode: action.data
+                }
             case actionTypes.CHANGE_TOKEN:
                 return {
                     ...state,

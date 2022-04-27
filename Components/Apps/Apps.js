@@ -13,12 +13,12 @@ import HeaderView from '../HeaderView';
 
 
 function Apps({ navigation }) {
-    const { employee_Id, employee_Image, employee_Data, user_detail } = useContext(StoreContext);
+    const { employee_Id, employee_Image, employee_Data, user_detail, projectCode } = useContext(StoreContext);
     const [ScreenControl, setScreenControl] = useState(null);
     const [AllowedScreen, setAllowedScreen] = useState([])
     const [menu, setMenu] = useState([])
     const [display, setDisplay] = useState([])
-
+    console.log(projectCode, 'projectcode')
     useEffect(() => {
         axios.get("/rpc/fun_emporgdetails?empid=" + employee_Id).then((res) => {
             // console.log(res.data[0].allowedmenuaccess[0].MenuIds, user_detail)

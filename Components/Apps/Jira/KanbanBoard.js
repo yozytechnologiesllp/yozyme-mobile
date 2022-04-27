@@ -18,7 +18,7 @@ import { RefreshControl } from 'react-native-web';
 
 function KanbanBoard({ navigation }) {
     const { employee_Id, user_detail, data, setData, setCurrentIssue, setApidata,
-        setLoading, setOriginalestimatedata, stageDetails, setStageDetails, employee_Data } = useContext(StoreContext)
+        setLoading, setOriginalestimatedata, stageDetails, setStageDetails, employee_Data, projectCode, setProjectCode, currentIssue } = useContext(StoreContext)
     const [status, setStatus] = useState("Backlog")
     const [modalVisible, setModalVisible] = useState(false);
     const [testerid, setTesterId] = useState([]);
@@ -27,7 +27,7 @@ function KanbanBoard({ navigation }) {
     const [assignedDropdown, setAssignedDropdown] = useState([])
     const [ragstatus, setRagStatus] = useState([])
     const [projectDetails, setProjectDetails] = useState([]);
-    const [filteredData, setFilteredData] = useState([])
+    const [employeeFilter, setEmployeeFilter] = useState()
     // console.log(user_detail.rolecode, 'user detail', testerid, 'tester id')
     const TesterId =
         testerid &&
@@ -90,19 +90,17 @@ function KanbanBoard({ navigation }) {
             })
         axios.get(api)
             .then((res) => {
+                // if (projectCode == []) {
                 setAssignedDropdown(res.data)
                 let data = res.data;
-
-                // let Tester = data.filter(e => e.employeeroleinproject == "UAT Tester")
-
-                // console.log(Tester);
-
                 data.map((item) => {
                     var findItem = projectDetails.find(
                         (x) => x.projectcode === item.projectcode
                     );
                     if (!findItem) projectDetails.push(item);
                 });
+                setProjectCode(data[0].projectcode)
+                // }
             })
     }
     // function Reupdatedata() {
@@ -122,7 +120,7 @@ function KanbanBoard({ navigation }) {
     //         .catch((e) => console.log(e))
     // }
     // console.log(ragstatus, 'rag status')
-
+    console.log(projectCode, 'project code')
     function handleProject(item) {
         // setProjectCode(item.value);
         // setProjectLabel(item.label);
@@ -136,11 +134,27 @@ function KanbanBoard({ navigation }) {
         // setProjectnamedetails(
         //     KanbanBoardData.filter((x) => x.ProjectId == item.value)
         // );
-        console.log(data.filter((e) => e.ProjectId == item.value), 'filtered data')
-        setFilteredData(data.filter((e) => e.ProjectId == item.value))
+        // console.log(data.filter((e) => e.ProjectId == item.value), 'filtered data')
+        // setFilteredData(data.filter((e) => e.ProjectId == item.value))
+        setProjectCode(item.value)
 
     }
-    console.log("", 'data')
+    console.log(currentIssue, 'data')
+    let Assetoptions = assignedDropdown.filter(e =>
+        // e.empid != employee_Id && 
+        e.projectcode == projectCode)
+        .map((x) => {
+            return {
+                value: x.empid,
+                label: x.empfn + " " + x.empln,
+                firstname: x.empfn,
+                lastname: x.empln,
+                projectRole: x.projectrole,
+            };
+        });
+    const filteredData = employeeFilter == undefined ? data.filter(e => e.CurrentStage[0].StageName == status && e.ProjectId == projectCode) :
+        data.filter(e => e.CurrentStage[0].StageName == status && e.ProjectId == projectCode && e.AssignedTo == employeeFilter)
+    console.log(projectCode, 'project code')
     return (
         <>
             <HeaderView />
@@ -151,28 +165,54 @@ function KanbanBoard({ navigation }) {
                 {/* <EditPopup editVisible={editVisible} setEditVisible={setEditVisible} apidata={apidata} 
                     setApidata={setApidata} loading={loading} setLoading={setLoading} originalestimatedata={originalestimatedata} setOriginalestimatedata={setOriginalestimatedata} />  */}
                 <Text style={styles.titleStyle}>Kanban Board</Text>
-                {
-                    user_detail.rolecode == "ITMGR1" ?
-                        <DropDownPicker
-                            // defaultValue={currentIssue.length != 0 ? currentIssue.CurrentStage[0].StageCode : null}
-                            items={ProjectOption}
-                            // value={stageLabel}
-                            containerStyle={{ height: 40, width: '45%' }}
-                            labelStyle={{ color: 'black', flexWrap: 'wrap' }}
-                            style={styles.dropdownStyle}
-                            itemStyle={{
-                                justifyContent: 'flex-start',
-                            }}
-                            placeholder="Select Project"
-                            onChangeItem={(item) => {
-                                // setStageLabel(item.value)
-                                // setStageData(item)
-                                handleProject(item)
-                            }}
-                        />
-                        :
-                        null
-                }
+                <View style={styles.directionRow}>
+
+                    {
+                        projectDetails.length != 0 ?
+
+                            <DropDownPicker
+                                defaultValue={projectCode}
+                                items={ProjectOption}
+                                // value={stageLabel}
+                                containerStyle={{ height: 40, width: '36%', marginRight: '27%' }}
+                                labelStyle={{ color: 'black', flexWrap: 'wrap' }}
+                                style={styles.dropdownStyle}
+                                itemStyle={{
+                                    justifyContent: 'flex-start',
+                                    // height: 5
+                                }}
+                                placeholder="Select Project"
+                                onChangeItem={(item) => {
+                                    // setStageLabel(item.value)
+                                    // setStageData(item)
+                                    handleProject(item)
+                                }}
+                            />
+                            :
+                            null
+                    }
+                    {
+                        user_detail.rolecode == "ITMGR1" ?
+                            <DropDownPicker
+                                items={Assetoptions}
+                                // value={leaveCodeId}
+                                containerStyle={{ height: 40, width: '45%', alignContent: 'flex-end' }}
+                                labelStyle={{ color: 'black', flexWrap: 'wrap' }}
+                                style={styles.dropdownStyle}
+                                itemStyle={{
+                                    justifyContent: 'flex-start',
+                                    // overflow: 'visible'
+                                }}
+                                placeholder="Select Employee"
+                                onChangeItem={item => {
+                                    setEmployeeFilter(item.value)
+                                }}
+                            />
+                            :
+                            null
+                    }
+
+                </View>
                 <View style={styles.buttonStyle}>
                     <Text style={status == "Backlog" ? styles.selectedText : styles.text} onPress={() => { setStatus("Backlog") }}>Backlog</Text>
                     <Text style={status == "Refined" ? styles.selectedText : styles.text} onPress={() => { setStatus("Refined") }}>Refined</Text>
@@ -180,107 +220,114 @@ function KanbanBoard({ navigation }) {
                     <Text style={status == "User Acceptace Testing" ? styles.selectedText : styles.text} onPress={() => { setStatus("User Acceptace Testing") }}>UAT</Text>
                     <Text style={status == "Done" ? styles.selectedText : styles.text} onPress={() => { setStatus("Done") }}>Done</Text>
                 </View>
-
                 {
-                    filteredData.filter(e => e.CurrentStage[0].StageName == status).map((e) => (
-                        <Card style={styles.cardStyle}
-                            onPress={() => {
-                                setModalVisible(true)
-                                setCurrentIssue(e)
-                            }}
-                        >
-                            <Text style={styles.issueTitle}>{e.IssueTitle}</Text>
-                            {
-                                e.LinkToEpic != null ?
-                                    <View style={styles.direction}>
-                                        <Text style={[styles.epicAndId, { backgroundColor: '#cda3e3', fontWeight: '500' }]}>{e.LinkToEpic[0].Title}</Text>
-                                        <Text style={[styles.epicAndId, { backgroundColor: 'beige' }]}>{e.ProjectDetails[0].ProjName}-{e.IssueId}</Text>
-                                    </View>
-                                    :
-                                    null
-                            }
+                    filteredData.length != 0 ?
 
-                            <View style={styles.direction}>
+                        filteredData.map((e) => (
+                            <Card style={styles.cardStyle}
+                                onPress={() => {
+                                    setModalVisible(true)
+                                    setCurrentIssue(e)
+                                }}
+                            >
+                                <Text style={styles.issueTitle}>{e.IssueTitle}</Text>
+                                {
+                                    e.LinkToEpic != null ?
+                                        <View style={styles.direction}>
+                                            <Text style={[styles.epicAndId, { backgroundColor: '#cda3e3', fontWeight: '500' }]}>{e.LinkToEpic[0].Title}</Text>
+                                            <Text style={[styles.epicAndId, { backgroundColor: 'beige' }]}>{e.ProjectDetails[0].ProjName}-{e.IssueId}</Text>
+                                        </View>
+                                        :
+                                        null
+                                }
 
-                                <FontAwesome
-                                    name={e.Priority == "Highest" ? 'angle-double-up' :
-                                        e.Priority == "High" ? 'angle-up' :
-                                            e.Priority == "Low" ? 'angle-down' :
-                                                e.Priority == "Lowest" ? 'angle-double-down' :
-                                                    'minus'
-                                    }
-                                    color={e.Priority == "Highest" ? 'red' :
-                                        e.Priority == "High" ? 'red' :
-                                            e.Priority == "Low" ? '#7bb92f' :
-                                                e.Priority == "Lowest" ? '#7bb92f' :
-                                                    'blue'
-                                    } size={24} style={styles.iconStyle} />
+                                <View style={styles.direction}>
 
-                                <Text style={[styles.issueTypeStyle]}>
                                     <FontAwesome
-                                        style={styles.issueIcon}
-                                        name={e.IssueType == "Story" ? 'bookmark' :
-                                            e.IssueType == "Task" ? 'check-circle' :
-                                                e.IssueType == "Bug" ? 'dot-circle-o' :
-                                                    e.IssueType == "Epic" ? 'bolt' : 'pencil-square-o'}
+                                        name={e.Priority == "Highest" ? 'angle-double-up' :
+                                            e.Priority == "High" ? 'angle-up' :
+                                                e.Priority == "Low" ? 'angle-down' :
+                                                    e.Priority == "Lowest" ? 'angle-double-down' :
+                                                        'minus'
+                                        }
+                                        color={e.Priority == "Highest" ? 'red' :
+                                            e.Priority == "High" ? 'red' :
+                                                e.Priority == "Low" ? '#7bb92f' :
+                                                    e.Priority == "Lowest" ? '#7bb92f' :
+                                                        'blue'
+                                        } size={24} style={styles.iconStyle} />
 
-                                        color={e.IssueType == "Story" ? 'green' :
-                                            e.IssueType == "Task" ? 'skyblue' :
-                                                e.IssueType == "Bug" ? 'red' :
-                                                    e.IssueType == "Epic" ? '#cda3e3' : 'skyblue'} size={22} /> </Text>
-                                {
-                                    e.AssignedToDetails.FN != "null" ?
-                                        <Text style={styles.name}>{e.AssignedToDetails.FN + " " + e.AssignedToDetails.LN}</Text>
-                                        :
-                                        null
-                                }
+                                    <Text style={[styles.issueTypeStyle]}>
+                                        <FontAwesome
+                                            style={styles.issueIcon}
+                                            name={e.IssueType == "Story" ? 'bookmark' :
+                                                e.IssueType == "Task" ? 'check-circle' :
+                                                    e.IssueType == "Bug" ? 'dot-circle-o' :
+                                                        e.IssueType == "Epic" ? 'bolt' : 'pencil-square-o'}
 
-                                {ragstatus &&
-                                    ragstatus.filter((c) => c.IssueId == e.IssueId).length !=
-                                    0 ? (
-                                    <Text style={styles.iconStyle}><Avatar.Text backgroundColor={ragstatus.filter((c) => c.IssueId == e.IssueId)[0]
-                                        .RiskofDelivery === "A" ? 'yellow' :
-                                        ragstatus.filter((c) => c.IssueId == e.IssueId)[0]
-                                            .RiskofDelivery === "G" ? 'green' :
-                                            'red'} label={ragstatus.filter((c) => c.IssueId == e.IssueId)[0]
-                                                .RiskofDelivery} size={24} color={ragstatus.filter((c) => c.IssueId == e.IssueId)[0]
-                                                    .RiskofDelivery === "A" ? 'black' : 'white'} /> </Text>
-                                ) : null}
-                                {/* <FontAwesome name='eye' color='black' size={22} style={styles.iconStyleShow}
-                                    onPress={() => {
-                                        setModalVisible(true)
-                                        setCurrentIssue(e)
-                                    }} /> */}
-                                {
-                                    status == "In Development" || status == "User Acceptace Testing" ?
+                                            color={e.IssueType == "Story" ? 'green' :
+                                                e.IssueType == "Task" ? 'skyblue' :
+                                                    e.IssueType == "Bug" ? 'red' :
+                                                        e.IssueType == "Epic" ? '#cda3e3' : 'skyblue'} size={22} /> </Text>
+                                    {
+                                        e.AssignedToDetails.FN != "null" ?
+                                            <Text style={styles.name}>{e.AssignedToDetails.FN + " " + e.AssignedToDetails.LN}</Text>
+                                            :
+                                            null
+                                    }
 
-                                        <FontAwesome name='edit' color='black' size={20} style={styles.iconStyleShow}
-                                            onPress={() => {
+                                    {ragstatus &&
+                                        ragstatus.filter((c) => c.IssueId == e.IssueId).length !=
+                                        0 ? (
+                                        <Text style={styles.iconStyle}><Avatar.Text backgroundColor={ragstatus.filter((c) => c.IssueId == e.IssueId)[0]
+                                            .RiskofDelivery === "A" ? 'yellow' :
+                                            ragstatus.filter((c) => c.IssueId == e.IssueId)[0]
+                                                .RiskofDelivery === "G" ? 'green' :
+                                                'red'} label={ragstatus.filter((c) => c.IssueId == e.IssueId)[0]
+                                                    .RiskofDelivery} size={24} color={ragstatus.filter((c) => c.IssueId == e.IssueId)[0]
+                                                        .RiskofDelivery === "A" ? 'black' : 'white'} /> </Text>
+                                    ) : null}
+                                    {/* <FontAwesome name='eye' color='black' size={22} style={styles.iconStyleShow}
+                        onPress={() => {
+                            setModalVisible(true)
+                            setCurrentIssue(e)
+                        }} /> */}
+                                    {
+                                        (status == "In Development" || status == "User Acceptace Testing") && (e.AssignedTo == employee_Id) ?
 
-                                                setCurrentIssue(e)
-                                                setStageLabel(e.CurrentStage[0].StageCode)
-                                                axios
-                                                    .get("agile_issue_progress?IssueId=eq." + e.IssueId)
-                                                    .then((res) => {
-                                                        setApidata(res.data);
-                                                        setLoading(false);
-                                                    });
+                                            <FontAwesome name='edit' color='black' size={20} style={styles.iconStyleShow}
+                                                onPress={() => {
 
-                                                axios
-                                                    .get("agile_issue_details?IssueId=eq." + e.IssueId)
-                                                    .then((res) => {
-                                                        setOriginalestimatedata(res.data);
-                                                    });
-                                                navigation.navigate('EditPopup', { refresh: refresh })
-                                            }} />
-                                        :
-                                        null
-                                }
-                            </View>
+                                                    setCurrentIssue(e)
+                                                    setStageLabel(e.CurrentStage[0].StageCode)
+                                                    axios
+                                                        .get("agile_issue_progress?IssueId=eq." + e.IssueId)
+                                                        .then((res) => {
+                                                            setApidata(res.data);
+                                                            setLoading(false);
+                                                        });
 
-                        </Card>
-                    ))
+                                                    axios
+                                                        .get("agile_issue_details?IssueId=eq." + e.IssueId)
+                                                        .then((res) => {
+                                                            setOriginalestimatedata(res.data);
+                                                        });
+                                                    navigation.navigate('EditPopup', { refresh: refresh })
+                                                }} />
+                                            :
+                                            null
+                                    }
+                                </View>
+
+                            </Card>
+                        ))
+
+                        :
+                        <View style={styles.contentCenter}>
+                            <Text style={[styles.issueTitle, { paddingTop: '50%', fontSize: 22, paddingLeft: '2%', paddingRight: '2%', fontWeight: 'bold' }]}>No Task or Story in {status}</Text>
+                        </View>
                 }
+
             </ScrollView>
         </>
     )

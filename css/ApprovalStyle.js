@@ -264,6 +264,33 @@ export default StyleSheet.create({
     buttonView: {
         flexDirection: 'row'
     },
+    allStyle: {
+        alignItems: 'center',
+        // flexDirection: 'row',
+
+    },
+    direction: {
+        flexDirection: 'row'
+    },
+    allButton: {
+        borderRadius: 9,
+        borderWidth: 2,
+        borderColor: 'skyblue',
+        marginBottom: '2%',
+        marginTop: '4%',
+        marginLeft: '9%',
+        marginRight: '9%',
+        // 
+
+        // fontSize: 22,
+        // height: 45,
+        // backgroundColor: 'white',
+        // color: 'black',
+        // textAlign: 'center'
+        justifyContent: 'space-around',
+        // textAlign: 'center'
+        flexDirection: 'row'
+    },
     buttonStyle: {
         borderRadius: 9,
         borderWidth: 2,

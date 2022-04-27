@@ -74,7 +74,7 @@ function EditPopup({ navigation, route }) {
     function Resetdata() {
         setEditvalue("");
         setcount(1);
-        setPercentageCount();
+        setPercentageCount(10);
     }
 
     // old data refresh after submit new data
@@ -88,7 +88,7 @@ function EditPopup({ navigation, route }) {
                 : parseInt(percentagecount))
     }, []);
 
-
+    console.log(percentagecount, 'percentagecount')
 
     const stageDetailsDropdown = stageDetails.map((x) => ({
         label: x.StageName,
@@ -243,7 +243,7 @@ function EditPopup({ navigation, route }) {
                                         Reupdatedata();
                                         refresh();
                                         // KBRefresh()
-                                        setRefresh(true)
+                                        // setRefresh(true)
                                     }
                                 }
                             ]
@@ -313,6 +313,7 @@ function EditPopup({ navigation, route }) {
                     style={styles.updateText}
                     numberOfLines={9}
                     value={editvalue}
+
                     onChangeText={(text) => { setEditvalue(text) }}></TextInput>
                 <View style={{ flexDirection: 'row', margin: '2%' }}>
                     <Text style={styles.labelStyle}>Effort Pending</Text>
@@ -354,8 +355,9 @@ function EditPopup({ navigation, route }) {
                     // numberOfLines={1}
                     >{count}</TextInput>
                 </View>
-                <Text style={styles.submitStyle} onPress={() => Notesdata()}>Update</Text>
-
+                <View style={{ alignItems: 'center', justifyContent: 'center', marginTop: '9%' }}>
+                    <Text style={styles.submitStyle} onPress={() => Notesdata()}>Update</Text>
+                </View>
             </View>
             {/* </Modal> */}
         </>

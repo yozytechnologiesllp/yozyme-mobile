@@ -104,9 +104,9 @@ const TwoAuthVerify = ({ navigation }) => {
     function RequestTomanager() {
         axios(NodificationPOST)
             .then((res) => {
-                console.log(res.data, 'res data')
-                ToastAndroid.show('Request Send Successfully', ToastAndroid.SHORT)
                 storeDetails()
+                ToastAndroid.show('Request Send Successfully', ToastAndroid.SHORT)
+
                 // toast.success(`Request Send Successfully`, {
                 //     transition: Slide,
                 //     position: toast.POSITION.TOP_RIGHT,
@@ -138,38 +138,50 @@ const TwoAuthVerify = ({ navigation }) => {
                 varificationcode: code,
                 Token: tokenData,
             };
-            fileaxios.post('twofactauth', verifys)
-                .then((res) => {
-                    if (res.data.msg === "verification passed") {
-                        // localStorage.setItem("token", data.Empid);
-                        storeDetails()
-                        navigation.navigate('BottomNav')
-                        cookies.set("token", tokenData, {
-                            path: "/",
-                            expires: new Date(new Date().getTime() + 10800000),
-                        });
-                        ToastAndroid.show('Successfully Login', ToastAndroid.SHORT)
-                        console.log(res.data);
+            let option = {
+                method: "post",
+                url:
+                    "https://files.yozytech.com/twofactauth",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: "Bearer " + tokenData,
+                },
+                data: JSON.stringify(verifys)
+            }
+            console.log(option, 'option')
+            // axios(option)
+            //     .then((res) => {
+            //         if (res.data.msg === "verification passed") {
+            //             // localStorage.setItem("token", data.Empid);
+            //             storeDetails()
+            //             console.log(storeDetails, 'store details')
+            //             navigation.navigate('BottomNav')
+            //             cookies.set("token", tokenData, {
+            //                 path: "/",
+            //                 expires: new Date(new Date().getTime() + 10800000),
+            //             });
+            //             ToastAndroid.show('Successfully Login', ToastAndroid.SHORT)
+            //             console.log(res.data);
 
 
-                        // toast.success(`Successfully Login`, {
-                        //     transition: Slide,
-                        //     position: toast.POSITION.TOP_RIGHT,
-                        //     autoClose: 5000,
-                        //     draggable: true,
-                        // })
-                    }
-                })
-                .catch((err) => {
-                    setCodeValidation(true)
-                    console.log(err);
-                    // toast.error(`Login Failed`, {
-                    //     transition: Slide,
-                    //     position: toast.POSITION.TOP_RIGHT,
-                    //     autoClose: 5000,
-                    //     draggable: true,
-                    // })
-                });
+            //             // toast.success(`Successfully Login`, {
+            //             //     transition: Slide,
+            //             //     position: toast.POSITION.TOP_RIGHT,
+            //             //     autoClose: 5000,
+            //             //     draggable: true,
+            //             // })
+            //         }
+            //     })
+            //     .catch((err) => {
+            //         setCodeValidation(true)
+            //         console.log(err);
+            //         // toast.error(`Login Failed`, {
+            //         //     transition: Slide,
+            //         //     position: toast.POSITION.TOP_RIGHT,
+            //         //     autoClose: 5000,
+            //         //     draggable: true,
+            //         // })
+            //     });
         }
         else {
             setCodeValidation(true)

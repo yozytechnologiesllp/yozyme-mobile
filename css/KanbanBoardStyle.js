@@ -15,13 +15,17 @@ export default StyleSheet.create({
         marginBottom: '5%',
         marginLeft: '2%',
         marginRight: '2%',
-        backgroundColor: '#F8F8F8'
+        backgroundColor: '#F8F8F8',
+        // minHeight: '20%',
+        // maxHeight: '60%',
+        maxWidth: '85%'
     },
     buttonStyle: {
         borderRadius: 9,
         borderWidth: 2,
         borderColor: 'skyblue',
         marginBottom: '2%',
+        marginTop: '2%',
         // fontSize: 22,
         // height: 45,
         // backgroundColor: 'white',
@@ -40,7 +44,16 @@ export default StyleSheet.create({
         // width: '50%',
         borderRadius: 18,
         textAlign: 'center',
-        alignContent: 'center'
+        alignContent: 'center',
+        marginBottom: '2%'
+    },
+    contentCenter: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        // height: '100%',
+        // backgroundColor: 'white',
+
     },
     text: {
         padding: '2.2%',
@@ -68,10 +81,17 @@ export default StyleSheet.create({
         borderRadius: 15,
         alignContent: 'center'
     },
+    closeIcon: {
+        color: 'black',
+        alignSelf: 'flex-end',
+        fontSize: 18,
+        fontWeight: '500'
+    },
     issueTitle: {
         color: 'black',
         fontSize: 18,
-        fontWeight: '500'
+        fontWeight: '500',
+        paddingRight: 15
     },
     epicStyle: {
         color: 'white',
@@ -92,13 +112,15 @@ export default StyleSheet.create({
         },
         shadowOpacity: 0.25,
         shadowRadius: 4,
-        elevation: 5
+        elevation: 5,
+        minHeight: '40%',
+        maxHeight: '90%'
     },
     popupView: {
         // margin: 20,
         backgroundColor: "white",
         // borderRadius: 20,
-        padding: '2%',
+        padding: '4%',
         // alignItems: "center",
         shadowColor: "#000",
         shadowOffset: {
@@ -117,7 +139,8 @@ export default StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'space-around',
         backgroundColor: '#rgba(0, 0, 0, 0.7)',
-        zIndex: 1000
+        zIndex: 1000,
+        // height: '50%'
     },
     direction: {
         flex: 1,
@@ -208,5 +231,6 @@ export default StyleSheet.create({
         //paddingLeft:18,
         //  fontSize: 30,
         color: 'black',
+        // marginBottom: '2%'
     },
 })

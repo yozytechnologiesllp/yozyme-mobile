@@ -34,6 +34,7 @@ function Logout({ navigation }) {
             // const Token = await AsyncStorage.getItem('token')
             const username = await AsyncStorage.getItem('username')
             const password = await AsyncStorage.getItem('password')
+            console.log(username, 'useeffect readdata')
             // const password = await AsyncStorage.getItem('password')
             if (username !== null) {
                 //cookies.set("token", Token)
@@ -111,7 +112,7 @@ function Logout({ navigation }) {
                         config.headers.Authorization = "Bearer " + res.data.token;
                         return config;
                     });
-                    storeDetails(login_data)
+                    // storeDetails(login_data)
                     ChangeId(login_data.login)
                     let checkTwoStepVerification = {
                         method: "GET",
@@ -139,6 +140,7 @@ function Logout({ navigation }) {
                         .then((res) => {
                             console.log(res.data)
                             if (res.data.length == 0) {
+                                console.log(res.data.length)
                                 navigation.navigate('BottomNav')
                             }
                             else {

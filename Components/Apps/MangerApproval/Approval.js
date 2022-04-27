@@ -191,12 +191,7 @@ function Approval({ navigation }) {
         };
         console.log(patchData, apstatus + " status")
         console.log(notificationData, 'notification data')
-        axios
-            .patch(
-                "onduty_mass_upload?OndutyMassUploadId=eq." +
-                id,
-                patchData
-            )
+        axios.patch("onduty_mass_upload?OndutyMassUploadId=eq." + id, patchData)
             .then((res) => {
 
                 axios
@@ -208,6 +203,113 @@ function Approval({ navigation }) {
                 console.log(res.data);
                 attendanceRefresh()
             });
+    }
+    function approveAll(apstatus) {
+        const patchData = [{
+            IsApproved: apstatus == "Approved" ? "Y" : "N",
+            ApproverRemarks: apstatus == "Approved" ? "Approved" : "Declined",
+            Status: apstatus == "Approved" ? "Approved" : "Declined",
+            ApprovedDate: moment().utcOffset("+05:30").format("YYYY-MM-DDTHH:mm:ss"),
+        }]
+        if (status == "Attendance") {
+            commonData.map((x) => {
+                const notificationData = {
+                    CreatedDate: moment()
+                        .utcOffset("+05:30")
+                        .format("YYYY-MM-DDTHH:mm:ss"),
+                    CreatedBy: employee_Id,
+                    NotifyTo: x.empid,
+                    AudienceType: "Individual",
+                    Priority: "High",
+                    Subject:
+                        apstatus == "Approved" ? "Attendance Approved" : "Attendance Declined",
+                    Description:
+                        apstatus == "Approved" ?
+                            "Attendance Approved by " +
+                            user_detail.firstname + " " +
+                            user_detail.lastname :
+                            "Attendance Declined by " +
+                            user_detail.firstname + " " +
+                            user_detail.lastname,
+                    IsSeen: "N",
+                    Status: "New",
+                };
+                axios.patch("onduty_mass_upload?OndutyMassUploadId=eq." + x.ondutymassuploadid, patchData).then((res) => {
+                    axios.post("notification?NotifyTo=eq." + x.empid, notificationData)
+                        .then((res) => attendanceRefresh())
+                        .catch((error) => console.log(error));
+                    console.log(res.data);
+                });
+            })
+            alert("All attendance approved successfully")
+
+        }
+        else if (status == "Timesheet") {
+            commonData.map((x) => {
+                let notificationData = {
+                    CreatedDate: moment()
+                        .utcOffset("+05:30")
+                        .format("YYYY-MM-DDTHH:mm:ss"),
+                    CreatedBy: employee_Id,
+                    NotifyTo: x.empid,
+                    AudienceType: "Individual",
+                    Priority: "High",
+                    Subject: apstatus == "Approved" ? "Timesheet Approved" : "Timesheet Rejected",
+                    Description: apstatus == "Approved" ?
+                        "Timesheet Approved by " + user_detail.firstname + " " + user_detail.lastname + " and Week Number is " + x.weeknumber : "Timesheet Rejected by " + user_detail.firstname + " " + user_detail.lastname + " and Week Number is " + x.weeknumber,
+                    IsSeen: "N",
+                    Status: "New",
+                };
+                axios
+                    .patch("timesheet_1transaction?TimeId=eq." + x.timeid, patchData)
+                    .then((res) => {
+                        axios
+                            .post("notification?NotifyTo=eq." + x.empid, notificationData)
+                            .then((res) => timesheetRefresh())
+                            .catch((error) => console.log(error));
+
+                    });
+            })
+            alert("All Timesheet Approved Successfully")
+
+        }
+        else if (status == "Leave") {
+            commonData.map((x) => {
+                const patchDataLe = [{
+                    IsApproved: apstatus == "Approved" ? "Y" : "N",
+                    ApproverRemarks: apstatus == "Approved" ? "Approved" : "Declined",
+                    ApprovedDate: moment().utcOffset("+05:30").format("YYYY-MM-DDTHH:mm:ss"),
+                }]
+                let notificationData = {
+                    CreatedDate: moment()
+                        .utcOffset("+05:30")
+                        .format("YYYY-MM-DDTHH:mm:ss"),
+                    CreatedBy: employee_Id,
+                    NotifyTo: x.empid,
+                    AudienceType: "Individual",
+                    Priority: "High",
+                    Subject: apstatus == "Approved" ? "Leave Approved" : "Leave Declined",
+                    Description:
+                        apstatus == "Approved" ?
+                            "Leave Approved of Type " + x.leavetypecodeinfo + " and Number of Days leave is " + x.numberofdays
+                            :
+                            "Leave Declined of Type " + x.leavetypecodeinfo + " and Number of Days leave is " + x.numberofdays,
+                    IsSeen: "N",
+                    Status: "New",
+                };
+                console.log(id, 'notification data')
+                axios.patch("leave_transaction?LeaveId=eq." + x.leaveid, patchDataLe)
+                    .then((res) => {
+                        axios
+                            .post("notification?NotifyTo=eq." + x.empid, notificationData)
+                            .then((res) => leaveRefresh())
+                            .catch((error) => console.log(error));
+
+                    });
+            })
+            alert("All leaves approved successfully")
+
+        }
     }
     return (
         <>
@@ -232,6 +334,13 @@ function Approval({ navigation }) {
                 {
                     commonData.length != 0 ?
                         <>
+                            <View style={styles.allStyle}>
+                                <View style={styles.direction}>
+                                    <Text style={[styles.submitButton, { backgroundColor: '#00D100' }]} onPress={() => { approveAll("Approved") }}>Approve All</Text>
+                                    <Text style={[styles.submitButton, { backgroundColor: '#FF0000' }]} onPress={() => { approveAll("Declined") }}>Decline All</Text>
+                                </View>
+                            </View>
+
                             {
                                 commonData.map((e) => (
                                     <View style={styles.cardStyle}>
