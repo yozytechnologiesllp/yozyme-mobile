@@ -16,28 +16,25 @@ import fileaxios from '../../fileaxios'
 import { Buffer } from "buffer"
 import HeaderView from '../HeaderView';
 import moment from "moment";
+import axios1 from 'axios'
 
 
 export default function Dashboard({ navigation }) {
-    const { login_data, employee_Id, ChangeEmployeeImage, ChangeEmployeeData, employee_Data, setPublicHoliday } = useContext(StoreContext);
+    const { login_data, employee_Id, ChangeEmployeeImage, ChangeEmployeeData, employee_Data, setPublicHoliday, tokenData } = useContext(StoreContext);
 
 
 
     useEffect(() => {
         axios.get("employee_master?EmpId=eq." + employee_Id)
-            .then(
-                res => {
-                    console.log(res.data[0])
-                    ChangeEmployeeData(res.data[0])
-                }
-            )
-        axios
-            .get("public_holiday_master?HolidayYear=eq." + moment().year() + "&HolidayType=eq." + "Mandatory")
-            .then((res) => {
-                setPublicHoliday(res.data);
-            });
-        // fileaxios.get("EmployeeImages/" + employee_Id + ".jpg", { responseType: "arraybuffer", })
-        //     .then((res) => { ChangeEmployeeImage("data:image/jpeg;base64," + Buffer.from(res.data, "binary").toString("base64")) });
+            .then(res => { ChangeEmployeeData(res.data[0]) })
+        axios.get("public_holiday_master?HolidayYear=eq." + moment().year() + "&HolidayType=eq." + "Mandatory")
+            .then((res) => { setPublicHoliday(res.data); });
+        let webApiUrl = `https://files.yozytech.com/EmployeeImages/${employee_Id}.jpg`;
+        axios1.get(webApiUrl, { responseType: "arraybuffer", headers: { "Authorization": `Bearer ${tokenData}` } }).then((res) => {
+            console.log(res, 'line 49 employee image')
+            ChangeEmployeeImage("data:image/jpeg;base64," + Buffer.from(res.data, "binary").toString("base64"))
+        })
+
         const backHandler = BackHandler.addEventListener('hardwareBackPress', () =>
             handleBackButton(),
         );

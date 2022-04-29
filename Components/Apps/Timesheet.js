@@ -21,41 +21,59 @@ function Leave({ navigation }) {
     const [weekNumber, setWeekNumber] = useState(moment().isoWeek());
     const [Year, setYear] = useState(moment().year());
     const [dropdown, setDropdown] = useState([])
-    const [monday, setMonday] = useState([{
-        "TimeCode": "",
-        "TimeBooked": 0,
-        "BookedDate": moment().day(1).year(Year).isoWeek(weekNumber).format("yyyy-MM-DD").toString()
-    }])
-    const [tuesday, setTuesday] = useState([{
-        "TimeCode": "",
-        "TimeBooked": 0,
-        "BookedDate": moment().day(2).year(Year).isoWeek(weekNumber).format("yyyy-MM-DD").toString()
-    }])
-    const [wednesday, setWednesday] = useState([{
-        "TimeCode": "",
-        "TimeBooked": 0,
-        "BookedDate": moment().day(3).year(Year).isoWeek(weekNumber).format("yyyy-MM-DD").toString()
-    }])
-    const [thursday, setThursday] = useState([{
-        "TimeCode": "",
-        "TimeBooked": 0,
-        "BookedDate": moment().day(4).year(Year).isoWeek(weekNumber).format("yyyy-MM-DD").toString()
-    }])
-    const [friday, setFriday] = useState([{
-        "TimeCode": "",
-        "TimeBooked": 0,
-        "BookedDate": moment().day(5).year(Year).isoWeek(weekNumber).format("yyyy-MM-DD").toString()
-    }])
-    const [saturday, setSaturday] = useState([{
-        "TimeCode": "",
-        "TimeBooked": 0,
-        "BookedDate": moment().day(5).year(Year).isoWeek(weekNumber).format("yyyy-MM-DD").toString()
-    }])
-    const [sunday, setSunday] = useState([{
-        "TimeCode": "",
-        "TimeBooked": 0,
-        "BookedDate": moment().day(6).year(Year).isoWeek(weekNumber).format("yyyy-MM-DD").toString()
-    }])
+    const [monday, setMonday] = useState([])
+    const [tuesday, setTuesday] = useState([])
+    const [wednesday, setWednesday] = useState([])
+    const [thursday, setThursday] = useState([])
+    const [friday, setFriday] = useState([])
+    const [saturday, setSaturday] = useState([])
+    const [sunday, setSunday] = useState([])
+    const [timesheetData, setTimesheetData] = useState([])
+    function refresh() {
+        setMonday([{
+            "TimeCode": "",
+            "TimeBooked": 0,
+            "BookedDate": moment().day(1).year(Year).isoWeek(weekNumber).format("yyyy-MM-DD").toString()
+        }])
+        setTuesday([{
+            "TimeCode": "",
+            "TimeBooked": 0,
+            "BookedDate": moment().day(2).year(Year).isoWeek(weekNumber).format("yyyy-MM-DD").toString()
+        }])
+        setWednesday([{
+            "TimeCode": "",
+            "TimeBooked": 0,
+            "BookedDate": moment().day(3).year(Year).isoWeek(weekNumber).format("yyyy-MM-DD").toString()
+        }])
+        setThursday([{
+            "TimeCode": "",
+            "TimeBooked": 0,
+            "BookedDate": moment().day(4).year(Year).isoWeek(weekNumber).format("yyyy-MM-DD").toString()
+        }])
+        setFriday([{
+            "TimeCode": "",
+            "TimeBooked": 0,
+            "BookedDate": moment().day(5).year(Year).isoWeek(weekNumber).format("yyyy-MM-DD").toString()
+        }])
+        setSaturday([{
+            "TimeCode": "",
+            "TimeBooked": 0,
+            "BookedDate": moment().day(6).year(Year).isoWeek(weekNumber).format("yyyy-MM-DD").toString()
+        }])
+        setSunday([{
+            "TimeCode": "",
+            "TimeBooked": 0,
+            "BookedDate": moment().day(0).year(Year).isoWeek(weekNumber).format("yyyy-MM-DD").toString()
+        }])
+    }
+    useEffect(() => {
+        refresh()
+        axios.get('timesheet_1transaction?EmpId=eq.' + employee_Id + '&Year=eq.' + moment().year())
+            .then((res) => {
+                console.log(res.data, 'timesheet data')
+                setTimesheetData(res.data)
+            })
+    }, [])
     let today = (moment().isoWeekYear(Year)).isoWeek(moment().isoWeek());
     // let today = moment().isoWeek(moment(moment().year(Year)).isoWeek(weekNumber));
     let mon = today.clone().weekday(1).format("DD-MM-yyyy").toString();
@@ -92,18 +110,22 @@ function Leave({ navigation }) {
 
     const handleDelete = (day) => {
         let data = day == "monday" ? [...monday] : day == "tuesday" ? [...tuesday] : [...wednesday];
-        data.pop()
-        if (day == "monday") { setMonday(data) }
-        else if (day == "tuesday") { setTuesday(data) }
-        else if (day = "wednesday") { setWednesday(data) }
+        if (data.length != 1) {
+            data.pop()
+            if (day == "monday") { setMonday(data) }
+            else if (day == "tuesday") { setTuesday(data) }
+            else if (day = "wednesday") { setWednesday(data) }
+        }
     }
     const handleDeleteThur = (day) => {
         let data = day == "thursday" ? [...thursday] : day == "thursday" ? [...thursday] : day == "friday" ? [...friday] : day == "saturday" ? [...saturday] : [...sunday];
-        data.pop()
-        if (day == "thursday") { setThursday(data) }
-        else if (day == "friday") { setFriday(data) }
-        else if (day == "saturday") { setSaturday(data) }
-        else if (day == "sunday") { setSunday(data) }
+        if (data.length != 1) {
+            data.pop()
+            if (day == "thursday") { setThursday(data) }
+            else if (day == "friday") { setFriday(data) }
+            else if (day == "saturday") { setSaturday(data) }
+            else if (day == "sunday") { setSunday(data) }
+        }
     }
 
     useEffect(() => {
@@ -124,7 +146,7 @@ function Leave({ navigation }) {
                     }
                 })
                 let options = [...opt, ...reasonOpt]
-                console.log(options, 'options')
+
                 setDropdown(options);
             })
         });
@@ -185,27 +207,96 @@ function Leave({ navigation }) {
         else if (day == "sunday") { setSunday(mond) }
 
     }
-    console.log(thursday, 'thursday', wednesday, 'wednesday')
-    const totalHours = monday.reduce((a, v) => a = parseInt(a) + parseInt(v.TimeBooked), 0) +
+
+    const totalHours = monday.length != 0 ? monday.reduce((a, v) => a = parseInt(a) + parseInt(v.TimeBooked), 0) +
         tuesday.reduce((a, v) => a = parseInt(a) + parseInt(v.TimeBooked), 0) +
         wednesday.reduce((a, v) => a = parseInt(a) + parseInt(v.TimeBooked), 0) +
         thursday.reduce((a, v) => a = parseInt(a) + parseInt(v.TimeBooked), 0) +
         friday.reduce((a, v) => a = parseInt(a) + parseInt(v.TimeBooked), 0) +
         saturday.reduce((a, v) => a = parseInt(a) + parseInt(v.TimeBooked), 0) +
-        sunday.reduce((a, v) => a = parseInt(a) + parseInt(v.TimeBooked), 0)
+        sunday.reduce((a, v) => a = parseInt(a) + parseInt(v.TimeBooked), 0) : 0
+    const alreadySubmit = timesheetData.filter(x => x.WeekNumber == weekNumber).length
+    console.log(alreadySubmit, 'already submit')
     function submit() {
         const postData = [...monday, ...tuesday, ...wednesday, ...thursday, ...friday, ...saturday, ...sunday]
-        if (postData.filter((x) => x.TimeBooked != 0).length != 0) {
-
+        let json =
+        {
+            EmpId: employee_Id,
+            WeekNumber: weekNumber,
+            SubmittedDate: moment().utcOffset("+05:30").format("YYYY-MM-DDTHH:mm:ss"),
+            TimeEntry: {
+                TimeDetails: postData.filter(x => x.TimeCode != "" && x.TimeBooked != 0)
+            },
+            IsApproved: "",
+            ApproverId: user_detail.level1managereid,
+            Status: "Submitted",
+            Year: moment().year(),
+            Month: moment.months(),
+        };
+        console.log(json, postData.filter(x => x.TimeCode != "" && x.TimeBooked != 0)), user_detail.firstname + " " + user_detail.lastname
+        if ((totalHours == 45 && postData.filter(x => x.TimeCode != 400005 && x.TimeCode != 400006).length == 0
+            // postData.filter(x => x.TimeBooked != 0 && x.TimeCode != "").length >= 5
+            // && postData.filter(x => x.TimeCode != 400006) 
+            && monday.filter(x => x.TimeCode != "" && x.TimeBooked != 0).length != 0
+            && tuesday.filter(x => x.TimeCode != "" && x.TimeBooked != 0).length != 0
+            && wednesday.filter(x => x.TimeCode != "" && x.TimeBooked != 0).length != 0
+            && thursday.filter(x => x.TimeCode != "" && x.TimeBooked != 0).length != 0
+            && friday.filter(x => x.TimeCode != "" && x.TimeBooked != 0).length != 0
+            && alreadySubmit == 0)
+            ||
+            (totalHours > 45 && postData.filter(x => x.TimeCode == 400005 || x.TimeCode == 400006).length != 0
+                // postData.filter(x => x.TimeBooked != 0 && x.TimeCode != "").length >= 5
+                // && postData.filter(x => x.TimeCode != 400006) 
+                && monday.filter(x => x.TimeCode != "" && x.TimeBooked != 0).length != 0
+                && tuesday.filter(x => x.TimeCode != "" && x.TimeBooked != 0).length != 0
+                && wednesday.filter(x => x.TimeCode != "" && x.TimeBooked != 0).length != 0
+                && thursday.filter(x => x.TimeCode != "" && x.TimeBooked != 0).length != 0
+                && friday.filter(x => x.TimeCode != "" && x.TimeBooked != 0).length != 0
+                && alreadySubmit == 0)) {
+            axios.post('timesheet_1transaction', json).then((res) => {
+                let notificationData = {
+                    CreatedDate: moment()
+                        .utcOffset("+05:30")
+                        .format("YYYY-MM-DDTHH:mm:ss"),
+                    CreatedBy: employee_Id,
+                    NotifyTo: user_detail.level1managereid,
+                    AudienceType: "Individual",
+                    Priority: "High",
+                    Subject: "Timesheet submitted",
+                    Description: "Timesheet submitted by " + user_detail.firstname + " " + user_detail.lastname,
+                    IsSeen: "N",
+                    Status: "New",
+                };
+                axios
+                    .post("notification?NotifyTo=eq." + manager, notificationData)
+                    .then((res) => {
+                        alert("Timesheet Submitted Successfully")
+                        refresh()
+                    });
+            })
         }
-        else if (postData.filter((x) => x.TimeBooked != 0).length == 0) {
+        else if (postData.filter(x => x.TimeBooked != 0).length == 0) {
             alert("Please Choose project and enter working days")
         }
-        else if (totalHours < 45 && totalHours != 45) {
+        else if ((totalHours < 45 && totalHours != 45)
+            // || (postData.filter(x => x.TimeBooked != 0 && x.TimeCode != "").length < 5
+            //     && postData.filter(x => x.TimeCode == 400006))
+            ||
+            (monday.filter(x => x.TimeCode != "" && x.TimeBooked != 0).length == 0
+                || tuesday.filter(x => x.TimeCode != "" && x.TimeBooked != 0).length == 0
+                || wednesday.filter(x => x.TimeCode != "" && x.TimeBooked != 0).length == 0
+                || thursday.filter(x => x.TimeCode != "" && x.TimeBooked != 0).length == 0
+                || friday.filter(x => x.TimeCode != "" && x.TimeBooked != 0).length == 0)) {
             alert("Choose project and enter working days for all week days")
         }
-        else if (totalHours > 45 && totalHours != 45 && postData.filter(x => x.TimeCode != 400005).length == 0 && postData.filter(x => x.TimeCode != 400006).length == 0) {
-            alert("Maximum hours per week is 45, please enter extra hours in week end days.")
+        else if (totalHours > 45
+            && totalHours != 45
+            && postData.filter(x => x.TimeCode == 400005).length == 0
+            && postData.filter(x => x.TimeCode == 400006).length == 0) {
+            alert("Maximum hours per week is 45, please enter extra hours in Extra Time.")
+        }
+        else if (alreadySubmit != 0) {
+            alert("Timesheet already submitted for this week " + weekNumber)
         }
     }
     return (
@@ -252,7 +343,7 @@ function Leave({ navigation }) {
                                         // name={i}
                                         style={styles.textboxStyle} keyboardType='numeric'
                                         onChangeText={(value) => { HoursChange(i, value, "monday") }}
-                                        maxLength={monday[i].TimeCode != 400005 ? 1 : 2}
+                                        maxLength={1}
                                     >{monday[i].Hours}</TextInput>
                                     <Text style={styles.updateStyle} onPress={() => { handleAdd("monday") }}>+</Text>
                                     <Text style={styles.updateStyle} onPress={() => { handleDelete("monday") }}>-</Text>
@@ -280,7 +371,7 @@ function Leave({ navigation }) {
                                     />
                                     <TextInput
                                         id={i}
-                                        maxLength={tuesday[i].TimeCode != 400005 ? 1 : 2}
+                                        maxLength={1}
                                         name={i}
                                         style={styles.textboxStyle} keyboardType='numeric'
                                         onChangeText={(value) => { HoursChange(i, value, "tuesday") }}
@@ -311,7 +402,7 @@ function Leave({ navigation }) {
                                     />
                                     <TextInput
                                         id={i}
-                                        maxLength={wednesday[i].TimeCode != 400005 ? 1 : 2}
+                                        maxLength={1}
                                         name={i}
                                         style={styles.textboxStyle} keyboardType='numeric'
                                         onChangeText={(value) => { HoursChange(i, value, "wednesday") }}
@@ -342,7 +433,7 @@ function Leave({ navigation }) {
                                     />
                                     <TextInput
                                         id={i}
-                                        maxLength={thursday[i].TimeCode != 400005 ? 1 : 2}
+                                        maxLength={1}
                                         name={i}
                                         style={styles.textboxStyle} keyboardType='numeric'
                                         onChangeText={(value) => { HoursChangeThur(i, value, "thursday") }}
@@ -373,7 +464,7 @@ function Leave({ navigation }) {
                                     />
                                     <TextInput
                                         id={i}
-                                        maxLength={friday[i].TimeCode != 400005 ? 1 : 2}
+                                        maxLength={1}
                                         name={i}
                                         style={styles.textboxStyle} keyboardType='numeric'
                                         onChangeText={(value) => { HoursChangeThur(i, value, "friday") }}
@@ -446,9 +537,9 @@ function Leave({ navigation }) {
                             ))}
                     </View>
                 </View>
-                <View style={{ flexDirection: 'row', marginTop: '2%' }}>
+                <View style={{ flexDirection: 'row', marginTop: '9%' }}>
                     <Text style={styles.labelStyle}>Total Hours:</Text>
-                    <Text style={[styles.textboxStyle, { width: '45%' }]}>{totalHours}</Text>
+                    <Text style={[styles.textboxStyle, { width: '45%', padding: '2.5%' }]}>{totalHours}</Text>
                 </View>
                 <View style={styles.submitView}>
                     <Text style={styles.submitStyle}

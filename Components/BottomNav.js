@@ -18,6 +18,7 @@ import Settings from './Settings'
 import EditPopup from './Apps/Jira/EditPopup';
 import Timesheet from './Apps/Timesheet'
 import Approval from './Apps/MangerApproval/Approval';
+import Notification from './Notification';
 
 
 function AppsFunc({ route }) {
@@ -99,7 +100,9 @@ function Tabs({ navigation }) {
           else if (route.name === 'Settings') {
             iconName = 'cog';
           }
-
+          else if (route.name === 'Notification') {
+            iconName = 'bell';
+          }
           // You can return any component that you like here!
           return <FontAwesome5 name={iconName} size={size} color={color} />;
         },
@@ -120,9 +123,12 @@ function Tabs({ navigation }) {
       <Tab.Screen name="Profile" component={Profile}
         options={{ headerShown: false }}
       />
-      <Tab.Screen name="Settings" component={Settings}
+      <Tab.Screen name="Notification" component={Notification}
         options={{ headerShown: false }}
       />
+      {/* <Tab.Screen name="Settings" component={Settings}
+        options={{ headerShown: false }}
+      /> */}
     </Tab.Navigator>
 
   )

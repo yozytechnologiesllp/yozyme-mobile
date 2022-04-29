@@ -1,6 +1,5 @@
 import axios from "axios";
 import Cookies from "universal-cookie";
-import AsyncStorage from 'react-native'
 
 const instance = axios.create({
     baseURL: "https://files.yozytech.com/",

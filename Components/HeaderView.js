@@ -28,6 +28,7 @@ function HeaderView({ navigation }) {
         setVisible(false)
         AsyncStorage.removeItem('password')
         AsyncStorage.removeItem('username')
+        navigation.navigate('Login')
         // navigation.navigate('Logout')
         RNRestart.Restart()
         // for (let i = 0; i < 5; i++) {
@@ -42,7 +43,7 @@ function HeaderView({ navigation }) {
                 style={styles.headerImage}
                 source={require('../images/yozy.png')}
             />
-            <Ionicons name="ios-notifications" color="darkblue" size={33} style={styles.notificationStyle} />
+            {/* <Ionicons name="ios-notifications" color="darkblue" size={33} style={styles.notificationStyle} onPress={() => { navigation.navigate('Notification') }} /> */}
             <View style={styles.headerText}>
                 <Text style={{ color: 'darkblue', fontWeight: 'bold' }}>{employee_Data.Firstname}</Text>
                 <Text style={{ color: 'darkblue', fontWeight: 'bold' }}>{employee_Data.EmpId}</Text>

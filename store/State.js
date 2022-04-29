@@ -20,7 +20,8 @@ function State(props) {
     loading: false,
     originalestimatedata: [],
     stageDetails: [],
-    projectCode: ''
+    projectCode: '',
+    notification: []
   }
 
   const [state, dispatch] = useReducer(Reducer, intialState)
@@ -58,6 +59,13 @@ function State(props) {
   const setStageDetails = (data) => {
     dispatch({
       type: actionTypes.STAGE_DETAILS,
+      data: data
+    })
+
+  }
+  const setNotification = (data) => {
+    dispatch({
+      type: actionTypes.SET_NOTIFICATION,
       data: data
     })
 
@@ -159,6 +167,7 @@ function State(props) {
     originalestimatedata: state.originalestimatedata,
     stageDetails: state.stageDetails,
     projectCode: state.projectCode,
+    notification: state.notification,
     LoginOnChange,
     ChangeDetail,
     ChangeId,
@@ -174,7 +183,8 @@ function State(props) {
     setLoading,
     setOriginalestimatedata,
     setStageDetails,
-    setProjectCode
+    setProjectCode,
+    setNotification
   }}>{props.children}</Store.Provider>;
 }
 

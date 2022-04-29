@@ -145,10 +145,11 @@ function Apps({ navigation }) {
                     numColumns={3}
                     data={display}
                     renderItem={({ item }) => (
-                        <View style={styles.menuStyle}><View style={styles.iconStyle}><FontAwesome5 color={item.color} name={item.iconName} size={50} onPress={() => {
-                            navigation.navigate(item.value)
-                            console.log(item.value)
-                        }} />
+                        <View style={styles.menuStyle}><View style={styles.iconStyle}>
+                            <FontAwesome5 color={item.color} name={item.iconName} size={50} onPress={() => {
+                                navigation.navigate(item.value)
+                                console.log(item.value)
+                            }} />
                         </View>
                             <Text style={styles.labelStyle}>{item.name}</Text>
                         </View>)}

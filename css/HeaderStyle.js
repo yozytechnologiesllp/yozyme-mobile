@@ -4,7 +4,7 @@ export default StyleSheet.create({
         height: 29,
         width: 90,
         marginLeft: '2%',
-        marginRight: '29%'
+        marginRight: '40%'
     },
     headerText: {
         width: '22%',

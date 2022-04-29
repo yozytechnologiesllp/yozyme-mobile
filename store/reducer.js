@@ -63,6 +63,11 @@ const Reducer = (state, action) => {
                     ...state,
                     tokenData: action.data
                 }
+            case actionTypes.SET_NOTIFICATION:
+                return {
+                    ...state,
+                    notification: action.data
+                }
             case actionTypes.SETAPIDATA:
                 return {
                     ...state,

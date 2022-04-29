@@ -13,7 +13,42 @@ import Logout from './Components/Logout';
 import HeaderView from './Components/HeaderView';
 import Approval from './Components/Apps/MangerApproval/Approval'
 import Timesheet from './Components/Apps/Timesheet'
+import Notification from './Components/Notification';
 
+function HeaderNav() {
+  const NavStack = createStackNavigator();
+  return (
+    <State>
+      <NavigationContainer independent={true}>
+        <NavStack.Navigator
+        //initialRouteName={initialPath}
+        >
+          <NavStack.Screen
+            name="HeaderView"
+            component={HeaderView}
+            options={{ headerShown: false }}
+          />
+          <NavStack.Screen
+            name="Notification"
+            component={Notification}
+            options={{ headerShown: false }}
+          />
+          <NavStack.Screen
+            name="Login"
+            component={Login}
+            options={{ headerShown: false }}
+          />
+          <NavStack.Screen
+            name="Logout"
+            component={Logout}
+            options={{ headerShown: false }}
+          />
+
+        </NavStack.Navigator>
+      </NavigationContainer>
+    </State>
+  );
+}
 function App() {
 
   const NavStack = createStackNavigator();
@@ -27,11 +62,18 @@ function App() {
         <NavStack.Navigator
         //initialRouteName={initialPath}
         >
+          {/* <NavStack.Screen
+            name="Notification"
+            component={Notification}
+            options={{ headerShown: false }}
+          /> */}
           <NavStack.Screen
             name="Login"
             component={Login}
             options={{ headerShown: false }}
-          /><NavStack.Screen
+          />
+
+          <NavStack.Screen
             name="BottomNav"
             component={BottomNav}
             options={{ headerShown: false }}
@@ -47,10 +89,12 @@ function App() {
             options={{ headerShown: false }}
           />
           <NavStack.Screen
-            name="HeaderView"
-            component={HeaderView}
+            name="HeaderNav"
+            component={HeaderNav}
             options={{ headerShown: false }}
           />
+
+
           {/*<NavStack.Screen
             name="SubAttendance"
             component={SubAttendance}
