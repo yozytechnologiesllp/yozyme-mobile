@@ -7,6 +7,7 @@ import moment from 'moment'
 import { Avatar, Divider } from 'react-native-paper'
 import { ScrollView } from 'react-native-gesture-handler'
 import axios1 from 'axios'
+import NotificationCard from './NotificationCard'
 
 function Notification({ navigation }) {
     const { employee_Id, notification, setNotification, employee_Image, tokenData } = useContext(StoreContext)
@@ -25,14 +26,14 @@ function Notification({ navigation }) {
                 );
             })
     }
-    
+
     return (
         <>
             <HeaderView />
             <ScrollView>
                 {
                     notification.map((e) => (
-                        <NotificcationCard e={e}/>
+                        <NotificationCard e={e} />
                     ))
                 }
             </ScrollView>
