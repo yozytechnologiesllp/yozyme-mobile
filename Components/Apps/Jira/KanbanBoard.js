@@ -28,6 +28,7 @@ function KanbanBoard({ navigation }) {
     const [ragstatus, setRagStatus] = useState([])
     const [projectDetails, setProjectDetails] = useState([]);
     const [employeeFilter, setEmployeeFilter] = useState()
+    const [priority, setPriority] = useState()
     // console.log(user_detail.rolecode, 'user detail', testerid, 'tester id')
     const TesterId =
         testerid &&
@@ -103,39 +104,9 @@ function KanbanBoard({ navigation }) {
                 // }
             })
     }
-    // function Reupdatedata() {
-    //     axios
-    //         .get("agile_issue_progress?IssueId=eq." + currentIssue.IssueId)
-    //         .then((res) => {
-    //             setApidata(res.data);
-    //             setLoading(false);
-    //         });
 
-    //     axios
-    //         .get("agile_issue_progress?IssueId=eq." + currentIssue.IssueId + "&limit=1")
-    //         .then((res) => {
-    //             console.log(res.data, 'res data')
-    //             setOriginalestimatedata(res.data);
-    //         })
-    //         .catch((e) => console.log(e))
-    // }
-    // console.log(ragstatus, 'rag status')
     console.log(projectCode, 'project code')
     function handleProject(item) {
-        // setProjectCode(item.value);
-        // setProjectLabel(item.label);
-        // setProjectId2(item.value);
-        // setProjectName(item.label);
-        // setClient(item.client);
-        // setClient1(item.client);
-        // setEmpDropDownData(resData.filter((x) => x.projectcode === item.value));
-        // setEmployeeList(resData.filter((x) => x.projectcode === item.value));
-        // setDropdown(KanbanBoardData.filter((x) => x.ProjectId == item.value));
-        // setProjectnamedetails(
-        //     KanbanBoardData.filter((x) => x.ProjectId == item.value)
-        // );
-        // console.log(data.filter((e) => e.ProjectId == item.value), 'filtered data')
-        // setFilteredData(data.filter((e) => e.ProjectId == item.value))
         setProjectCode(item.value)
 
     }
@@ -152,9 +123,21 @@ function KanbanBoard({ navigation }) {
                 projectRole: x.projectrole,
             };
         });
-    const filteredData = employeeFilter == undefined ? data.filter(e => e.CurrentStage[0].StageName == status && e.ProjectId == projectCode) :
-        data.filter(e => e.CurrentStage[0].StageName == status && e.ProjectId == projectCode && e.AssignedTo == employeeFilter)
-    console.log(projectCode, 'project code')
+    const PriorityOption = [
+        { label: "Highest", value: "Highest" },
+        { label: "High", value: "High" },
+        { label: "Medium", value: "Medium" },
+        { label: "Low", value: "Low" },
+        { label: "Lowest", value: "Lowest" }
+    ]
+    const filteredData =
+        employeeFilter === undefined && priority === undefined ?
+            data.filter(e => e.CurrentStage[0].StageName == status && e.ProjectId == projectCode) :
+            employeeFilter !== undefined && priority === undefined ?
+                data.filter(e => e.CurrentStage[0].StageName == status && e.ProjectId == projectCode && e.AssignedTo == employeeFilter) :
+                employeeFilter == undefined && priority !== undefined ?
+                    data.filter(e => e.CurrentStage[0].StageName == status && e.ProjectId == projectCode && e.Priority == priority) :
+                    data.filter(e => e.CurrentStage[0].StageName == status && e.ProjectId == projectCode && e.AssignedTo == employeeFilter && e.Priority == priority)
     return (
         <>
             <HeaderView />
@@ -174,7 +157,7 @@ function KanbanBoard({ navigation }) {
                                 defaultValue={projectCode}
                                 items={ProjectOption}
                                 // value={stageLabel}
-                                containerStyle={{ height: 40, width: '36%', marginRight: '27%' }}
+                                containerStyle={{ height: 40, width: '36%' }}
                                 labelStyle={{ color: 'black', flexWrap: 'wrap' }}
                                 style={styles.dropdownStyle}
                                 itemStyle={{
@@ -211,7 +194,21 @@ function KanbanBoard({ navigation }) {
                             :
                             null
                     }
-
+                    <DropDownPicker
+                        items={PriorityOption}
+                        // value={leaveCodeId}
+                        containerStyle={{ height: 40, width: '45%', alignContent: 'flex-end' }}
+                        labelStyle={{ color: 'black', flexWrap: 'wrap' }}
+                        style={styles.dropdownStyle}
+                        itemStyle={{
+                            justifyContent: 'flex-start',
+                            // overflow: 'visible'
+                        }}
+                        placeholder="Choose Priority"
+                        onChangeItem={item => {
+                            setPriority(item.value)
+                        }}
+                    />
                 </View>
                 <View style={styles.buttonStyle}>
                     <Text style={status == "Backlog" ? styles.selectedText : styles.text} onPress={() => { setStatus("Backlog") }}>Backlog</Text>
