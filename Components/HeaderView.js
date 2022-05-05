@@ -28,7 +28,7 @@ function HeaderView({ navigation }) {
         setVisible(false)
         AsyncStorage.removeItem('password')
         AsyncStorage.removeItem('username')
-        navigation.navigate('Login')
+        // navigation.navigate('Login')
         // navigation.navigate('Logout')
         RNRestart.Restart()
         // for (let i = 0; i < 5; i++) {

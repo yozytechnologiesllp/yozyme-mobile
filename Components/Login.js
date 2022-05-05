@@ -14,6 +14,7 @@ import Cookies from "universal-cookie";
 import AsyncStorage from '@react-native-community/async-storage';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import TwoAuthVerify from './TwoAuthVerify';
+// import PushNotification from "react-native-push-notification";
 
 
 function Login({ navigation }) {
@@ -27,8 +28,15 @@ function Login({ navigation }) {
 
   useEffect(() => {
     readData()
+    // handleNotification()
   }, [])
-
+  // const handleNotification = () => {
+  //   PushNotification.localNotification({
+  //     channelId: "test-channel",
+  //     title: "You are tried to login",
+  //     message: "Login Page"
+  //   })
+  // }
   const readData = async () => {
     try {
       // const Token = await AsyncStorage.getItem('token')
@@ -88,6 +96,7 @@ function Login({ navigation }) {
     }
   }
   const submit = () => {
+    // handleNotification()
     if (login_data.login != "" && login_data.password != "") {
       let config = {
         method: "post",
@@ -141,9 +150,11 @@ function Login({ navigation }) {
               console.log(res.data)
               if (res.data.length == 0) {
                 console.log(res.data.length)
+                storeDetails()
                 navigation.navigate('BottomNav')
               }
               else {
+                // storeDetails()
                 navigation.navigate('TwoAuthVerify')
               }
 
@@ -199,6 +210,8 @@ function Login({ navigation }) {
             placeholder="Password"
             placeholderTextColor="grey"
             password={true}
+            keyboardType="numeric"
+            onSubmitEditing={() => { submit() }}
           />
           {passwordVisibility}
         </View>

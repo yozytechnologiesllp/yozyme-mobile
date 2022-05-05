@@ -15,55 +15,66 @@ import Approval from './Components/Apps/MangerApproval/Approval'
 import Timesheet from './Components/Apps/Timesheet'
 import Notification from './Components/Notification';
 // import PushController from './PushController';
+import PushNotification from "react-native-push-notification";
 
 
 function App() {
 
+  useEffect(() => {
+    createChannels()
+  }, [])
   const NavStack = createStackNavigator();
 
-
+  const createChannels = () => {
+    PushNotification.createChannel({
+      channelId: "test-channel",
+      channelName: "Test Channel"
+    })
+  }
 
 
   return (
-    <State>
-      <NavigationContainer independent={true}>
-        <NavStack.Navigator
-        //initialRouteName={initialPath}
-        >
-          {/* <NavStack.Screen
+    <>
+      {/* <PushController /> */}
+      <State>
+        <NavigationContainer independent={true}>
+          <NavStack.Navigator
+          //initialRouteName={initialPath}
+          >
+            {/* <NavStack.Screen
             name="Notification"
             component={Notification}
             options={{ headerShown: false }}
           /> */}
-          <NavStack.Screen
-            name="Login"
-            component={Login}
-            options={{ headerShown: false }}
-          />
+            <NavStack.Screen
+              name="Login"
+              component={Login}
+              options={{ headerShown: false }}
+            />
 
-          <NavStack.Screen
-            name="BottomNav"
-            component={BottomNav}
-            options={{ headerShown: false }}
-          />
-          <NavStack.Screen
-            name="TwoAuthVerify"
-            component={TwoAuthVerify}
-            options={{ headerShown: false }}
-          />
-          <NavStack.Screen
-            name="Logout"
-            component={Logout}
-            options={{ headerShown: false }}
-          />
-          <NavStack.Screen
-            name="HeaderView"
-            component={HeaderView}
-            options={{ headerShown: false }}
-          />
+            <NavStack.Screen
+              name="BottomNav"
+              component={BottomNav}
+              options={{ headerShown: false }}
+            />
+            <NavStack.Screen
+              name="TwoAuthVerify"
+              component={TwoAuthVerify}
+              options={{ headerShown: false }}
+            />
+            <NavStack.Screen
+              name="Logout"
+              component={Logout}
+              options={{ headerShown: false }}
+            />
+            <NavStack.Screen
+              name="HeaderView"
+              component={HeaderView}
+              options={{ headerShown: false }}
+            />
 
 
-          {/*<NavStack.Screen
+            {/*<NavStack.Screen
             name="SubAttendance"
             component={SubAttendance}
             options={{ headerShown: false }}
@@ -73,15 +84,16 @@ function App() {
             component={KanbanBoard}
             options={{ headerShown: false }}
           /> */}
-          {/* <NavStack.Screen
+            {/* <NavStack.Screen
             name="Timesheet"
             component={Timesheet}
             options={{ headerShown: false }}
           /> */}
-        </NavStack.Navigator>
-      </NavigationContainer>
-      {/* <PushController /> */}
-    </State>
+          </NavStack.Navigator>
+        </NavigationContainer>
+
+      </State>
+    </>
   );
 }
 

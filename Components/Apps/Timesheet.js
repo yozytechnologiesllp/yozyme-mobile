@@ -216,7 +216,7 @@ function Leave({ navigation }) {
         saturday.reduce((a, v) => a = parseInt(a) + parseInt(v.TimeBooked), 0) +
         sunday.reduce((a, v) => a = parseInt(a) + parseInt(v.TimeBooked), 0) : 0
     const alreadySubmit = timesheetData.filter(x => x.WeekNumber == weekNumber).length
-    console.log(alreadySubmit, 'already submit')
+    // console.log(alreadySubmit, 'already submit')
     function submit() {
         const postData = [...monday, ...tuesday, ...wednesday, ...thursday, ...friday, ...saturday, ...sunday]
         let json =
@@ -231,10 +231,11 @@ function Leave({ navigation }) {
             ApproverId: user_detail.level1managereid,
             Status: "Submitted",
             Year: moment().year(),
-            Month: moment.months(),
+            Month: moment().format("MM"),
         };
-        console.log(json, postData.filter(x => x.TimeCode != "" && x.TimeBooked != 0)), user_detail.firstname + " " + user_detail.lastname
-        if ((totalHours == 45 && postData.filter(x => x.TimeCode != 400005 && x.TimeCode != 400006).length == 0
+        console.log(json, 'json')
+        // console.log(json, postData.filter(x => x.TimeCode != "" && x.TimeBooked != 0)), user_detail.firstname + " " + user_detail.lastname
+        if ((totalHours == 45 && postData.filter(x => x.TimeCode == 400005 && x.TimeCode == 400006).length == 0
             // postData.filter(x => x.TimeBooked != 0 && x.TimeCode != "").length >= 5
             // && postData.filter(x => x.TimeCode != 400006) 
             && monday.filter(x => x.TimeCode != "" && x.TimeBooked != 0).length != 0
@@ -253,27 +254,31 @@ function Leave({ navigation }) {
                 && thursday.filter(x => x.TimeCode != "" && x.TimeBooked != 0).length != 0
                 && friday.filter(x => x.TimeCode != "" && x.TimeBooked != 0).length != 0
                 && alreadySubmit == 0)) {
-            axios.post('timesheet_1transaction', json).then((res) => {
-                let notificationData = {
-                    CreatedDate: moment()
-                        .utcOffset("+05:30")
-                        .format("YYYY-MM-DDTHH:mm:ss"),
-                    CreatedBy: employee_Id,
-                    NotifyTo: user_detail.level1managereid,
-                    AudienceType: "Individual",
-                    Priority: "High",
-                    Subject: "Timesheet submitted",
-                    Description: "Timesheet submitted by " + user_detail.firstname + " " + user_detail.lastname,
-                    IsSeen: "N",
-                    Status: "New",
-                };
-                axios
-                    .post("notification?NotifyTo=eq." + manager, notificationData)
-                    .then((res) => {
-                        alert("Timesheet Submitted Successfully")
-                        refresh()
-                    });
-            })
+            axios.post("timesheet_1transaction", json)
+                .then((res) => {
+                    console.log('timesheet submitted')
+
+                    let notificationData = {
+                        CreatedDate: moment()
+                            .utcOffset("+05:30")
+                            .format("YYYY-MM-DDTHH:mm:ss"),
+                        CreatedBy: employee_Id,
+                        NotifyTo: user_detail.level1managereid,
+                        AudienceType: "Individual",
+                        Priority: "High",
+                        Subject: "Timesheet submitted",
+                        Description: "Timesheet submitted by " + user_detail.firstname + " " + user_detail.lastname,
+                        IsSeen: "N",
+                        Status: "New",
+                    };
+                    axios
+                        .post("notification?NotifyTo=eq." + user_detail.level1managereid, notificationData)
+                        .then((res) => {
+                            alert("Timesheet Submitted Successfully")
+                            refresh()
+                        });
+                })
+                .catch((e) => { console.log(e, 'timesheet error') })
         }
         else if (postData.filter(x => x.TimeBooked != 0).length == 0) {
             alert("Please Choose project and enter working days")
@@ -297,6 +302,9 @@ function Leave({ navigation }) {
         }
         else if (alreadySubmit != 0) {
             alert("Timesheet already submitted for this week " + weekNumber)
+        }
+        else {
+            alert('calling else')
         }
     }
     return (

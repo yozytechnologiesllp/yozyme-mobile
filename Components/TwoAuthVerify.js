@@ -8,6 +8,7 @@ import axios from 'axios';
 import StoreContext from '../store/StoreContext';
 import styles from '../css/SettingsStyle'
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import AsyncStorage from '@react-native-community/async-storage';
 
 
 const TwoAuthVerify = ({ navigation }) => {
@@ -104,25 +105,11 @@ const TwoAuthVerify = ({ navigation }) => {
     function RequestTomanager() {
         axios(NodificationPOST)
             .then((res) => {
-                storeDetails()
                 ToastAndroid.show('Request Send Successfully', ToastAndroid.SHORT)
-
-                // toast.success(`Request Send Successfully`, {
-                //     transition: Slide,
-                //     position: toast.POSITION.TOP_RIGHT,
-                //     autoClose: 5000,
-                //     draggable: true,
-                // })
 
             })
             .catch((error) => {
                 ToastAndroid.show('Request failed', ToastAndroid.SHORT)
-                // toast.error(`Request failed`, {
-                //     transition: Slide,
-                //     position: toast.POSITION.TOP_RIGHT,
-                //     autoClose: 5000,
-                //     draggable: true,
-                // })
             });
     }
 
@@ -132,10 +119,11 @@ const TwoAuthVerify = ({ navigation }) => {
         // e.preventDefault();
         if (code != "") {
             setCodeValidation(false)
+
             let verifys = {
                 EmpId: employee_Id,
-                verification: true,
-                varificationcode: code,
+                Verification: true,
+                VerificationCode: code,
                 Token: tokenData,
             };
             let option = {
@@ -149,39 +137,38 @@ const TwoAuthVerify = ({ navigation }) => {
                 data: JSON.stringify(verifys)
             }
             console.log(option, 'option')
-            // axios(option)
-            //     .then((res) => {
-            //         if (res.data.msg === "verification passed") {
-            //             // localStorage.setItem("token", data.Empid);
-            //             storeDetails()
-            //             console.log(storeDetails, 'store details')
-            //             navigation.navigate('BottomNav')
-            //             cookies.set("token", tokenData, {
-            //                 path: "/",
-            //                 expires: new Date(new Date().getTime() + 10800000),
-            //             });
-            //             ToastAndroid.show('Successfully Login', ToastAndroid.SHORT)
-            //             console.log(res.data);
+            axios(option)
+                .then((res) => {
+                    if (res.data.msg === "Verification Success") {
+                        // localStorage.setItem("token", data.Empid);
+                        storeDetails()
+                        navigation.navigate('BottomNav')
+                        cookies.set("token", tokenData, {
+                            path: "/",
+                            expires: new Date(new Date().getTime() + 10800000),
+                        });
+                        ToastAndroid.show('Successfully Login', ToastAndroid.SHORT)
+                        console.log(res.data);
 
 
-            //             // toast.success(`Successfully Login`, {
-            //             //     transition: Slide,
-            //             //     position: toast.POSITION.TOP_RIGHT,
-            //             //     autoClose: 5000,
-            //             //     draggable: true,
-            //             // })
-            //         }
-            //     })
-            //     .catch((err) => {
-            //         setCodeValidation(true)
-            //         console.log(err);
-            //         // toast.error(`Login Failed`, {
-            //         //     transition: Slide,
-            //         //     position: toast.POSITION.TOP_RIGHT,
-            //         //     autoClose: 5000,
-            //         //     draggable: true,
-            //         // })
-            //     });
+                        // toast.success(`Successfully Login`, {
+                        //     transition: Slide,
+                        //     position: toast.POSITION.TOP_RIGHT,
+                        //     autoClose: 5000,
+                        //     draggable: true,
+                        // })
+                    }
+                })
+                .catch((err) => {
+                    setCodeValidation(true)
+                    console.log(err);
+                    // toast.error(`Login Failed`, {
+                    //     transition: Slide,
+                    //     position: toast.POSITION.TOP_RIGHT,
+                    //     autoClose: 5000,
+                    //     draggable: true,
+                    // })
+                });
         }
         else {
             setCodeValidation(true)
@@ -194,7 +181,8 @@ const TwoAuthVerify = ({ navigation }) => {
         <View style={styles.centeredView}>
             <Text style={styles.titleStyle}>Two Step auth</Text>
             <Text style={styles.labelStyle}>Please Enter your Two step verification code </Text>
-            <TextInput style={styles.textStyle} onChangeText={(e) => setCode(e)} maxLength={6} value={code} />
+            <TextInput style={styles.textStyle} onChangeText={(e) => setCode(e)} maxLength={6} value={code}
+                onSubmitEditing={() => { verifycode() }} />
             {
                 codeValidation ?
                     <Text style={styles.alertMsg}>Please enter the valid verification code</Text>
