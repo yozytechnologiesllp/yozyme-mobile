@@ -75,7 +75,8 @@ function Search({ navigation }) {
 
 
 
-
+  const managerDetails = userdata.find(x => x.ReportingManager == employee_Data.ReportingManager)
+  console.log(managerDetails.Firstname, 'firstname')
 
   return (
     <>
@@ -105,7 +106,7 @@ function Search({ navigation }) {
               style={styles.profileimg}
             />
             <View>
-              <Text style={styles.profilename}>Franklin deri {' ( ' + employee_Data.ReportingManager + ' )'}</Text>
+              <Text style={styles.profilename}>userdata {' ( ' + employee_Data.ReportingManager + ' )'}</Text>
               <Text style={styles.profilerole}>Your manager</Text>
               <Text style={styles.profilephno}>7373007326</Text>
               <Text style={styles.profilemail}>frank1982india@gmail.com</Text>
