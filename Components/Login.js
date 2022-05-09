@@ -196,7 +196,7 @@ function Login({ navigation }) {
           value={login_data.login}
           placeholder="Employee Id"
           placeholderTextColor="grey"
-          maxLength={10}
+          maxLength={6}
           keyboardType="numeric"
         />
         <Text />

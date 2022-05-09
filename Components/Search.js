@@ -24,32 +24,40 @@ function Search({ navigation }) {
     console.log(user_detail,'aaaaaaaaaaaaaaddddddttttttttttttttttttttttttt')
     console.log(employee_Data,'aaaaaaaaaaaaaaddddddttttttttttttttttttttttttt')
   const [userdata,Setuserdata]=useState([])
+  // const [user,Setuser]=useState([])
+const[search,Setsearch]=useState(false)
+  const [userimg,Setuserimg]=useState('');
+  const [userid,Setuserid]=useState('');
+  const [userposition,Setuserposition]=useState('');
+
   const [manager1img,Setmanager1img]=useState('');
   const [manager2img,Setmanager2img]=useState('');
+
+  
     useEffect(()=>{
       let webApiUrl = `https://files.yozytech.com/EmployeeImages/${user_detail.level1managereid}.jpg`;
       let webApiUrl2 = `https://files.yozytech.com/EmployeeImages/${user_detail.level2managereid}.jpg`;
           axios1.get(webApiUrl, { responseType: "arraybuffer", headers: { "Authorization": `Bearer ${tokenData}` } }).then((res) => {
             Setmanager1img("data:image/jpeg;base64," + Buffer.from(res.data, "binary").toString("base64"))
           }).catch(e=>{
-            console.log(e);
+            // console.log(e);
           })
 
           axios1.get(webApiUrl2, { responseType: "arraybuffer", headers: { "Authorization": `Bearer ${tokenData}` } }).then((res) => {
             Setmanager2img("data:image/jpeg;base64," + Buffer.from(res.data, "binary").toString("base64"))
           }).catch(e=>{
-            console.log(e);
+            // console.log(e);
           })
              
       axios.get(`employee_master?IsActive=eq.Y`)
       .then((res) => {
         Setuserdata(res.data);
-        //  console.log(res.data,'dddddddddddddddddddddddddddtttttaaaaaaaaaaaa');
+        
 
          
           // console.log(res.data, 'tester detail')
       }).catch(e=>{
-        console.log(e);
+        // console.log(e);
       })
     },[])
 
@@ -59,10 +67,11 @@ function Search({ navigation }) {
     let manager1=userdata.find(data=>data.EmpId==user_detail.level1managereid)
     
     let manager2=userdata.find(data=>data.EmpId==user_detail.level2managereid)
+    
       
   
-    console.log(manager1,'mapangerrrrrrrr11111');
-    console.log(manager2,'mafffiiiiinnnnnnnnnddddddddpangerrrrrrrr22222222222222');
+    // console.log(manager1,'mapangerrrrrrrr11111');
+    // console.log(manager2,'mafffiiiiinnnnnnnnnddddddddpangerrrrrrrr22222222222222');
 
  
     // let usercard=userdata.map(function(data){
@@ -91,10 +100,41 @@ function Search({ navigation }) {
 //  </View>);
 //    })
 //     })
+
+
+function getuserdetail(){
+  Setsearch(true)
+  console.log(userid,'vvv22vvvvvvvvvvvvvvvvvvvvvvvvvvvv')
+  let userimgurl = `https://files.yozytech.com/EmployeeImages/${userid}.jpg`;
+    axios1.get(userimgurl, { responseType: "arraybuffer", headers: { "Authorization": `Bearer ${tokenData}` } }).then((res) => {
+      Setuserimg("data:image/jpeg;base64," + Buffer.from(res.data, "binary").toString("base64"))
+    }).catch(e=>{
+      // console.log(e);
+    })
+
+    axios.get(`rpc/fun_empdesignation?empid=${userid}&select=designation`)
+    .then((res) => {
+      console.log('hhhhhhhhhhhhhhh',res.data)
+      Setuserposition(res.data[0].designation);
+    }).catch(e=>{
+      console.log(e,'position errorrrrrrrrrrrrrrrrrrrr')
+    })
+
+   
+
+
+}
+
+console.log(user,'zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz')
+
+
+
+let user=userdata.filter(data=>data.EmpId==parseInt(userid))
+console.log(userdata,'aaaaaaaaaaaaadddddddddddddddddddddaaaaaaaaaaaaaa');
  
   
   
-  
+  console.log(typeof(userid), parseInt('100017vignesh'), '............................', 'user id')
 
     return (
       <>
@@ -108,8 +148,9 @@ function Search({ navigation }) {
           style={styles.searchinput}
           placeholder="Search Employee"
           placeholderTextColor="grey"
-          onSubmitEditing={() => submit()}
-     
+          onChangeText={value => Setuserid(value)}
+          onSubmitEditing={(e) => getuserdetail(userid)}
+          
         />
           
     
@@ -119,32 +160,82 @@ function Search({ navigation }) {
             </View>
     
             <View style={styles.cardContaier}>
-            <View style={styles.usercard}>
-                   <Image source={{uri: manager1img}}
-           style={styles.profileimg}
-            />
-                <View>
-                      <Text style={styles.profilename}>{manager1.Firstname +' '+ manager1.Lastname +' ( '+ manager1.EmpId+' )' }</Text>
-                      <Text style={styles.profilerole}>{manager1.IsActive=='Y'?'currently working':'not working'} </Text>
-                      <Text style={styles.profilephno}>{manager1.PhoneNumber}</Text>
-                      <Text style={styles.profilemail}>{manager1.PersonalMail} </Text>
+
+{
+  !search?
+  
+<>
+              {manager1==undefined?null:
               
-                </View>
-            
-            </View>
-            <View style={styles.usercard}>
-                   <Image source={{uri: manager2img}}
-           style={styles.profileimg}
-            />
-                <View>
-                      <Text style={styles.profilename}>{manager2.Firstname +' '+ manager2.Lastname + ' ( '+ manager2.EmpId+' )' }</Text>
-                      <Text style={styles.profilerole}>{manager2.IsActive=='Y'?'currently working':'not working'} </Text>
-                      <Text style={styles.profilephno}>{manager2.PhoneNumber==null?'not avaliable':manager2.PhoneNumber}</Text>
-                      <Text style={styles.profilemail}>{manager2.PersonalMail} </Text>
+              <View style={styles.usercard}>
+              <Image source={{uri: manager1img==''?'https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png':manager1img}}
+             style={styles.profileimg}
+              />
+           
+                  <View>
+                        <Text style={styles.profilename}>{manager1.Firstname +' '+ manager1.Lastname +' ( '+ manager1.EmpId+' )' }</Text>
+                        <Text style={styles.profilerole}>{manager1.IsActive=='Y'?'currently working':'not working'} </Text>
+                        <Text style={styles.profilephno}>{manager1.PhoneNumber==null?'PhoneNumber not found':manager1.PhoneNumber}</Text>
+                        <Text style={styles.profilemail}>{manager1.PersonalMail} </Text>
+                
+                  </View>
               
-                </View>
-            
-            </View>
+              </View>
+              
+              
+              }
+
+              {
+                manager2==undefined?null:
+                <View style={styles.usercard}>
+                <Image source={{uri: manager2img==''?'https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png':manager2img}}
+        style={styles.profileimg}
+         />
+             <View>
+                   <Text style={styles.profilename}>{manager2.Firstname +' '+ manager2.Lastname + ' ( '+ manager2.EmpId+' )' }</Text>
+                   <Text style={styles.profilerole}>{manager2.IsActive=='Y'?'currently working':'not working'} </Text>
+                   <Text style={styles.profilephno}>{manager2.PhoneNumber==null?'PhoneNumber not found':manager2.PhoneNumber}</Text>
+                   <Text style={styles.profilemail}>{manager2.PersonalMail} </Text>
+           
+             </View>
+         
+         </View>
+              }
+              </>
+              :null
+              
+              }
+    
+
+    {
+    
+  user!=undefined?
+
+
+
+<View style={styles.usercard}>
+<Image source={{uri: userimg==''?'https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png':userimg}}
+style={styles.profileimg}
+/>
+<View>
+   <Text style={styles.profilename}>{user.Firstname +' '+ user.Lastname + ' ( '+ user.EmpId+' )' }</Text>
+   <Text style={styles.profilerole}>{userposition} </Text>
+   <Text style={styles.profilephno}>{user.PhoneNumber==null?'PhoneNumber not found':user.PhoneNumber}</Text>
+   <Text style={styles.profilemail}>{user.PersonalMail} </Text>
+
+</View>
+
+</View>
+:null
+   
+   
+   
+   
+   }
+
+         
+           
+         
     
 
     
@@ -158,7 +249,8 @@ const styles = StyleSheet.create({
     container:{
   display: "flex",
   flex:1,
-  backgroundColor:'white'
+  backgroundColor:'white',
+  
     },
    
    searchinput:{
