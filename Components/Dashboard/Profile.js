@@ -11,7 +11,7 @@ import axios from '../../axios'
 import moment from "moment"
 import Attendance from './Attendance'
 import fileaxios from '../../fileaxios'
-import ImagePicker from 'react-native-image-picker';
+// import ImagePicker from 'react-native-image-picker';
 import EmployeeExperience from './EmployeeExperience'
 
 function Profile({ }) {
@@ -43,31 +43,31 @@ function Profile({ }) {
     }, [])
     const upperArrow = <FontAwesome5 name="arrow-up" size={20} color="black" />
     const selectFile = async () => {
-        const options = {
-            quality: 1.0,
-            maxWidth: 500,
-            maxHeight: 500,
-            storageOptions: {
-                skipBackup: true
-            }
-        };
+        // const options = {
+        //     quality: 1.0,
+        //     maxWidth: 500,
+        //     maxHeight: 500,
+        //     storageOptions: {
+        //         skipBackup: true
+        //     }
+        // };
 
-        ImagePicker.launchImageLibrary(options, (response) => {
-            //console.log('Response = ', response);
+        // ImagePicker.launchImageLibrary(options, (response) => {
+        //     //console.log('Response = ', response);
 
-            if (response.didCancel) {
-                console.log('User cancelled photo picker');
-            }
-            else if (response.error) {
-                console.log('ImagePicker Error: ', response.error);
-            }
-            else if (response.customButton) {
-                console.log('User tapped custom button: ', response.customButton);
-            }
-            else {
-                ChangeEmployeeImage(response.uri)
-            }
-        });
+        //     if (response.didCancel) {
+        //         console.log('User cancelled photo picker');
+        //     }
+        //     else if (response.error) {
+        //         console.log('ImagePicker Error: ', response.error);
+        //     }
+        //     else if (response.customButton) {
+        //         console.log('User tapped custom button: ', response.customButton);
+        //     }
+        //     else {
+        //         ChangeEmployeeImage(response.uri)
+        //     }
+        // });
     }
     const username = async () => {
         try {
