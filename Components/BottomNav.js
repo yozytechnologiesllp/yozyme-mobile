@@ -19,6 +19,7 @@ import EditPopup from './Apps/Jira/EditPopup';
 import Timesheet from './Apps/Timesheet'
 import Approval from './Apps/MangerApproval/Approval';
 import Notification from './Notification';
+import PerformanceReview from './Apps/PerformanceReview';
 
 
 function AppsFunc({ route }) {
@@ -64,6 +65,11 @@ function AppsFunc({ route }) {
         <NavStack.Screen
           name="Approval"
           component={Approval}
+          options={{ headerShown: false }}
+        />
+        <NavStack.Screen
+          name="PerformanceReview"
+          component={PerformanceReview}
           options={{ headerShown: false }}
         />
       </NavStack.Navigator>

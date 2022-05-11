@@ -69,7 +69,7 @@ function Apps({ navigation }) {
             }
             if (MenuId == 6) {
                 //Performance Review
-                display.push({ "name": "Performance View", "value": "Dashboard", "iconName": "theater-masks", "color": "green" })
+                display.push({ "name": "Performance View", "value": "PerformanceReview", "iconName": "theater-masks", "color": "green" })
             }
             if (MenuId == 7) {
                 //My Finance
