@@ -20,6 +20,7 @@ import Timesheet from './Apps/Timesheet'
 import Approval from './Apps/MangerApproval/Approval';
 import Notification from './Notification';
 import PerformanceReview from './Apps/PerformanceReview';
+import MyAssets from './Apps/MyAssets';
 
 
 function AppsFunc({ route }) {
@@ -70,6 +71,11 @@ function AppsFunc({ route }) {
         <NavStack.Screen
           name="PerformanceReview"
           component={PerformanceReview}
+          options={{ headerShown: false }}
+        />
+         <NavStack.Screen
+          name="Myasset"
+          component={MyAssets}
           options={{ headerShown: false }}
         />
       </NavStack.Navigator>

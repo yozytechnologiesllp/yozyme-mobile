@@ -65,7 +65,7 @@ function Apps({ navigation }) {
             }
             if (MenuId == 5) {
                 //My Assets
-                display.push({ "name": "My Assets", "value": "Dashboard", "iconName": "laptop", "color": "darkblue" })
+                display.push({ "name": "My Assets", "value": "MyAssets", "iconName": "laptop", "color": "darkblue" })
             }
             if (MenuId == 6) {
                 //Performance Review
@@ -116,7 +116,7 @@ function Apps({ navigation }) {
                 display.push({ "iconName": "ticket-alt", "name": "IT Services", "value": "Dashboard", "color": "red" })
             }
             if (MenuId == 17) {
-                display.push({ "iconName": "database", "name": "My Data", "value": "Dashboard", "color": "darkblue" })
+                display.push({ "iconName": "database", "name": "My Data", "value": "MyAssets", "color": "darkblue" })
             }
             if (MenuId == 18) {
                 display.push({ "iconName": "book", "name": "Company Policy", "value": "Dashboard", "color": "green" })
