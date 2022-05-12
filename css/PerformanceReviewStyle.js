@@ -77,6 +77,15 @@ export default StyleSheet.create({
         shadowRadius: 4.65,
         elevation: 8,
     },
+    alertMsg: {
+        fontSize: 22,
+        color: 'red',
+        fontWeight: 'bold',
+        textAlign: 'center',
+        alignItems: 'center',
+        marginTop: '20%',
+        padding: '9%'
+    },
     rowStyle: {
         padding: '2%',
         backgroundColor: '#F4FBFF',
