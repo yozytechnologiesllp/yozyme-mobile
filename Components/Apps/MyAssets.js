@@ -6,34 +6,79 @@ import StoreContext from '../../store/StoreContext';
 import axios from "../../axios";
 import Entypo from 'react-native-vector-icons/Entypo'
 import CheckBox from '@react-native-community/checkbox';
-
+import moment from 'moment';
 export default function MyAssets() {
 
-  let { employee_Data,employee_Id} = useContext(StoreContext);
- 
+  let { employee_Data,employee_Id,user_detail} = useContext(StoreContext);
+
   const [userasset,Setuserasset]=useState([]);
   let [accept,Setaccept]=useState(false);
   console.log(employee_Data,'aaaaaaaaaaaaa');
 
-
-  
   useEffect(()=>{      
-    axios.get('rpc/fun_assetallocreport?empid='+employee_Id)
-    .then((res,) => {
-      console.log(res,'resssssssssssmponse')
-   
-        Setuserasset(res.data);
-    
-      
-
-    })
+      referesh();
   },[]);
+
+  function referesh(){
+    axios.get('rpc/fun_assetallocreport?empid='+employee_Id)
+      .then((res,) => {
+        console.log(res,'resssssssssssmponse')
+     
+          Setuserasset(res.data);
+      
+        
+  
+      })
+   
+  }
+ 
 
 console.log(userasset)
 
 
 console.log(employee_Data,'aaaaaaaaaaaaa');
+let disabled=true;
+let needupdate=userasset.filter(d=>{
+if(d.empconcent=='N'){
+  disabled=false;
+  return d
+}else{
+  
+}
 
+})
+
+function updater(){
+ axios.patch(`asset_allocation?EmpId=eq.${employee_Id}&EmpConcent=eq.N`,{
+  "EmpConcent": "I Have received Listed Assets From YOZY Technology",
+  "AcceptedDate": moment().format("YYYY-MM-DD"),
+ }).then(res=>{
+
+  let notificationData = {
+    CreatedDate: moment()
+      .utcOffset("+05:30")
+      .format("YYYY-MM-DDTHH:mm:ss"),
+    CreatedBy: employee_Id,
+    NotifyTo: user_detail.level1managereid,
+    AudienceType: "Individual",
+    Priority: "High",
+    Subject: "Asset Accepted",
+    Description: "Asset Accepted By  " + employee_Data.Firstname +' '+employee_Data.Lastname,
+    IsSeen: "N",
+    Status: "New",
+  };
+  axios
+    .post("notification?NotifyTo=eq." + user_detail.level1managereid, notificationData)
+    .then((res) => console.log(res))
+    .catch((error) => console.log(error));
+    alert('submitted')
+    Setaccept(false);
+   referesh();
+
+ })
+ 
+}
+console.log(disabled,'agreeeeeee')
 
 let assect=userasset.filter(d=>{
   if(d.isdeallocated==null && d.isaccessory!='Y'){
@@ -56,7 +101,7 @@ console.log(acessory)
     <>
       {userasset.length!=0?
       <ScrollView style={styles.container}>
-       <Text style={styles.heading}>My Assets
+       <Text style={styles.heading}>{assect.length==0?'No Assets':'My Assets'}
        </Text>
     <View>
     
@@ -64,10 +109,13 @@ console.log(acessory)
 {assect.map(d=>{
 return <Asset assetype={d.assetmake +' '+d.assettype} model={d.assetmodel} serialno={d.serialnumber} alloted={d.allocfn+' '+'('+d.allocateddate+')'} />
 })}
+ 
+
+
 
 
      </View>
-<Text style={styles.heading}>My Accessories</Text>
+<Text style={styles.heading}>{acessory.length==0?'No  Accessories':'My Accessories'}</Text>
 
 
 <View>          
@@ -78,9 +126,10 @@ return <Accessories brand={d.accessorymake} alloted={d.allocfn+' '+'('+d.allocat
      </View>
 
    <View style={styles.CheckBoxcontainer}>
-   <CheckBox style={styles.halfDayStyle} value={accept}
+   <CheckBox  disabled={disabled} value={accept}
    onChange={()=>{
-    Setaccept(!accept)
+    Setaccept(!accept);
+    
    }}
      ></CheckBox>
     <Text  style={styles.policy}>
@@ -88,7 +137,17 @@ return <Accessories brand={d.accessorymake} alloted={d.allocfn+' '+'('+d.allocat
     </Text>
    
    </View>
-   <Text style={styles.submitbtn}>Submit</Text>
+   <Text style={styles.submitbtn} onPress={()=>{
+     if(accept){
+     updater();
+      
+      }else if(disabled==true){
+        alert('nothing to update')
+       
+     }else{
+      alert('please click the checkbox');
+     }
+   }}>Submit</Text>
    </ScrollView>:
    
      <View style={styles.notfound}> 
@@ -123,6 +182,8 @@ const styles = StyleSheet.create({
     display:'flex',
     alignItems:'center',
     flexDirection:'row',
+    justifyContent:'space-around',
+    marginTop:5,
   },
   productcard:{
     margin:5,
@@ -157,20 +218,25 @@ justifyContent:'center',
   },submitbtn:{
     backgroundColor:'#007FFF',
     color:'#fff',
-    padding:1,
-    paddingLeft:1.7,
-    paddingRight:1.7,
-    marginTop:5,
+   
+    
+   
     width:70,
+    height:30,
     textAlign:'center',
-    marginTop:5,
+   marginTop:10,
     marginLeft:'auto',
     marginRight:'auto',
     marginBottom:70,
+    borderRadius:5,
+    paddingTop:5,
 
   },
   policy:{
     color:'grey',
+    fontSize:13,
+    width:'90%'
+
  
   }
 
