@@ -84,6 +84,13 @@ export default function PerformanceReview() {
           { EmployeeBenefits: rating.EmployeeBenefits }
         ]
       },
+      ManagerReviewFeedback: {
+        ManagerReview: [
+          {
+            FinalReview: ""
+          }
+        ]
+      },
       ReviewedBy: user_detail.level1managereid,
       ReviewCompletionDate: null,
       IsDiscussionOver: "",

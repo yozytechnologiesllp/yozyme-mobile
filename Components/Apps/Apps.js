@@ -94,7 +94,7 @@ function Apps({ navigation }) {
             }
             if (MenuId == 11) {
                 // Seperation
-                display.push({ "iconName": "user-alt-slash", "name": "Seperation", "value": "Dashboard", "color": "#F6BE00" })
+                display.push({ "iconName": "user-alt-slash", "name": "Seperation", "value": "Seperation", "color": "#F6BE00" })
             }
             if (MenuId == 12) {
                 //Candidature Form

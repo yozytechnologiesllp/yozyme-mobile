@@ -21,6 +21,7 @@ import Approval from './Apps/MangerApproval/Approval';
 import Notification from './Notification';
 import PerformanceReview from './Apps/PerformanceReview';
 import MyAssets from './Apps/MyAssets';
+import Seperation from './Seperation';
 
 
 function AppsFunc({ route }) {
@@ -73,9 +74,15 @@ function AppsFunc({ route }) {
           component={PerformanceReview}
           options={{ headerShown: false }}
         />
-         <NavStack.Screen
+        <NavStack.Screen
           name="MyAssets"
           component={MyAssets}
+          options={{ headerShown: false }}
+        />
+
+        <NavStack.Screen
+          name="Seperation"
+          component={Seperation}
           options={{ headerShown: false }}
         />
       </NavStack.Navigator>
