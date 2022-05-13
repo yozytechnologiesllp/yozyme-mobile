@@ -23,8 +23,13 @@ export default function MyAssets() {
     axios.get('rpc/fun_assetallocreport?empid='+employee_Id)
       .then((res,) => {
         console.log(res,'resssssssssssmponse')
-     
-          Setuserasset(res.data);
+
+        
+          Setuserasset(res.data.filter(x=>{
+            if(x.isdeallocated!='Y'){
+              return x
+            }
+          }));
       
         
   
@@ -33,9 +38,9 @@ export default function MyAssets() {
   }
  
 
-console.log(userasset)
+console.log(userasset.length,'lllllllllllllllllllllll')
 
-
+console.log(userasset,'dataaaaaaaaaaaaaaaa')
 console.log(employee_Data,'aaaaaaaaaaaaa');
 let disabled=true;
 let needupdate=userasset.filter(d=>{
@@ -99,9 +104,9 @@ console.log(acessory)
 
   return (
     <>
-      {userasset.length!=0?
+      {userasset.length?
       <ScrollView style={styles.container}>
-       <Text style={styles.heading}>{assect.length==0?'No Assets':'My Assets'}
+       <Text style={styles.heading}>{assect.length==0?'':'My Assets'}
        </Text>
     <View>
     
@@ -115,7 +120,7 @@ return <Asset assetype={d.assetmake +' '+d.assettype} model={d.assetmodel} seria
 
 
      </View>
-<Text style={styles.heading}>{acessory.length==0?'No  Accessories':'My Accessories'}</Text>
+<Text style={styles.heading}>{acessory.length==0?'':'My Accessories'}</Text>
 
 
 <View>          
@@ -124,7 +129,7 @@ return <Accessories brand={d.accessorymake} alloted={d.allocfn+' '+'('+d.allocat
 })}
 
      </View>
-
+     {disabled?<View style={styles.disableaddiv}></View>:
    <View style={styles.CheckBoxcontainer}>
    <CheckBox  disabled={disabled} value={accept}
    onChange={()=>{
@@ -136,25 +141,24 @@ return <Accessories brand={d.accessorymake} alloted={d.allocfn+' '+'('+d.allocat
     This is to confirm that, I have received the listed assets from Yozy Technologies LLP and I bound to keep them safe and use only for official purpose. If any damages to assets by employees (knowingly or unknowingly), the company has authority to recover the damage from individuals
     </Text>
    
-   </View>
-   <Text style={styles.submitbtn} onPress={()=>{
+   </View>}
+   {disabled?<View style={styles.disableacddiv}></View>:<Text style={styles.submitbtn} onPress={()=>{
      if(accept){
      updater();
       
       }else if(disabled==true){
-        alert('nothing to update')
+        alert('nothing to update');
        
      }else{
       alert('please click the checkbox');
      }
-   }}>Submit</Text>
-   </ScrollView>:
+   }}>Submit</Text>}
+   
+   </ScrollView> :
    
      <View style={styles.notfound}> 
     <Entypo name="emoji-sad" size={100} color="#d3d3d3"/>
     <Text style={styles.nftitle}>You have no Assets</Text>
-     
-   
    </View>
   
     }
@@ -171,6 +175,8 @@ const styles = StyleSheet.create({
     
     paddingTop:50,
     
+  },disableacddiv:{
+marginBottom:50,
   },
   heading:{
     fontSize:25,
@@ -184,6 +190,9 @@ const styles = StyleSheet.create({
     flexDirection:'row',
     justifyContent:'space-around',
     marginTop:5,
+  },
+  disableaddiv:{
+    marginBottom:5,
   },
   productcard:{
     margin:5,
