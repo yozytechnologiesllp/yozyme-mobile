@@ -1,82 +1,106 @@
-import * as React from 'react';
-import { Text, View,CheckBox,FlatList, StyleSheet } from 'react-native';
-import { DataTable } from 'react-native-paper';
-
-
+import React, { useState, useEffect, useContext } from 'react'
+import { Text, View, StyleSheet, ScrollView} from 'react-native';
+import Asset from './Asset'
+import Accessories from './Accessories'
+import StoreContext from '../../store/StoreContext';
+import axios from "../../axios";
+import Entypo from 'react-native-vector-icons/Entypo'
+import CheckBox from '@react-native-community/checkbox';
 
 export default function MyAssets() {
-  return (
-    <View style={styles.container}>
-          <Text style={styles.heading}>My Assets
-          </Text>
-       <View>
-           <View style={styles.productcard}>
-                <Text style={styles.productheading}>Hp Laptop</Text>
-               <DataTable style={styles.table}>
-               
-               <DataTable.Row>
-           <DataTable.Cell>Model Number</DataTable.Cell>
-            <DataTable.Cell>14-DV6654TU</DataTable.Cell>
-        
-        
-           </DataTable.Row>
-            <DataTable.Row>
-        <DataTable.Cell>Serial Number</DataTable.Cell>
-        <DataTable.Cell>5CD0982CJY</DataTable.Cell>
-        
-        
-         </DataTable.Row>
-            <DataTable.Row>
-        <DataTable.Cell>Allocated By</DataTable.Cell>
-        <DataTable.Cell>Derie (18-Apr-2022) </DataTable.Cell>
-        
-        
-         </DataTable.Row>
 
-               </DataTable> 
-  
-  
-            </View>
+  let { employee_Data,employee_Id} = useContext(StoreContext);
+ 
+  const [userasset,Setuserasset]=useState([]);
+  let [accept,Setaccept]=useState(false);
+  console.log(employee_Data,'aaaaaaaaaaaaa');
 
+
+  
+  useEffect(()=>{      
+    axios.get('rpc/fun_assetallocreport?empid='+employee_Id)
+    .then((res,) => {
+      console.log(res,'resssssssssssmponse')
    
-        </View>
+        Setuserasset(res.data);
+    
+      
+
+    })
+  },[]);
+
+console.log(userasset)
+
+
+console.log(employee_Data,'aaaaaaaaaaaaa');
+
+
+let assect=userasset.filter(d=>{
+  if(d.isdeallocated==null && d.isaccessory!='Y'){
+    return d
+  }
+})
+console.log(assect);
+
+let acessory=userasset.filter(d=>{
+  if(d.isdeallocated==null && d.isaccessory=='Y'){
+    return d
+  }
+})
+
+console.log(acessory)
+
+
+
+  return (
+    <>
+      {userasset.length!=0?
+      <ScrollView style={styles.container}>
+       <Text style={styles.heading}>My Assets
+       </Text>
+    <View>
+    
+
+{assect.map(d=>{
+return <Asset assetype={d.assetmake +' '+d.assettype} model={d.assetmodel} serialno={d.serialnumber} alloted={d.allocfn+' '+'('+d.allocateddate+')'} />
+})}
+
+
+     </View>
 <Text style={styles.heading}>My Accessories</Text>
 
 
-  <View>
-           <View style={styles.productcard}>
-                <Text style={styles.productheading}>Laptop Bag</Text>
-               <DataTable style={styles.table}>
-               
-               <DataTable.Row>
-           <DataTable.Cell>Brand</DataTable.Cell>
-            <DataTable.Cell>HP</DataTable.Cell>
-        
-        
-           </DataTable.Row>
-         
-            <DataTable.Row>
-        <DataTable.Cell>Allocated By</DataTable.Cell>
-        <DataTable.Cell>Derie (18-Apr-2022) </DataTable.Cell>
-        
-        
-         </DataTable.Row>
+<View>          
+{acessory.map(d=>{
+return <Accessories brand={d.accessorymake} alloted={d.allocfn+' '+'('+d.allocateddate+')'} atype={d.accessorytype}/>
+})}
 
-               </DataTable> 
-  
-  
-            </View>
+     </View>
 
+   <View style={styles.CheckBoxcontainer}>
+   <CheckBox style={styles.halfDayStyle} value={accept}
+   onChange={()=>{
+    Setaccept(!accept)
+   }}
+     ></CheckBox>
+    <Text  style={styles.policy}>
+    This is to confirm that, I have received the listed assets from Yozy Technologies LLP and I bound to keep them safe and use only for official purpose. If any damages to assets by employees (knowingly or unknowingly), the company has authority to recover the damage from individuals
+    </Text>
    
-        </View>
-
-      <View>
-       <Text  style={styles.policy}>
-       This is to confirm that, I have received the listed assets from Yozy Technologies LLP and I bound to keep them safe and use only for official purpose. If any damages to assets by employees (knowingly or unknowingly), the company has authority to recover the damage from individuals
-       </Text>
-      <Text style={styles.submitbtn}>Submit</Text>
-      </View>
-    </View>
+   </View>
+   <Text style={styles.submitbtn}>Submit</Text>
+   </ScrollView>:
+   
+     <View style={styles.notfound}> 
+    <Entypo name="emoji-sad" size={100} color="#d3d3d3"/>
+    <Text style={styles.nftitle}>You have no Assets</Text>
+     
+   
+   </View>
+  
+    }
+         
+    </>
   );
 }
 
@@ -84,7 +108,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop:5,
-    backgroundColor: '#ecf0f1',
+    backgroundColor: '#fff',
     
     paddingTop:50,
     
@@ -94,6 +118,11 @@ const styles = StyleSheet.create({
     fontWeight:'bold',
     margin:3,
     textAlign:"center"
+  },
+  CheckBoxcontainer:{
+    display:'flex',
+    alignItems:'center',
+    flexDirection:'row',
   },
   productcard:{
     margin:5,
@@ -106,8 +135,22 @@ const styles = StyleSheet.create({
     fontSize:20,
     color:'grey',
      textAlign:"center"
+    
 
   },
+  notfound:{
+    display:'flex',
+    flexDirection:'column',
+    justifyContent:'center',
+    alignItems:'center',
+    width:'60%',
+    textAlign:'center',
+    marginLeft:'auto',
+    marginRight:'auto',
+    marginTop:50,
+    
+    
+     },
   table:{
 display:'flex',
 justifyContent:'center',
@@ -123,6 +166,7 @@ justifyContent:'center',
     marginTop:5,
     marginLeft:'auto',
     marginRight:'auto',
+    marginBottom:70,
 
   },
   policy:{

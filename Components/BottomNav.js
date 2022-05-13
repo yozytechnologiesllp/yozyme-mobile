@@ -74,7 +74,7 @@ function AppsFunc({ route }) {
           options={{ headerShown: false }}
         />
          <NavStack.Screen
-          name="Myasset"
+          name="MyAssets"
           component={MyAssets}
           options={{ headerShown: false }}
         />
