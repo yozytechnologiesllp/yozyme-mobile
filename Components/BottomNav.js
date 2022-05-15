@@ -21,7 +21,7 @@ import Approval from './Apps/MangerApproval/Approval';
 import Notification from './Notification';
 import PerformanceReview from './Apps/PerformanceReview';
 import MyAssets from './Apps/MyAssets';
-import Seperation from './Seperation';
+import Seperation from '../Components/Apps/Seperation'
 
 
 function AppsFunc({ route }) {

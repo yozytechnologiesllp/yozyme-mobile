@@ -2,6 +2,7 @@ import { StyleSheet } from "react-native";
 export default StyleSheet.create({
     bgStyle: {
         // paddingTop: '1.5',
+        height: '100%',
         paddingLeft: '3.6%',
         paddingRight: '3.6%',
         paddingBottom: '3.6%',
@@ -65,6 +66,13 @@ export default StyleSheet.create({
         marginBottom: '0.5%',
         fontSize: 18
     },
+    disableLabel: {
+        color: 'grey',
+        fontWeight: 'bold',
+        marginTop: '4%',
+        marginBottom: '0.5%',
+        fontSize: 18
+    },
     rowStyle: {
         padding: '2%',
         backgroundColor: '#F4FBFF',
@@ -78,6 +86,14 @@ export default StyleSheet.create({
         //paddingLeft:18,
         //  fontSize: 30,
         color: 'black',
+    },
+    disableDropdown: {
+        borderRadius: 9,
+        borderWidth: 2,
+        borderColor: 'grey',
+        //paddingLeft:18,
+        //  fontSize: 30,
+        color: 'grey',
     },
     textStyleReason: {
         borderRadius: 9,
@@ -137,5 +153,14 @@ export default StyleSheet.create({
     submitView: {
         marginTop: '2%',
         alignItems: 'center'
-    }
+    },
+    alertMsg: {
+        fontSize: 22,
+        color: 'red',
+        fontWeight: 'bold',
+        textAlign: 'center',
+        alignItems: 'center',
+        marginTop: '20%',
+        padding: '9%'
+    },
 })
