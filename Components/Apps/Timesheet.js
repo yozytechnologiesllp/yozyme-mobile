@@ -7,13 +7,7 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment'
 import axios from '../../axios'
-import CheckBox from '@react-native-community/checkbox';
-import DatePicker from 'react-native-datepicker';
 import StoreContext from '../../store/StoreContext';
-import MultiSelect from 'react-native-multiple-select';
-import FontAwesome from 'react-native-vector-icons/FontAwesome'
-import { NavigationContainer } from '@react-navigation/native';
-import MyInput from './MyInput'
 
 
 function Leave({ navigation }) {

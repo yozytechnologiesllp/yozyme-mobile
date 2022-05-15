@@ -9,6 +9,7 @@ import { ScrollView } from 'react-native-gesture-handler'
 import axios1 from 'axios'
 import NotificationCard from './NotificationCard'
 import { Swipeable } from 'react-native-gesture-handler'
+import styles from '../css/NotificationStyles'
 
 function Notification({ navigation }) {
     // const [anotherImage, setAnotherImage] = useState([])
@@ -43,7 +44,7 @@ function Notification({ navigation }) {
     return (
         <>
             <HeaderView />
-            <ScrollView>
+            <ScrollView style={styles.bgStyle}>
                 {
                     notification.map((e) => (
                         <Swipeable renderLeftActions={() => renderLeft}
