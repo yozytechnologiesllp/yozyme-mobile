@@ -99,10 +99,10 @@ export default function PerformanceReview() {
       Status: "",
     }
     console.log(postData, 'post data')
-    if (comment.OverallComments != "" && comment.OverallComments.length >= 256 &&
-      comment.WayForward != "" && comment.WayForward.length >= 256 &&
-      comment.WhatCouldHaveDoneBetter != "" && comment.WhatCouldHaveDoneBetter.length >= 256
-      && comment.WhatWentWell != "" && comment.WhatWentWell.length >= 256) {
+    if (comment.OverallComments != "" && comment.OverallComments.length >= 100 &&
+      comment.WayForward != "" && comment.WayForward.length >= 100 &&
+      comment.WhatCouldHaveDoneBetter != "" && comment.WhatCouldHaveDoneBetter.length >= 100
+      && comment.WhatWentWell != "" && comment.WhatWentWell.length >= 100) {
       {
 
         axios.post('performance_review', postData).then((res) => {
@@ -129,7 +129,7 @@ export default function PerformanceReview() {
       }
     }
     else {
-      alert("Please enter all the reviews( Minimum letters are 256 for all the review )")
+      alert("Please enter all the reviews( Minimum letters are 100 for all the review )")
     }
   }
   const formOpenMonth1 = 5;

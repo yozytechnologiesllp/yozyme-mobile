@@ -246,17 +246,17 @@ function Seperation({ navigation }) {
                         </>
                         :
                         seperationDetails[0].IsFullyApproved == "Y" ?
-                            <Text style={styles.alertMsg}>Your seperation request is approved.
+                            <Text style={styles.alertMsg}>Your separation request is approved.
                                 Your last working day is {moment(seperationDetails[0].InitiatedDate).add(user_detail.noticeperiodinmonths, 'months').calendar({ sameElse: 'DD-MM-YYYY' })} and notice period is {user_detail.noticeperiodinmonths} Months
                             </Text>
                             :
                             seperationDetails[0].IsFullyApproved == "N" ?
-                                <Text style={styles.alertMsg}>Your seperation request is declined.
-                                    After {moment(seperationDetails[0].InitiatedDate).add(6, 'months').calendar({ sameElse: 'DD-MM-YYYY' })}, you are able to apply seperation</Text>
+                                <Text style={styles.alertMsg}>Your separation request is declined.
+                                    After {moment(seperationDetails[0].InitiatedDate).add(6, 'months').calendar({ sameElse: 'DD-MM-YYYY' })}, you are able to apply separation</Text>
                                 :
                                 seperationDetails[0].IsWithdrawn == "Y" ?
-                                    <Text style={styles.alertMsg}>You are withdrawn the seperation request.
-                                        After {moment(seperationDetails[0].InitiatedDate).add(6, 'months').calendar({ sameElse: 'DD-MM-YYYY' })}, you are able to apply seperation</Text>
+                                    <Text style={styles.alertMsg}>You are withdrawn the separation request.
+                                        After {moment(seperationDetails[0].InitiatedDate).add(6, 'months').calendar({ sameElse: 'DD-MM-YYYY' })}, you are able to apply separation</Text>
                                     :
                                     null
                 }
