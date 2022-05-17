@@ -119,7 +119,7 @@ function Apps({ navigation }) {
                 display.push({ "iconName": "database", "name": "My Data", "value": "MyAssets", "color": "darkblue" })
             }
             if (MenuId == 18) {
-                display.push({ "iconName": "book", "name": "Company Policy", "value": "Dashboard", "color": "green" })
+                display.push({ "iconName": "book", "name": "Company Policy", "value": "Policy", "color": "green" })
             }
             if (MenuId == 19) {
                 display.push({ "iconName": "list-alt", "name": "Agile Delivery", "value": "KanbanBoard", "color": "#F6BE00" })

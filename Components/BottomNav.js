@@ -22,6 +22,8 @@ import Notification from './Notification';
 import PerformanceReview from './Apps/PerformanceReview';
 import MyAssets from './Apps/MyAssets';
 import Seperation from '../Components/Apps/Seperation'
+import Policy from './Policy';
+import Policydes from './Policydes'
 
 
 function AppsFunc({ route }) {
@@ -49,6 +51,7 @@ function AppsFunc({ route }) {
           component={KanbanBoard}
           options={{ headerShown: false }}
         />
+       
         <NavStack.Screen
           name="Dashboard"
           component={Dashboard}
@@ -79,10 +82,20 @@ function AppsFunc({ route }) {
           component={MyAssets}
           options={{ headerShown: false }}
         />
+        <NavStack.Screen
+          name="Policydes"
+          component={Policydes}
+          options={{ headerShown: false }}
+        />
 
         <NavStack.Screen
           name="Seperation"
           component={Seperation}
+          options={{ headerShown: false }}
+        />
+         <NavStack.Screen
+          name="Policy"
+          component={Policy}
           options={{ headerShown: false }}
         />
       </NavStack.Navigator>
