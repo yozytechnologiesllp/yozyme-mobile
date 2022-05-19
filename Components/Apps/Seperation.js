@@ -151,7 +151,7 @@ function Seperation({ navigation }) {
                     NotifyTo: user_detail.level1managereid,
                     AudienceType: "Individual",
                     Priority: "High",
-                    Subject: "Separation Wuthdrawn",
+                    Subject: "Separation Withdrawn",
                     Description: "Separation Withdrawn By  " + user_detail.firstname + " " + user_detail.lastname,
                     IsSeen: "N",
                     Status: "New",

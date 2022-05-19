@@ -74,17 +74,19 @@ function NotificationCard({ e }) {
             </View>
             <View style={{
                 // flex: 1,
-                flexDirection: 'column', width: '76%',
+                flexDirection: 'column', width: '70%',
                 marginLeft: '4%'
             }}>
-
                 <Text style={{ fontWeight: 'bold', color: 'darkblue', fontSize: 18 }}>{e.Subject}&nbsp;&nbsp;</Text>
                 <Text style={{ color: 'black', fontSize: 15, marginTop: '0.9%' }}>{e.Description}</Text>
                 <Text style={{ fontWeight: '400', fontSize: 18, marginTop: '0.9%' }}>{moment(e.CreatedDate, "YYYY-MM-DDTHH:mm:ss").fromNow()}</Text>
             </View>
-
-
-
+            {
+                e.IsSeen == "N" ?
+                    <Text style={styles.unSeen}>.</Text>
+                    :
+                    null
+            }
             <Divider />
         </View>
     )

@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import {
-  Image
+  Image,
+  Text
 } from 'react-native';
 import styles from '../css/DashboardStyle'
 import { createStackNavigator } from '@react-navigation/stack';
@@ -22,11 +23,14 @@ import Notification from './Notification';
 import PerformanceReview from './Apps/PerformanceReview';
 import MyAssets from './Apps/MyAssets';
 import Seperation from '../Components/Apps/Seperation'
+import StoreContext from '../store/StoreContext';
+import MyTravel from './Apps/MyTravel';
 import Policy from './Policy';
 import Policydes from './Policydes'
 
 
 function AppsFunc({ route }) {
+
   const NavStack = createStackNavigator();
   return (
     <NavigationContainer independent={true}>
@@ -51,7 +55,6 @@ function AppsFunc({ route }) {
           component={KanbanBoard}
           options={{ headerShown: false }}
         />
-       
         <NavStack.Screen
           name="Dashboard"
           component={Dashboard}
@@ -82,6 +85,7 @@ function AppsFunc({ route }) {
           component={MyAssets}
           options={{ headerShown: false }}
         />
+
         <NavStack.Screen
           name="Policydes"
           component={Policydes}
@@ -93,9 +97,14 @@ function AppsFunc({ route }) {
           component={Seperation}
           options={{ headerShown: false }}
         />
-         <NavStack.Screen
+        <NavStack.Screen
           name="Policy"
           component={Policy}
+          options={{ headerShown: false }}
+        />
+        <NavStack.Screen
+          name="MyTravel"
+          component={MyTravel}
           options={{ headerShown: false }}
         />
       </NavStack.Navigator>
@@ -104,7 +113,10 @@ function AppsFunc({ route }) {
 }
 
 const Tab = createBottomTabNavigator();
+
 function Tabs({ navigation }) {
+  const { notification } = useContext(StoreContext)
+  const notify = notification.filter(x => x.IsSeen == "N")
 
   return (
     <Tab.Navigator
@@ -136,7 +148,12 @@ function Tabs({ navigation }) {
             iconName = 'bell';
           }
           // You can return any component that you like here!
-          return <FontAwesome5 name={iconName} size={size} color={color} />;
+          if (route.name != 'Notification') {
+            return <FontAwesome5 name={iconName} size={size} color={color} />;
+          }
+          else {
+            return <Text style={notify.length == 0 ? { color: color } : { color: 'red' }}><FontAwesome5 name={iconName} size={size} color={notify.length == 0 ? color : 'red'} /> {notify.length == 0 ? null : notify.length}</Text>
+          }
         },
         tabBarActiveTintColor: 'darkblue',
         tabBarInactiveTintColor: 'black',

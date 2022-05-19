@@ -128,7 +128,7 @@ function Apps({ navigation }) {
                 display.push({ "iconName": "search-dollar", "name": "Presales", "value": "Dashboard", "color": "red" })
             }
             if (MenuId == 21) {
-                display.push({ "iconName": "plane-departure", "name": "My Travel", "value": "Dashboard", "color": "darkblue" })
+                display.push({ "iconName": "plane-departure", "name": "My Travel", "value": "MyTravel", "color": "darkblue" })
             }
             if (MenuId == 22) {
                 display.push({ "iconName": "fa-building", "name": "Facilities", "value": "Dashboard", "color": "green" })

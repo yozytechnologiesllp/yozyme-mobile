@@ -50,10 +50,10 @@ export default function Dashboard({ navigation }) {
     }, [])
     const handleNotification = () => {
         // console.log(notification, 'notification')
-        axios
-            .get("notification?NotifyTo=eq." + employee_Id + "&IsSeen=eq.N")
+        axios.get("notification?NotifyTo=eq." + employee_Id + "&order=CreatedDate.desc&limit=20")
             .then((res) => {
-                let filteredData = res.data.filter(x => moment.duration(moment().diff(x.CreatedDate)).hours() < 24 && moment(x.CreatedDate).format("MM-YYYY") == moment().format("MM-YYYY"))
+                let filteredData = res.data.filter(x => moment.duration(moment().diff(x.CreatedDate)).hours() < 24
+                    && moment(x.CreatedDate).format("MM-YYYY") == moment().format("MM-YYYY") && x.IsSeen == "N")
                 filteredData.map((x) => {
                     PushNotification.localNotification({
                         channelId: "test-channel",
@@ -67,10 +67,12 @@ export default function Dashboard({ navigation }) {
                         // }
                     )
                 })
-                let displayData = res.data.filter(x => moment(x.CreatedDate).format("YYYY") == moment().format("YYYY"))
-                setNotification(displayData.sort((a, b) => moment(b.CreatedDate).diff(a.CreatedDate)));
+                // let displayData = res.data.filter(x => moment(x.CreatedDate).format("YYYY") == moment().format("YYYY"))
+                setNotification(
+                    // displayData.sort((a, b) => moment(b.CreatedDate).diff(a.CreatedDate))
+                    res.data
+                );
             })
-
     }
     const handleBackButton = () => {
         if (navigation.isFocused()) {

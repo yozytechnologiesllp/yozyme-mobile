@@ -4,7 +4,7 @@ import HeaderView from './HeaderView'
 import axios from '../axios'
 import StoreContext from '../store/StoreContext'
 import moment from 'moment'
-import { Avatar, Divider } from 'react-native-paper'
+import { Avatar, Card, Divider } from 'react-native-paper'
 import { ScrollView } from 'react-native-gesture-handler'
 import axios1 from 'axios'
 import NotificationCard from './NotificationCard'
@@ -22,11 +22,14 @@ function Notification({ navigation }) {
     }, [])
     function refresh() {
         axios
-            .get("notification?NotifyTo=eq." + employee_Id + "&IsSeen=eq.N")
+            .get("notification?NotifyTo=eq." + employee_Id + "&order=CreatedDate.desc&limit=20")
             .then((res) => {
                 // console.log(res.data)
                 let displayData = res.data.filter(x => moment(x.CreatedDate).format("YYYY") == moment().format("YYYY"))
-                setNotification(displayData.sort((a, b) => moment(b.CreatedDate).diff(a.CreatedDate)));
+                setNotification(
+                    res.data
+                    // displayData.sort((a, b) => moment(b.CreatedDate).diff(a.CreatedDate))
+                );
 
             })
     }
@@ -45,15 +48,21 @@ function Notification({ navigation }) {
         <>
             <HeaderView />
             <ScrollView style={styles.bgStyle}>
+
                 {
-                    notification.map((e) => (
-                        <Swipeable renderLeftActions={() => renderLeft}
-                            onSwipeableLeftOpen={() => updateSeen(e.NotificationId)}>
-                            <NotificationCard e={e}
-                            // anotherImage={anotherImage} setAnotherImage={setAnotherImage} 
-                            />
-                        </Swipeable>
-                    ))
+                    notification.length != 0 ?
+                        notification.map((e) => (
+                            // <Swipeable renderLeftActions={() => renderLeft}
+                            //     onSwipeableLeftOpen={() => updateSeen(e.NotificationId)}>
+                            <Card onPress={() => { if (e.IsSeen == "N") { updateSeen(e.NotificationId) } }}>
+                                <NotificationCard e={e}
+                                // anotherImage={anotherImage} setAnotherImage={setAnotherImage} 
+                                />
+                            </Card>
+                            // </Swipeable>
+                        ))
+                        :
+                        <Text style={styles.alertMsg}>No Notifications </Text>
                 }
             </ScrollView>
         </>
