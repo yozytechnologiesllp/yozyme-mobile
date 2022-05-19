@@ -1,8 +1,10 @@
 import { Text, View,ScrollView, StyleSheet } from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import { DataTable } from 'react-native-paper';
-import React, { useState, useEffect, useContext } from 'react'
+import React from 'react'
 import moment from 'moment';
+import HeaderView from './HeaderView';
+
 
 function Policydes({ navigation,route }) {
 
@@ -18,7 +20,7 @@ console.log(topic,'toopic')
 let topicitems=topic.map(x=>{
     let singletopic=x.PolicyDetails;
     return singletopic.map(x=>{
-        return  <Text style={styles.ptitle}><FontAwesome5 name="arrow-right" color='#FD5D93' /> {x.Title}</Text>
+        return  <Text style={styles.ptitle}><FontAwesome5 name="arrow-right" color='#007FFF' /> {x.Title}</Text>
     })
 })
 
@@ -41,26 +43,26 @@ let mapingtable=tmap.map(x=>{
         return  <DataTable style={styles.table}>
                
         <DataTable.Row>
-    <DataTable.Cell>RevisedDate</DataTable.Cell>
+    <DataTable.Cell style={styles.theading}>RevisedDate</DataTable.Cell>
      <DataTable.Cell>{x.RevisedDate}</DataTable.Cell>
     
     
     </DataTable.Row>
     
      <DataTable.Row>
-    <DataTable.Cell>RevisedBy</DataTable.Cell>
+    <DataTable.Cell style={styles.theading}>RevisedBy</DataTable.Cell>
     <DataTable.Cell>{x.RevisedBy}</DataTable.Cell>
     
     
     </DataTable.Row>
     <DataTable.Row>
-    <DataTable.Cell>Version</DataTable.Cell>
+    <DataTable.Cell style={styles.theading}>Version</DataTable.Cell>
     <DataTable.Cell>{x.Version}</DataTable.Cell>
     
     
     </DataTable.Row>
     <DataTable.Row>
-    <DataTable.Cell>Remarks</DataTable.Cell>
+    <DataTable.Cell style={styles.theading}>Remarks</DataTable.Cell>
     <DataTable.Cell>{x.Remarks}</DataTable.Cell>
     
     
@@ -97,7 +99,8 @@ let aucience=topic.map(x=>{
     })
 })
   return (
-      
+    <>
+    <HeaderView/>
     <ScrollView style={styles.container}>
     <Text style={styles.policytitle}>{title}</Text>
     <View style={styles.titlecontainer} >
@@ -128,6 +131,7 @@ let aucience=topic.map(x=>{
     </View>
 
     </ScrollView>
+    </>
   );
 }
 
@@ -136,15 +140,25 @@ const styles = StyleSheet.create({
     flex: 1,
    marginTop:'10%',
     padding: 8,
+    backgroundColor:'white',
+    margin:5,
+    
   },
   policytitle:{
     textAlign:'center',
    fontWeight:'bold',
    fontSize:18,
+  //  backgroundColor: '#F0F8FF',
+   backgroundColor: '#007FFF',
+   color:'white',
+   padding:4,
+
+
   },
   titlecontainer:{
     margin:5,
     marginTop:'5%',
+    
 
   },
   tablecard:{
@@ -165,15 +179,25 @@ ptitle:{
   marginTop:'1%',
 },
 carttitle:{
-color:'#E14ECA',
+color:'#007FFF',
 fontSize:16,
-  
-  
+ fontWeight:'400' 
+
 
 },
+theading:{
+  
+  paddingLeft:0,
+},
 table:{
-borderWidth:1,
+borderWidth:2,
 marginTop:10,
+  backgroundColor: '#F0F8FF',
+color: 'grey',
+
+borderColor:'#F0F8FF',
+
+
 },
 cartdescription:{
   fontSize:12,

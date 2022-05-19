@@ -6,6 +6,7 @@ import axios from "../axios";
 
 import Entypo from 'react-native-vector-icons/Entypo'
 import Policydes from './Policydes';
+import HeaderView from './HeaderView';
 
 
 
@@ -14,6 +15,8 @@ export default  function Policy ({navigation}) {
     const[searchpolicy,Setsearchpolicy]=useState('')
 
   const [expanded, setExpanded] = React.useState(true);
+  const [isthere, Setisthere] = React.useState(false);
+
 
   const handlePress = () => setExpanded(!expanded);
   let [pcatagory,Setpcatagory]=useState([]);
@@ -49,12 +52,40 @@ export default  function Policy ({navigation}) {
   },[])
    console.log(searchpolicy,'policyyy');
 
+
+  function policychecker(x){
+  pdetailcatagory.filter(data=>{
+  if(data.SubCategoryCode==x){
+    console.log(data.SubCategoryCode,x)
+   return true 
+
+  }
+  else{
+    console.log(data.SubCategoryCode,x)
+
+    return false
+
+  }
+})
+
+   }
+
 let catgory=pcatagory.map(data=>{
     let title=data.CategoryCode;
     let subcat=data.SubCategories.map(sub=>{
         return <List.Item title={sub.SubCategoryCode} onPress={()=>{
-          navigation.navigate('Policydes',{title:sub.SubCategoryCode,data:pdetailcatagory})
-        }} />
+        
+          pdetailcatagory.filter(x=>{
+            if(sub.SubCategoryCode==x.SubCategoryCode){
+              console.log(x.SubCategoryCode,sub.SubCategoryCode)
+              navigation.navigate('Policydes',{title:sub.SubCategoryCode,data:pdetailcatagory})
+
+            }
+          })
+        
+        }
+       
+        } />
     })
     return <List.Accordion
     title={title}
@@ -70,7 +101,7 @@ let catgory=pcatagory.map(data=>{
   console.log(catgory,'aaaaaaaaaaaaaaaaaaaaaaaaaa')
   
 function getuserdetail(){
-  
+  Setsearch(true);
     let data =pcatagory.filter(data =>{
 
     if(data.CategoryCode.toLowerCase()==searchpolicy.toLowerCase()){
@@ -84,37 +115,46 @@ function getuserdetail(){
     })
  
    console.log(scatagory,'searchresult')
-    Setsearch(true);
+    
 }
 
 
 
   return (
-  <>
-  <Text style={styles.heading}> KNOW YOUR POLICY</Text>
+    <>
+    <HeaderView/>
+  <View style={styles.container}>
+     
+  <Text style={styles.heading} > KNOW YOUR POLICY</Text>
+  
   <View style={styles.searchContainer}>
-        <TextInput
-          style={styles.searchinput}
-          placeholder="Search Policy"
-          placeholderTextColor="grey"
-          onChangeText={value =>{
-            Setsearchpolicy(value);
+  
+
+    <TextInput style={styles.searchinput}
+      placeholder="Search Employee"
+       placeholderTextColor="grey"
+      
+       onChangeText={value =>{
+            
             Setsearch(false);
-          
+            Setsearchpolicy(value)
+            
           }
         
         }
-     
-        
-          onSubmitEditing={(e) => getuserdetail()}
-          
-        />
+        value={searchpolicy}
+        onSubmitEditing={(e) => getuserdetail()}
+/>
+    
+ 
           
     
             <Text style={styles.searchicon}  onPress={() => getuserdetail()} >
             < FontAwesome5 name="search" size={30} color="#2d9afa"  />
             </Text>
-            </View>
+  </View>
+  
+  
   <List.Section  style={styles.Accordionbox}>
       {/* <List.Accordion
         title="Leave"
@@ -125,10 +165,22 @@ function getuserdetail(){
         
       </List.Accordion> */}
  
-      {search?scatagory.map(data=>{
+      {search&searchpolicy.length>0?scatagory.map(data=>{
   let title=data.CategoryCode;
   let subcat=data.SubCategories.map(sub=>{
-      return <List.Item title={sub.SubCategoryCode} />
+      return <List.Item title={sub.SubCategoryCode} onPress={()=>{
+        
+        pdetailcatagory.filter(x=>{
+          if(sub.SubCategoryCode==x.SubCategoryCode){
+            console.log(x.SubCategoryCode,sub.SubCategoryCode)
+            navigation.navigate('Policydes',{title:sub.SubCategoryCode,data:pdetailcatagory})
+
+          }
+        })
+      
+      }
+     
+      } />
   })
   return <List.Accordion
   title={title}
@@ -141,7 +193,8 @@ function getuserdetail(){
        
        </List.Section >
 
-  </>
+ </View>
+ </>
   );
 };
 const styles = StyleSheet.create({
@@ -157,6 +210,12 @@ const styles = StyleSheet.create({
               borderRadius:5,
               borderColor:'#2d9afa',
    },
+   container:{
+    backgroundColor:'white',
+    flex:1,
+    
+
+   },
 
    searchContainer:{
      display:'flex',
@@ -165,6 +224,7 @@ const styles = StyleSheet.create({
      justifyContent:'space-around',
      marginTop:'5%',
      paddingTop:0,
+    
    },
    searchicon:{
      color:'#fff',
@@ -176,10 +236,15 @@ const styles = StyleSheet.create({
      fontWeight:'bold',
      fontSize:20,
      textAlign:'center',
-     marginTop:'18%'
+     marginTop:'18%',
+     backgroundColor: '#007FFF',
+     color:'white',
+    padding:'3%',
+    margin:'5%'
+    
    },
    Accordionbox:{
-     margin:5,
+    margin:'5%'
    }
 })
 
