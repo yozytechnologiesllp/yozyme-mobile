@@ -17,7 +17,7 @@ export default  function Policy ({navigation}) {
     const[searchpolicy,Setsearchpolicy]=useState('')
 
   const [expanded, setExpanded] = React.useState(true);
-  const [isthere, Setisthere] = React.useState(false);
+  const [isnotthere, Setisnotthere] = React.useState(false);
 
 
   const handlePress = () => setExpanded(!expanded);
@@ -61,22 +61,27 @@ export default  function Policy ({navigation}) {
       let subcat=data.SubCategories.map(sub=>{
           return <List.Item title={sub.SubCategoryCode} onPress={()=>{
           
-           let b= policydetail.filter(x=>{
-              if(x.SubCategoryCode==sub.SubCategoryCode){
-                console.log(x.SubCategoryCode+sub.SubCategoryCode+x.PolicyCategoryId)
-                navigation.navigate('Policydes',{title:sub.SubCategoryCode,data:policydetail})
-               
-                return x
-  
-  
-              }
-                else {
-                 
-                  return x
-  
-                }
-              
-            })
+            let d=policydetail.map(x=>{
+              return (x.SubCategoryCode)
+             })
+             let s=d.find(x=>{
+               if(x==sub.SubCategoryCode) {
+                 return x
+               }else{
+                 return false
+               }
+             });
+             
+             if(s==undefined){
+               alert('no policy detail found')
+             }
+             else{
+              navigation.navigate('Policydes',{title:sub.SubCategoryCode,data:policydetail})
+             }
+          
+                
+                
+          
             
           
           }
@@ -85,61 +90,74 @@ export default  function Policy ({navigation}) {
       })
       return <List.Accordion
       title={title}
+      
       left={props => <FontAwesome5 name="info-circle" />}>
       {subcat}
       
     </List.Accordion>
   })
 
+
   function getuserdetail(){
     Setsearch(true);
-      let data =policymaster.filter(data =>{
-  
-      if(data.CategoryCode.toLowerCase()==searchpolicy.toLowerCase()){
-        Setsearchedpolicy([data]);
-        console.log(data,'vvvvvvvvvvvvvvvvvvvvvvvvrrrrrrrrrrrr')
-        
+    let d=policymaster.map(x=>{
+      return (x.CategoryCode)
+     })
+     let s=d.find(x=>{
+      if(x.toLowerCase()==searchpolicy.toLowerCase()) {
+        Setisnotthere(false)
+        return x
       }else{
-        
+        Setisnotthere(true)
+        return false
       }
-  
-      
-         
-      })
-   
-     console.log(searchedpolicy,'searchresultvvvvvvvvvvvvv')
+    });
+
+    let findd=policymaster.filter(x=>{
+      if(x.CategoryCode==s){
+        
+        return x
+      }else{
+        return false
+      }
+    })
+
+    Setsearchedpolicy(findd)
     
     
       
   }
+ 
+
   let finddata=searchedpolicy.map(data=>{
   let title=data.CategoryCode;
   let subcat=data.SubCategories.map(sub=>{
       return <List.Item title={sub.SubCategoryCode} onPress={()=>{
       
-       let b= policydetail.filter(x=>{
-          if(x.SubCategoryCode==sub.SubCategoryCode){
-            console.log(x.SubCategoryCode+sub.SubCategoryCode+x.PolicyCategoryId)
-            navigation.navigate('Policydes',{title:sub.SubCategoryCode,data:policydetail})
-           
-            return x
-
-
-          }
-            else {
-             
-              return x
-
-            }
-          
-        })
-        
+        let d=policydetail.map(x=>{
+          return (x.SubCategoryCode)
+         })
+         let s=d.find(x=>{
+           if(x==sub.SubCategoryCode) {
+             return x
+           }else{
+             return false
+           }
+         });
+         
+         if(s==undefined){
+           alert('no policy detail found')
+         }
+         else{
+          navigation.navigate('Policydes',{title:sub.SubCategoryCode,data:policydetail})
+         }
       
       }
      
       } />
   })
   return <List.Accordion
+  style={{ backgroundColor: '#F0F8FF',}}
   title={title}
   left={props => <FontAwesome5 name="info-circle" />}>
   {subcat}
@@ -149,18 +167,20 @@ export default  function Policy ({navigation}) {
 
 
    return(
+     <><HeaderView/>
     <ScrollView style={styles.container}>
+    
 <Text style={styles.heading} > KNOW YOUR POLICY</Text>
 <View style={styles.searchContainer}>
 <TextInput
           style={styles.searchinput}
-          placeholder="Search Employee"
+          placeholder="Search Policy"
           placeholderTextColor="grey"
           onChangeText={value =>{
             
             Setsearch(false);
             Setsearchpolicy(value)
-            
+            Setisnotthere(false)
           }
         
         }
@@ -177,11 +197,19 @@ export default  function Policy ({navigation}) {
             </Text>
             </View>
 
-    {search&searchpolicy.length>0?finddata:accodian}
+<View style={styles.Accordionbox}>
+{search&searchpolicy.length>0&searchpolicy!=''?finddata:accodian}
+</View>
+    
+    {isnotthere? <View style={styles.notfound}> 
+    <Entypo name="emoji-sad" size={100} color="#d3d3d3"/>
+    <Text style={styles.nftitle}> policy Not Found</Text>
+     
+   
+   </View>:null}
 
 
-
-    </ScrollView>
+    </ScrollView></>
 
    );
 
@@ -235,8 +263,31 @@ const styles = StyleSheet.create({
     
    },
    Accordionbox:{
-    margin:'5%'
-   }
+    margin:'5%',
+   
+
+   },
+   notfound:{
+    display:'flex',
+    flexDirection:'column',
+    justifyContent:'center',
+    alignItems:'center',
+    width:'60%',
+    textAlign:'center',
+    marginLeft:'auto',
+    marginRight:'auto',
+    marginTop:50,
+    
+    
+     },
+     nftitle:{
+    fontSize:20,
+    fontWeight:'bold',
+    margin:1,
+     },
+     nfsubtext:{
+       color:'grey'
+     },
 })
 
 
