@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { Text, View, StyleSheet,TextInput } from 'react-native';
+import { Text, View, StyleSheet,TextInput,ScrollView } from 'react-native';
 import { List } from 'react-native-paper';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
-import axios from "../axios";
+import Feather from 'react-native-vector-icons/Feather'
 
+import axios from "../axios";
+import Listitem from './List';
 import Entypo from 'react-native-vector-icons/Entypo'
 import Policydes from './Policydes';
 import HeaderView from './HeaderView';
@@ -19,10 +21,10 @@ export default  function Policy ({navigation}) {
 
 
   const handlePress = () => setExpanded(!expanded);
-  let [pcatagory,Setpcatagory]=useState([]);
-  let [pdetailcatagory,Setpdetailcatagory]=useState([]);
+  let [policymaster,Setpolicymaster]=useState([]);
+  let [policydetail,Setpolicydetail]=useState([]);
 
-  let [scatagory,Setscatagory]=useState([]);
+  let [searchedpolicy,Setsearchedpolicy]=useState([]);
 
  
   useEffect(()=>{
@@ -30,18 +32,18 @@ export default  function Policy ({navigation}) {
 
    axios.get(`policy_details`)
    .then((res) => {
-    Setpdetailcatagory(res.data);
+    Setpolicydetail(res.data);
        
      
 
       
    }).catch(e=>{
-       console.log(e,'policydetail')
+       
    })
 
     axios.get(`policy_category_master`)
     .then((res) => {
-        Setpcatagory(res.data);
+      Setpolicymaster(res.data);
         
       
 
@@ -50,133 +52,88 @@ export default  function Policy ({navigation}) {
         console.log(e)
     })
   },[])
-   console.log(searchpolicy,'policyyy');
 
+    console.log(policydetail,'policydetail')
+    console.log(policymaster,'policy master')
 
-  function policychecker(x){
-  pdetailcatagory.filter(data=>{
-  if(data.SubCategoryCode==x){
-    console.log(data.SubCategoryCode,x)
-   return true 
-
-  }
-  else{
-    console.log(data.SubCategoryCode,x)
-
-    return false
-
-  }
-})
-
-   }
-
-let catgory=pcatagory.map(data=>{
-    let title=data.CategoryCode;
-    let subcat=data.SubCategories.map(sub=>{
-        return <List.Item title={sub.SubCategoryCode} onPress={()=>{
-        
-          pdetailcatagory.filter(x=>{
-            if(sub.SubCategoryCode==x.SubCategoryCode){
-              console.log(x.SubCategoryCode,sub.SubCategoryCode)
-              navigation.navigate('Policydes',{title:sub.SubCategoryCode,data:pdetailcatagory})
-
-            }
-          })
-        
-        }
-       
-        } />
-    })
-    return <List.Accordion
-    title={title}
-    left={props => <FontAwesome5 name="info-circle" />}>
-    {subcat}
-    
-  </List.Accordion>
-})
-
-
-
-  console.log(pcatagory,'policyyyyyyyyy')
-  console.log(catgory,'aaaaaaaaaaaaaaaaaaaaaaaaaa')
-  
-function getuserdetail(){
-  Setsearch(true);
-    let data =pcatagory.filter(data =>{
-
-    if(data.CategoryCode.toLowerCase()==searchpolicy.toLowerCase()){
-      Setscatagory([data]);
-      console.log(data,'vvvvvvvvvvvvvvvvvvvvvvvvrrrrrrrrrrrr')
-      
-    }
-
-    
-       
-    })
- 
-   console.log(scatagory,'searchresult')
-    
-}
-
-
-
-  return (
-    <>
-    <HeaderView/>
-  <View style={styles.container}>
-     
-  <Text style={styles.heading} > KNOW YOUR POLICY</Text>
-  
-  <View style={styles.searchContainer}>
-  
-
-    <TextInput style={styles.searchinput}
-      placeholder="Search Employee"
-       placeholderTextColor="grey"
-      
-       onChangeText={value =>{
-            
-            Setsearch(false);
-            Setsearchpolicy(value)
-            
-          }
-        
-        }
-        value={searchpolicy}
-        onSubmitEditing={(e) => getuserdetail()}
-/>
-    
- 
+    let accodian=policymaster.map(data=>{
+      let title=data.CategoryCode;
+      let subcat=data.SubCategories.map(sub=>{
+          return <List.Item title={sub.SubCategoryCode} onPress={()=>{
           
-    
-            <Text style={styles.searchicon}  onPress={() => getuserdetail()} >
-            < FontAwesome5 name="search" size={30} color="#2d9afa"  />
-            </Text>
-  </View>
+           let b= policydetail.filter(x=>{
+              if(x.SubCategoryCode==sub.SubCategoryCode){
+                console.log(x.SubCategoryCode+sub.SubCategoryCode+x.PolicyCategoryId)
+                navigation.navigate('Policydes',{title:sub.SubCategoryCode,data:policydetail})
+               
+                return x
   
   
-  <List.Section  style={styles.Accordionbox}>
-      {/* <List.Accordion
-        title="Leave"
-        left={props => <FontAwesome5 name="info-circle" />}>
-        <List.Item title='Leave Entitlement' />
-        <List.Item  title='Leave Encashment' />
-        <List.Item title='Exceptional Leaves' />
+              }
+                else {
+                 
+                  return x
+  
+                }
+              
+            })
+            
+          
+          }
+         
+          } />
+      })
+      return <List.Accordion
+      title={title}
+      left={props => <FontAwesome5 name="info-circle" />}>
+      {subcat}
+      
+    </List.Accordion>
+  })
+
+  function getuserdetail(){
+    Setsearch(true);
+      let data =policymaster.filter(data =>{
+  
+      if(data.CategoryCode.toLowerCase()==searchpolicy.toLowerCase()){
+        Setsearchedpolicy([data]);
+        console.log(data,'vvvvvvvvvvvvvvvvvvvvvvvvrrrrrrrrrrrr')
         
-      </List.Accordion> */}
- 
-      {search&searchpolicy.length>0?scatagory.map(data=>{
+      }else{
+        
+      }
+  
+      
+         
+      })
+   
+     console.log(searchedpolicy,'searchresultvvvvvvvvvvvvv')
+    
+    
+      
+  }
+  let finddata=searchedpolicy.map(data=>{
   let title=data.CategoryCode;
   let subcat=data.SubCategories.map(sub=>{
       return <List.Item title={sub.SubCategoryCode} onPress={()=>{
-        
-        pdetailcatagory.filter(x=>{
-          if(sub.SubCategoryCode==x.SubCategoryCode){
-            console.log(x.SubCategoryCode,sub.SubCategoryCode)
-            navigation.navigate('Policydes',{title:sub.SubCategoryCode,data:pdetailcatagory})
+      
+       let b= policydetail.filter(x=>{
+          if(x.SubCategoryCode==sub.SubCategoryCode){
+            console.log(x.SubCategoryCode+sub.SubCategoryCode+x.PolicyCategoryId)
+            navigation.navigate('Policydes',{title:sub.SubCategoryCode,data:policydetail})
+           
+            return x
+
 
           }
+            else {
+             
+              return x
+
+            }
+          
         })
+        
       
       }
      
@@ -188,15 +145,51 @@ function getuserdetail(){
   {subcat}
   
 </List.Accordion>
-}):catgory}
-      
-       
-       </List.Section >
+})
 
- </View>
- </>
-  );
-};
+
+   return(
+    <ScrollView style={styles.container}>
+<Text style={styles.heading} > KNOW YOUR POLICY</Text>
+<View style={styles.searchContainer}>
+<TextInput
+          style={styles.searchinput}
+          placeholder="Search Employee"
+          placeholderTextColor="grey"
+          onChangeText={value =>{
+            
+            Setsearch(false);
+            Setsearchpolicy(value)
+            
+          }
+        
+        }
+        // onPressOut={()=>{
+        //   Sethidenav(false)
+          
+        // }}
+        
+          onSubmitEditing={(e) => getuserdetail()}
+          
+        />
+        <Text style={styles.searchicon}  onPress={() => getuserdetail()} >
+            <Feather name="search" size={40} color="#2d9afa"  />
+            </Text>
+            </View>
+
+    {search&searchpolicy.length>0?finddata:accodian}
+
+
+
+    </ScrollView>
+
+   );
+
+
+   }
+
+
+  
 const styles = StyleSheet.create({
   
    
@@ -213,8 +206,6 @@ const styles = StyleSheet.create({
    container:{
     backgroundColor:'white',
     flex:1,
-    
-
    },
 
    searchContainer:{
