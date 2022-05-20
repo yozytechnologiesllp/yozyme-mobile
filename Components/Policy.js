@@ -90,7 +90,8 @@ export default  function Policy ({navigation}) {
       })
       return <List.Accordion
       title={title}
-      
+      style={{ backgroundColor: '#F0F8FF',borderColor:'white', borderWidth:2,}}
+
       left={props => <FontAwesome5 name="info-circle" />}>
       {subcat}
       
@@ -234,6 +235,7 @@ const styles = StyleSheet.create({
    container:{
     backgroundColor:'white',
     flex:1,
+    
    },
 
    searchContainer:{
@@ -245,6 +247,7 @@ const styles = StyleSheet.create({
      paddingTop:0,
     
    },
+
    searchicon:{
      color:'#fff',
      padding:5,
@@ -255,15 +258,18 @@ const styles = StyleSheet.create({
      fontWeight:'bold',
      fontSize:20,
      textAlign:'center',
-     marginTop:'18%',
+    
      backgroundColor: '#007FFF',
      color:'white',
     padding:'3%',
-    margin:'5%'
+    margin:'5%',
+    marginTop:'5%',
+
     
    },
    Accordionbox:{
     margin:'5%',
+ 
    
 
    },
