@@ -27,7 +27,6 @@ export default function Dashboard({ navigation }) {
 
     var hours = moment.duration(moment().diff("2022-05-02T17:18:24")).hours();
 
-    console.log(hours, 'hours')
 
     useEffect(() => {
         handleNotification()
@@ -37,7 +36,6 @@ export default function Dashboard({ navigation }) {
             .then((res) => { setPublicHoliday(res.data); });
         let webApiUrl = `https://files.yozytech.com/EmployeeImages/${employee_Id}.jpg`;
         axios1.get(webApiUrl, { responseType: "arraybuffer", headers: { "Authorization": `Bearer ${tokenData}` } }).then((res) => {
-            console.log(res, 'line 49 employee image')
             ChangeEmployeeImage("data:image/jpeg;base64," + Buffer.from(res.data, "binary").toString("base64"))
         })
 
@@ -52,6 +50,7 @@ export default function Dashboard({ navigation }) {
         // console.log(notification, 'notification')
         axios.get("notification?NotifyTo=eq." + employee_Id + "&order=CreatedDate.desc&limit=20")
             .then((res) => {
+
                 let filteredData = res.data.filter(x => moment.duration(moment().diff(x.CreatedDate)).hours() < 24
                     && moment(x.CreatedDate).format("MM-YYYY") == moment().format("MM-YYYY") && x.IsSeen == "N")
                 filteredData.map((x) => {

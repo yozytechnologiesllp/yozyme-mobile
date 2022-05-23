@@ -5,7 +5,8 @@ export default StyleSheet.create({
         paddingLeft: '3.6%',
         paddingRight: '3.6%',
         paddingBottom: '3.6%',
-        backgroundColor: 'white'
+        backgroundColor: 'white',
+        height: '100%'
     },
     labelStyle: { fontSize: 16, color: 'black', fontWeight: '500', marginTop: '2%', marginBottom: '2%' },
     textStyle: {
@@ -83,7 +84,7 @@ export default StyleSheet.create({
 
     },
     submitView: {
-        marginTop: '9%',
+        marginTop: '13%',
         alignItems: 'center'
     }
 })

@@ -196,7 +196,7 @@ function Seperation({ navigation }) {
         <>
             <HeaderView />
             <View style={styles.bgStyle}>
-                <Text style={styles.titleStyle}>Seperation</Text>
+                <Text style={styles.titleStyle}>Separation</Text>
                 {
                     (seperationDetails.length == 0) ||
                         (seperationDetails.length != 0 &&
@@ -255,8 +255,8 @@ function Seperation({ navigation }) {
                                     After {moment(seperationDetails[0].InitiatedDate).add(6, 'months').calendar({ sameElse: 'DD-MM-YYYY' })}, you are able to apply separation</Text>
                                 :
                                 seperationDetails[0].IsWithdrawn == "Y" ?
-                                    <Text style={styles.alertMsg}>You are withdrawn the separation request.
-                                        After {moment(seperationDetails[0].InitiatedDate).add(6, 'months').calendar({ sameElse: 'DD-MM-YYYY' })}, you are able to apply separation</Text>
+                                    <Text style={styles.alertMsg}>You have withdrawn the separation request on {moment(seperationDetails[0].WithdrawnDate).format("DD-MMM-YYYY")}. You can able to apply
+                                        after {moment(seperationDetails[0].InitiatedDate).add(6, 'months').calendar({ sameElse: 'DD-MMM-YYYY' })} .</Text>
                                     :
                                     null
                 }

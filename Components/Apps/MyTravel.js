@@ -1,13 +1,13 @@
 import axios from "../../axios";
 import React, { useState, useEffect } from 'react';
 import moment from "moment";
-import csc from "country-state-city";
 import { Text, View, TextInput, ScrollView } from "react-native";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import DropDownPicker from "react-native-dropdown-picker";
 import CheckBox from '@react-native-community/checkbox';
 import styles from '../../css/SeperationStyle'
 import HeaderView from '../HeaderView'
+import csc from "country-state-city";
 
 function RaiseTravelRequest() {
     const [travelType, setTravelType] = useState('')
@@ -16,7 +16,7 @@ function RaiseTravelRequest() {
     const [departureFrom, setDepartureFrom] = useState("")
     const [departureTo, setDepartureTo] = useState("")
     const [departureDate, setDepartureDate] = useState(new Date())
-    const [arrivalDate, setArrivalDate] = useState()
+    const [arrivalDate, setArrivalDate] = useState(new Date())
     const [justification, setJustification] = useState("")
     const [AttachmentFileName, setAttachmentFileName] = useState("")
     const [travelPurpose, setTravelPurpose] = useState("")
@@ -34,30 +34,32 @@ function RaiseTravelRequest() {
     const [toState, setToState] = useState(null)
     const [showDeparture, setShowDeperature] = useState(false)
     const [showArrival, setShowArrival] = useState(false)
-    // let FromState = csc.getAllStates("IN");
-    // let ToState = csc.getAllStates("IN");
-    // const fromLength = fromState == null ? fromState : fromState.split(" ").length - 1;
-    // const toLength = toState == null ? toState : toState.split(" ").length - 1;
-    // let CitiesFrom = csc.getCitiesOfState("IN", fromState != null ? fromState.split(" ")[fromLength] : fromState);
-    // let CitiesTo = csc.getCitiesOfState("IN", toState != null ? toState.split(" ")[toLength] : toState);
-    // const airports = require('airport-data')
+    const [fromOptions, setFromOptions] = useState([])
+    const [toOptions, setToOptions] = useState([])
+    let FromState = csc.getAllStates("IN");
+    let ToState = csc.getAllStates("IN");
+    const fromLength = fromState == null ? fromState : fromState.split(" ").length - 1;
+    const toLength = toState == null ? toState : toState.split(" ").length - 1;
+    let CitiesFrom = csc.getCitiesOfState("IN", fromState != null ? fromState.split(" ")[fromLength] : fromState);
+    let CitiesTo = csc.getCitiesOfState("IN", toState != null ? toState.split(" ")[toLength] : toState);
+    const airports = require('airport-data')
+    console.log(airports, 'airports')
+    const countryOptions = airports.map((e) => ({
+        label: e.city + ", " + e.country + ", " + e.iata + ", " + e.name
+    }))
+    const FromStateOptions = FromState.filter(e => e.countryCode == "IN").map((e) => ({
+        label: e.name + ", " + e.isoCode
+    }))
+    const ToStateOptions = ToState.filter(e => e.countryCode == "IN").map((e) => ({
+        label: e.name + " " + e.isoCode
+    }))
+    const citiesOptionsFrom = CitiesFrom.filter(e => e.countryCode == "IN").map((e) => ({
+        label: e.name + ", " + e.stateCode
+    }))
+    const citiesOptionsTo = CitiesTo.filter(e => e.countryCode == "IN").map((e) => ({
+        label: e.name + ", " + e.stateCode
+    }))
 
-    // const countryOptions = airports.map((e) => ({
-    //     label: e.city + ", " + e.country + ", " + e.iata + ", " + e.name
-    // }))
-    // const FromStateOptions = FromState.filter(e => e.countryCode == "IN").map((e) => ({
-    //     label: e.name + ", " + e.isoCode
-    // }))
-    // const ToStateOptions = ToState.filter(e => e.countryCode == "IN").map((e) => ({
-    //     label: e.name + " " + e.isoCode
-    // }))
-    // const citiesOptionsFrom = CitiesFrom.filter(e => e.countryCode == "IN").map((e) => ({
-    //     label: e.name + ", " + e.stateCode
-    // }))
-    // const citiesOptionsTo = CitiesTo.filter(e => e.countryCode == "IN").map((e) => ({
-    //     label: e.name + ", " + e.stateCode
-    // }))
-    // console.log(fromState != null ? fromState.split(",")[1] : fromState, fromLength)
 
     // let arr = JSON.parse(sessionStorage.getItem("EmpDetails"));
 
@@ -70,12 +72,8 @@ function RaiseTravelRequest() {
             .then((res) => {
                 setProjectDetails(res.data)
             })
-        refreshTable()
     }, []);
-    function refreshTable() {
-        axios.get("travel_requests?IsActive=eq.Y&RaisedBy=eq." + 100021)
-            .then((res) => { setReport(res.data) })
-    }
+
     // const reseteverything = () => {
     //     setEdit(false)
     //     setTravelType('')
@@ -343,15 +341,15 @@ function RaiseTravelRequest() {
     //     }
     // };
     const onChangeArrivalDate = (event, selectedDate) => {
-        const currentDate = selectedDate || fromDate;
+        const currentDate = selectedDate || arrivalDate;
         setArrivalDate(currentDate);
         if (arrivalDate > departureDate) {
             setDepartureDate(currentDate)
         }
-        setShowFrom(false)
+        setShowArrival(false)
     };
     const onChangeDepartureDate = (event, selectedDate) => {
-        const currentDate = selectedDate || toDate;
+        const currentDate = selectedDate || departureDate;
         setDepartureDate(currentDate);
         setShowDeparture(false)
     };
@@ -384,7 +382,6 @@ function RaiseTravelRequest() {
 
 
                     <Text style={styles.dayLabel}>Travel Mode</Text>
-
                     <DropDownPicker
                         labelStyle={{ color: 'black', flexWrap: 'wrap' }}
                         style={styles.dropdownStyle}
@@ -393,22 +390,22 @@ function RaiseTravelRequest() {
                         }}
                         placeholder="Choose Travel Mode"
                         items={travelModeOption}
-                        value={travelModeOption.filter((e) => e.label === travelMode)}
                         //value={SIvalue == "" ? "" : SIvalue.value}
                         onChangeItem={(e) => {
                             setTravelMode(e.label)
+                            setFromOptions(e.label == "Air" ? countryOptions : citiesOptionsFrom)
+                            setToOptions(e.label == "Air" ? countryOptions : citiesOptionsTo)
                         }}
                     />
 
                     <Text style={styles.dayLabel}>Travel Purpose</Text>
-
                     <DropDownPicker
                         labelStyle={{ color: 'black', flexWrap: 'wrap' }}
                         style={styles.dropdownStyle}
                         itemStyle={{
                             justifyContent: 'flex-start',
                         }}
-                        placeholder="Select Travel Purpose"
+                        placeholder="Choose Travel Purpose"
                         items={travelPurposeOption}
                         // maxMenuHeight={150}
                         value={travelPurposeOption.filter((e) => e.label === travelPurpose)}
@@ -424,7 +421,6 @@ function RaiseTravelRequest() {
                         onValueChange={(newValue) => { setAccomodationRequired(!accomodationRequired) }}></CheckBox>
 
                     <Text style={styles.dayLabel}>Duration Of Stay</Text>
-
                     <DropDownPicker
                         labelStyle={{ color: 'black', flexWrap: 'wrap' }}
                         style={styles.dropdownStyle}
@@ -439,54 +435,99 @@ function RaiseTravelRequest() {
                             setDurationOfStay(e.label);
                         }}
                     />
-                    <Text style={styles.dayLabel}>Round Trip</Text>
-                    <CheckBox style={styles.halfDayStyle} value={roundTrip}
-                        onValueChange={(newValue) => { setRoundTrip(!roundTrip) }}></CheckBox>
-
 
                     {
                         travelMode == "Road" ?
                             <>
                                 <Text style={styles.dayLabel}>Departure From (State)</Text>
-
                                 <DropDownPicker
                                     labelStyle={{ color: 'black', flexWrap: 'wrap' }}
                                     style={styles.dropdownStyle}
                                     itemStyle={{
                                         justifyContent: 'flex-start',
                                     }}
-                                    placeholdear="Select From State"
-                                    // items={FromStateOptions}
-                                    items={[]}
-                                // onChangeItem={(e) => {
-                                //     setFromState(e.label)
-                                //     console.log(e.label, e.label.split(",")[1])
-                                // }}
-                                // value={FromStateOptions.filter(x => x.label === fromState)}
+                                    placeholdear="Choose State"
+                                    items={FromStateOptions}
+                                    // items={[]}
+                                    onChangeItem={(e) => {
+                                        setFromState(e.label)
+                                        console.log(e.label, e.label.split(",")[1])
+                                    }}
                                 // maxMenuHeight={150}
                                 />
-                                <Text style={styles.dayLabel}>Departure To(State)</Text>
 
+                                <Text style={styles.dayLabel}>Departure To(State)</Text>
                                 <DropDownPicker
                                     labelStyle={{ color: 'black', flexWrap: 'wrap' }}
                                     style={styles.dropdownStyle}
                                     itemStyle={{
                                         justifyContent: 'flex-start',
                                     }}
-                                    placeholder="Select To State"
+                                    placeholder="Choose State"
                                     // maxMenuHeight={150}
-                                    items={[]}
-                                // items={ToStateOptions}
-                                // onChangeItem={(e) => { setToState(e.label) }}
-                                // value={
-                                //     ToStateOptions.filter(x => x.label === toState)
-                                // }
+                                    // items={[]}
+                                    items={ToStateOptions}
+                                    onChangeItem={(e) => { setToState(e.label) }}
+
                                 />
+                            </>
+                            :
+                            null
+                    }
 
 
+                    <Text style={styles.dayLabel}>Departure From</Text>
+                    <DropDownPicker
+                        labelStyle={{ color: 'black', flexWrap: 'wrap' }}
+                        style={styles.dropdownStyle}
+                        itemStyle={{
+                            justifyContent: 'flex-start',
+                        }}
+                        placeholder="Choose From"
+                        items={travelMode == "Air" ? countryOptions : citiesOptionsFrom}
+                        onChangeItem={(e) => { setDepartureFrom(e.label) }}
+                    />
+
+                    <Text style={styles.dayLabel}>Departure To</Text>
+                    <DropDownPicker
+                        labelStyle={{ color: 'black', flexWrap: 'wrap' }}
+                        style={styles.dropdownStyle}
+                        itemStyle={{
+                            justifyContent: 'flex-start',
+                        }}
+                        placeholder="Choose To"
+                        // maxMenuHeight={150}
+                        items={travelMode == "Air" ? countryOptions : citiesOptionsTo}
+                        onChangeItem={(e) => { setDepartureTo(e.label) }}
+                    />
+
+                    <Text style={styles.dayLabel}>Departure Date</Text>
+                    <View >
+                        <Text onPress={() => { setShowDeperature(true) }} style={styles.textStyle}>{moment(departureDate).format("DD-MMM-YYYY")}</Text>
+                    </View>
+                    {showDeparture && (
+                        <DateTimePicker
+                            testID="dateTimePicker"
+                            // maximumDate={maximumDate}
+                            // minimumDate={arrivalDate}
+                            value={departureDate}
+                            mode={'date'}
+                            is24Hour
+                            onChange={onChangeDepartureDate}
+                            disabled={false}
+                        />
+                    )}
+
+                    <Text style={styles.dayLabel}>Round Trip</Text>
+                    <CheckBox style={styles.halfDayStyle} value={roundTrip}
+                        onValueChange={(newValue) => { setRoundTrip(!roundTrip) }}></CheckBox>
+
+                    {
+                        roundTrip ?
+                            <>
                                 <Text style={styles.dayLabel}>*Arrival Date</Text>
-                                <View style={styles.textStyle}>
-                                    <Text onPress={() => setShowArrival(true)}>{moment(arrivalDate).format("DD-MMM-YYYY")}</Text>
+                                <View >
+                                    <Text onPress={() => { setShowArrival(true) }} style={styles.textStyle}>{moment(arrivalDate).format("DD-MMM-YYYY")}</Text>
                                 </View>
                                 {showArrival && (
                                     <DateTimePicker
@@ -500,120 +541,12 @@ function RaiseTravelRequest() {
                                         disabled={false}
                                     />
                                 )}
-                                {/* <MuiPickersUtilsProvider utils={DateFnsUtils}>
-
-                                                <KeyboardDatePicker
-                                                    style={{ display: 'none' }}
-                                                    disableToolbar
-                                                    className="SelctRTR "
-                                                    //  views={["date", "month", "year"]}
-                                                    openTo="date"
-                                                    display={'none'}
-                                                    variant="inline"
-                                                    format="dd/MM/yyyy"
-                                                    value={arrivalDate}
-                                                    id="date-picker-inline"
-                                                    // minDate={new Date(departureDate).getFullYear(), new Date(departureDate).getMonth()}
-                                                    // maxDate={new Date(departureDate).getFullYear(), new Date(departureDate).getMonth() + 1, 0}
-                                                    onChange={(date) => {
-                                                        setArrivalDate(date)
-                                                        
-                                                    }}
-                                                    
-                                                />
-
-                                            </MuiPickersUtilsProvider> */}
-
-
                             </>
                             :
                             null
                     }
 
-                    <Text style={styles.dayLabel}>Departure From</Text>
-
-                    {/* <DropDownPicker
-                    labelStyle={{ color: 'black', flexWrap: 'wrap' }}
-                    style={styles.dropdownStyle}
-                    itemStyle={{
-                        justifyContent: 'flex-start',
-                    }}
-                    placeholder="Select Leave"
-                    options={travelMode == "Air" ? countryOptions : citiesOptionsFrom}
-                    onChangeItem={(e) => { setDepartureFrom(e.label) }}
-                    value={travelMode == "Air" ?
-                        countryOptions.filter(x => x.label === departureFrom)
-                        :
-                        citiesOptionsFrom.filter(x => x.label === departureFrom)}
-                // maxMenuHeight={150}
-                /> */}
-                    <Text style={styles.dayLabel}>Departure To</Text>
-
-                    {/* <DropDownPicker
-                    labelStyle={{ color: 'black', flexWrap: 'wrap' }}
-                    style={styles.dropdownStyle}
-                    itemStyle={{
-                        justifyContent: 'flex-start',
-                    }}
-                    placeholder="Select Leave"
-                    // maxMenuHeight={150}
-                    options={travelMode == "Air" ? countryOptions : citiesOptionsTo}
-                    onChangeItem={(e) => { setDepartureTo(e.label) }}
-                    value={travelMode == "Air" ?
-                        countryOptions.filter(x => x.label === departureTo)
-                        :
-                        citiesOptionsTo.filter(x => x.label === departureTo)
-                    }
-                /> */}
-
-
-                    <Text style={styles.dayLabel}>Departure Date</Text>
-
-                    <View style={styles.textStyle}>
-                        <Text onPress={() => { setShowDeperature(true) }}>{moment(departureDate).format("DD-MMM-YYYY")}</Text>
-                    </View>
-                    {showDeparture && (
-                        <DateTimePicker
-                            testID="dateTimePicker"
-                            // maximumDate={maximumDate}
-                            minimumDate={arrivalDate}
-                            value={departureDate}
-                            mode={'date'}
-                            is24Hour
-                            onChange={onChangeDepartureDate}
-                            disabled={false}
-                        />
-                    )}
-                    {/* <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                                        <KeyboardDatePicker
-                                            disableToolbar
-                                            className="SelctRTR "
-                                            //  views={["date", "month", "year"]}
-                                            openTo="date"
-                                            variant="inline"
-                                            format="dd/MM/yyyy"
-                                            value={departureDate}
-                                            id="date-picker-inline"
-                                            //  label="Date picker inline"
-                                            // minDate={new Date(new Date().getFullYear(), new Date().getMonth())}
-                                            // maxDate={new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0)}
-                                            onChange={(date) => setDepartureDate(date)}
-                                            KeyboardButtonProps={{
-                                                "aria-label": "change date"
-                                            }}
-                                            keyboardIcon={<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-calendar2-week tealblue" viewBox="0 0 16 16">
-                  <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM2 2a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1H2z"/>
-                  <path d="M2.5 4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5H3a.5.5 0 0 1-.5-.5V4zM11 7.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm-3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm-5 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1z"/>
-                </svg>}
-                                        />
-
-                                    </MuiPickersUtilsProvider> */}
-
-
-
-
                     <Text style={styles.dayLabel}>*Meal Type (Travelling)</Text>
-
                     <DropDownPicker
                         labelStyle={{ color: 'black', flexWrap: 'wrap' }}
                         style={styles.dropdownStyle}
@@ -622,14 +555,14 @@ function RaiseTravelRequest() {
                         }}
                         placeholder="Select Meal Type"
                         // components={{  IndicatorSeparator: () => null }}
-                        // value={mealTypeOption.filter((e) => e.label === mealType)}
+                        value={mealTypeOption.filter((e) => e.label === mealType)}
                         items={mealTypeOption}
                         onChangeItem={(e) => {
                             setMealType(e.label)
                         }}
                     />
-                    <Text style={styles.dayLabel}>*Preferred Time(Ticket Booking)</Text>
 
+                    <Text style={styles.dayLabel}>*Preferred Time(Ticket Booking)</Text>
                     <DropDownPicker
                         labelStyle={{ color: 'black', flexWrap: 'wrap' }}
                         style={styles.dropdownStyle}
@@ -637,45 +570,12 @@ function RaiseTravelRequest() {
                             justifyContent: 'flex-start',
                         }}
                         placeholder="Select Preferred Time"
-                        // value={preferredTimeOption.filter((e) => e.label === preferredTime)}
+                        value={preferredTimeOption.filter((e) => e.label === preferredTime)}
                         items={preferredTimeOption}
                         onChangeItem={(e) => {
                             setPreferredTime(e.value);
                         }}
                     />
-
-
-                    {/* <Text style={{ color: "rgb(94, 44, 11)", fontSize: "12px", display: !roundTrip ? 'none' : 'block' }}>*Arrival Date</Text>
-                                
-                                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
-
-                                        <KeyboardDatePicker
-                                            style={{ display: !roundTrip ? 'none' : 'block' }}
-                                            disableToolbar
-                                            className="SelctRTR "
-                                            //  views={["date", "month", "year"]}
-                                            openTo="date"
-                                            display={!roundTrip ? 'none' : 'block'}
-                                            variant="inline"
-                                            format="dd/MM/yyyy"
-                                            value={arrivalDate}
-                                            id="date-picker-inline"
-                                            //  label="Date picker inline"
-                                            minDate={new Date(departureDate)}
-                                            //minDate={new Date(departureDate).getFullYear(), new Date(departureDate).getMonth()}
-                                            // maxDate={new Date(departureDate).getFullYear(), new Date(departureDate).getMonth() + 1, 0}
-                                            onChange={(date) => setArrivalDate(date)}
-                                            KeyboardButtonProps={{
-                                                "aria-label": "change date"
-                                            }}
-                                            keyboardIcon={<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-calendar2-week tealblue" viewBox="0 0 16 16">
-                  <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM2 2a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1H2z"/>
-                  <path d="M2.5 4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5H3a.5.5 0 0 1-.5-.5V4zM11 7.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm-3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm-5 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1z"/>
-                </svg>}
-                                        />
-
-                                    </MuiPickersUtilsProvider> */}
-
 
 
 
@@ -686,7 +586,7 @@ function RaiseTravelRequest() {
                         // minRows={3}
                         // maxRows={3}
                         value={justification}
-                        onChangeText={e => setJustification(e)}
+                        onChangeText={e => { setJustification(e) }}
                     />
 
 
@@ -724,7 +624,7 @@ function RaiseTravelRequest() {
                         {/* <Text className='Card_Button_Color_Approve btn-redg' onPress={() => { }
                             // reseteverything
                         }>Reset</Text> */}
-                        <Text style={styles.submitStyle} onPress={() => { }
+                        <Text style={styles.submitStyle} onPress={() => { alert('submit') }
                             // handlesubmit
                         }>Submit</Text>
                     </View>

@@ -85,13 +85,11 @@ function AppsFunc({ route }) {
           component={MyAssets}
           options={{ headerShown: false }}
         />
-
         <NavStack.Screen
           name="Policydes"
           component={Policydes}
           options={{ headerShown: false }}
         />
-
         <NavStack.Screen
           name="Seperation"
           component={Seperation}

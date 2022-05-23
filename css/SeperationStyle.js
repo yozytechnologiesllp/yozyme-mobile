@@ -11,12 +11,14 @@ export default StyleSheet.create({
     },
     labelStyle: { fontSize: 16, color: 'black', fontWeight: '500', marginTop: '1.1%', marginBottom: '1.1%', width: '45%' },
     textStyle: {
-        // borderRadius: 9,
-        // borderWidth: 2,
+        borderRadius: 5,
+        borderWidth: 2,
         borderColor: 'skyblue',
         marginTop: '1.1%',
         marginBottom: '1.1%',
-        // height: 45,
+        height: 40,
+        paddingTop: 9,
+        paddingLeft: 9,
         // backgroundColor: 'white',
         color: 'black',
         // textAlign: 'center'
@@ -63,7 +65,7 @@ export default StyleSheet.create({
         color: 'darkblue',
         fontWeight: 'bold',
         marginTop: '4%',
-        marginBottom: '0.5%',
+        marginBottom: '0.9%',
         fontSize: 18
     },
     disableLabel: {

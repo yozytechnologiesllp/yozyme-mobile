@@ -128,8 +128,11 @@ export default function PerformanceReview() {
         })
       }
     }
-    else {
-      alert("Please enter all the reviews( Minimum letters are 100 for all the review )")
+    else if (comment.OverallComments == "" || comment.OverallComments.length < 100 ||
+      comment.WayForward == "" || comment.WayForward.length < 100 ||
+      comment.WhatCouldHaveDoneBetter == "" || comment.WhatCouldHaveDoneBetter.length < 100
+      || comment.WhatWentWell == "" || comment.WhatWentWell.length < 100) {
+      alert("Please enter all the reviews( Minimum characters are 100 for all the review )")
     }
   }
   const formOpenMonth1 = 5;
