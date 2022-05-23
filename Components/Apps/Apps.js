@@ -113,7 +113,7 @@ function Apps({ navigation }) {
                 display.push({ "iconName": "arrow-circle-up", "name": "Manager Nominations", "value": "Dashboard", "color": "#F6BE00" })
             }
             if (MenuId == 16) {
-                display.push({ "iconName": "ticket-alt", "name": "IT Services", "value": "Dashboard", "color": "red" })
+                display.push({ "iconName": "ticket-alt", "name": "IT Services", "value": "ItServices", "color": "red" })
             }
             if (MenuId == 17) {
                 display.push({ "iconName": "database", "name": "My Data", "value": "MyAssets", "color": "darkblue" })

@@ -27,6 +27,8 @@ import StoreContext from '../store/StoreContext';
 import MyTravel from './Apps/MyTravel';
 import Policy from './Policy';
 import Policydes from './Policydes'
+import ItServices from './Apps/ItServices/ItServices';
+import AssetRequest from './Apps/ItServices/AssetRequest';
 
 
 function AppsFunc({ route }) {
@@ -103,6 +105,16 @@ function AppsFunc({ route }) {
         <NavStack.Screen
           name="MyTravel"
           component={MyTravel}
+          options={{ headerShown: false }}
+        />
+        <NavStack.Screen
+          name="ItServices"
+          component={ItServices}
+          options={{ headerShown: false }}
+        />
+        <NavStack.Screen
+          name="AssetRequest"
+          component={AssetRequest}
           options={{ headerShown: false }}
         />
       </NavStack.Navigator>

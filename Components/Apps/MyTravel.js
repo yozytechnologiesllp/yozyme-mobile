@@ -34,19 +34,17 @@ function RaiseTravelRequest() {
     const [toState, setToState] = useState(null)
     const [showDeparture, setShowDeperature] = useState(false)
     const [showArrival, setShowArrival] = useState(false)
-    const [fromOptions, setFromOptions] = useState([])
-    const [toOptions, setToOptions] = useState([])
     let FromState = csc.getAllStates("IN");
     let ToState = csc.getAllStates("IN");
     const fromLength = fromState == null ? fromState : fromState.split(" ").length - 1;
     const toLength = toState == null ? toState : toState.split(" ").length - 1;
     let CitiesFrom = csc.getCitiesOfState("IN", fromState != null ? fromState.split(" ")[fromLength] : fromState);
     let CitiesTo = csc.getCitiesOfState("IN", toState != null ? toState.split(" ")[toLength] : toState);
-    const airports = require('airport-data')
-    console.log(airports, 'airports')
-    const countryOptions = airports.map((e) => ({
-        label: e.city + ", " + e.country + ", " + e.iata + ", " + e.name
-    }))
+    // const airports = require('airport-data')
+    // // console.log(airports, 'airports')
+    // const countryOptions = airports.map((e) => ({
+    //     label: e.city + ", " + e.country + ", " + e.iata + ", " + e.name
+    // }))
     const FromStateOptions = FromState.filter(e => e.countryCode == "IN").map((e) => ({
         label: e.name + ", " + e.isoCode
     }))
@@ -393,8 +391,7 @@ function RaiseTravelRequest() {
                         //value={SIvalue == "" ? "" : SIvalue.value}
                         onChangeItem={(e) => {
                             setTravelMode(e.label)
-                            setFromOptions(e.label == "Air" ? countryOptions : citiesOptionsFrom)
-                            setToOptions(e.label == "Air" ? countryOptions : citiesOptionsTo)
+
                         }}
                     />
 
@@ -484,7 +481,9 @@ function RaiseTravelRequest() {
                             justifyContent: 'flex-start',
                         }}
                         placeholder="Choose From"
-                        items={travelMode == "Air" ? countryOptions : citiesOptionsFrom}
+                        items={
+                            //travelMode == "Air" ? countryOptions : 
+                            citiesOptionsFrom}
                         onChangeItem={(e) => { setDepartureFrom(e.label) }}
                     />
 
@@ -497,7 +496,9 @@ function RaiseTravelRequest() {
                         }}
                         placeholder="Choose To"
                         // maxMenuHeight={150}
-                        items={travelMode == "Air" ? countryOptions : citiesOptionsTo}
+                        items={
+                            //travelMode == "Air" ? countryOptions : 
+                            citiesOptionsTo}
                         onChangeItem={(e) => { setDepartureTo(e.label) }}
                     />
 
