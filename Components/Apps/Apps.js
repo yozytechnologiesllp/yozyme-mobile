@@ -116,7 +116,7 @@ function Apps({ navigation }) {
                 display.push({ "iconName": "ticket-alt", "name": "IT Services", "value": "ItServices", "color": "red" })
             }
             if (MenuId == 17) {
-                display.push({ "iconName": "database", "name": "My Data", "value": "MyAssets", "color": "darkblue" })
+                display.push({ "iconName": "database", "name": "My Data", "value": "MyData", "color": "darkblue" })
             }
             if (MenuId == 18) {
                 display.push({ "iconName": "book", "name": "Company Policy", "value": "Policy", "color": "green" })

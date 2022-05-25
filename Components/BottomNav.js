@@ -29,6 +29,8 @@ import Policy from './Policy';
 import Policydes from './Policydes'
 import ItServices from './Apps/ItServices/ItServices';
 import AssetRequest from './Apps/ItServices/AssetRequest';
+import MySkills from './Apps/MySkills';
+import MyData from './Apps/MyData';
 
 
 function AppsFunc({ route }) {
@@ -115,6 +117,16 @@ function AppsFunc({ route }) {
         <NavStack.Screen
           name="AssetRequest"
           component={AssetRequest}
+          options={{ headerShown: false }}
+        />
+        <NavStack.Screen
+          name="MyData"
+          component={MyData}
+          options={{ headerShown: false }}
+        />
+        <NavStack.Screen
+          name="MySkills"
+          component={MySkills}
           options={{ headerShown: false }}
         />
       </NavStack.Navigator>

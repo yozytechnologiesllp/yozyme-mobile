@@ -6,18 +6,22 @@ import DropDownPicker from "react-native-dropdown-picker";
 import CheckBox from '@react-native-community/checkbox';
 import styles from '../../css/SeperationStyle'
 import HeaderView from '../HeaderView'
+import axios from '../../axios';
 
 function MyTravel() {
+    const [purpose, setPurpose] = useState([])
 
 
+    useEffect(() => {
+        axios.get('travel_purpose_master').then((res) => { setPurpose(res.data) })
+    }, [])
 
-    const travelPurposeOption = []
-    // purpose.map((e) => {
-    //     return {
-    //         value: e.TravelPurposeId,
-    //         label: e.Description,
-    //     }
-    // })
+    const travelPurposeOption = purpose.map((e) => {
+        return {
+            value: e.TravelPurposeId,
+            label: e.Description,
+        }
+    })
     const travelTypeOption = [
         { value: "Domestic", label: "Domestic" },
         { value: "International", label: "International" }
@@ -63,18 +67,21 @@ function MyTravel() {
                         style={styles.dropdownStyle}
                         placeholder="Choose Travel Type"
                         items={travelTypeOption}
+                        onChangeItem={(e) => { console.log(e.label) }}
                     />
                     <Text style={styles.dayLabel}>Travel Mode</Text>
                     <DropDownPicker
                         style={styles.dropdownStyle}
                         placeholder="Choose Travel Mode"
                         items={travelModeOption}
+                        onChangeItem={(e) => { console.log(e.label) }}
                     />
                     <Text style={styles.dayLabel}>Travel Purpose</Text>
                     <DropDownPicker
                         style={styles.dropdownStyle}
                         placeholder="Choose Travel Purpose"
                         items={travelPurposeOption}
+                        onChangeItem={(e) => { console.log(e.label) }}
                     />
                     <Text style={styles.dayLabel}>Accomodation</Text>
                     <CheckBox></CheckBox>
@@ -83,6 +90,7 @@ function MyTravel() {
                         style={styles.dropdownStyle}
                         placeholder="Choose Duration Of Stay "
                         items={durationOfStayOption}
+                        onChangeItem={(e) => { console.log(e.label) }}
                     />
                     <Text style={styles.dayLabel}>Departure From (State)</Text>
                     <DropDownPicker
@@ -108,98 +116,49 @@ function MyTravel() {
                         placeholder="Choose Departure To"
                         items={[]}
                     />
-                </View>
-
-
-                {/* <View>
-                    
-                    
-
-                    
-
-                <Text style={styles.dayLabel}>Departure Date</Text>
-                <View >
-                    <Text style={styles.textStyle}></Text>
-                </View>
-                {/* {showDeparture && ( 
-                <DateTimePicker
-                    testID="dateTimePicker"
-                    // maximumDate={maximumDate}
-                    // minimumDate={arrivalDate}
-                    value={new Date()}
-                    mode={'date'}
-                    is24Hour
-
-                    disabled={false}
-                />
-                {/* )} 
-
-                <Text style={styles.dayLabel}>Round Trip</Text>
-                <CheckBox style={styles.halfDayStyle}
-                ></CheckBox>
-
-                {/* {
-                        roundTrip ? 
-                <>
-                    <Text style={styles.dayLabel}>*Arrival Date</Text>
-                    <View >
-                        <Text style={styles.textStyle}></Text>
-                    </View>
-                    {/* {showArrival && ( 
+                    <Text style={styles.dayLabel}>Departure Date</Text>
+                    <Text style={styles.textStyle}>{moment().format("DD-MMM-YYYY")}</Text>
                     <DateTimePicker
-                        testID="dateTimePicker"
-                        // maximumDate={maximumDate}
-                        // minimumDate={minimumDate}
-                        value={new Date()}
                         mode={'date'}
+                        value={new Date()}
                         is24Hour
-                        // onChange={() => { onChangeArrivalDate }}
+                        disabled={false} />
+                    <Text style={styles.dayLabel}>Round Trip</Text>
+                    <CheckBox></CheckBox>
+                    <Text style={styles.dayLabel}>Arrival Date</Text>
+                    <Text style={styles.textStyle}>{moment().format("DD-MMM-YYYY")}</Text>
+                    <DateTimePicker
+                        mode={'date'}
+                        value={new Date()}
+                        is24Hour
                         disabled={false}
+                    ></DateTimePicker>
+                    <Text style={styles.dayLabel}>Meal Type ( Travelling )</Text>
+                    <DropDownPicker
+                        style={styles.dropdownStyle}
+                        placeholder="Choose Meal Type"
+                        items={mealTypeOption}
+                        onChangeItem={(e) => { console.log(e.label) }}
                     />
-                    {/* )} 
-                </>
-                {/* :
-                            null
-                    } 
-
-                <Text style={styles.dayLabel}>*Meal Type (Travelling)</Text>
-                <DropDownPicker
-                    labelStyle={{ color: 'black', flexWrap: 'wrap' }}
-                    style={styles.dropdownStyle}
-                    itemStyle={{
-                        justifyContent: 'flex-start',
-                    }}
-                    placeholder="Select Meal Type"
-                    // components={{  IndicatorSeparator: () => null }}
-                    items={mealTypeOption}
-                // onChangeItem={(e) => {
-                //     setMealType(e.label)
-                // }}
-                />
-
-                <Text style={styles.dayLabel}>*Preferred Time(Ticket Booking)</Text>
-                <DropDownPicker
-                    labelStyle={{ color: 'black', flexWrap: 'wrap' }}
-                    style={styles.dropdownStyle}
-                    itemStyle={{
-                        justifyContent: 'flex-start',
-                    }}
-                    placeholder="Select Preferred Time"
-                    items={preferredTimeOption}
-                // onChangeItem={(e) => {
-                //     setPreferredTime(e.value);
-                // }}
-                />
-
-
-
-                <Text style={styles.dayLabel}>Justification:</Text>
-                <TextInput
-                    style={styles.textStyleReason}
-                    numberOfLines={4}
-                // value={justification}
-                // onChangeText={(e) => { setJustification(e) }}
-                />
+                    <Text style={styles.dayLabel}>Preferred Time ( Ticket Booking )</Text>
+                    <DropDownPicker
+                        style={styles.dropdownStyle}
+                        placeholder="Choose Preferred Time"
+                        items={preferredTimeOption}
+                        onChangeItem={(e) => { console.log(e.label) }}
+                    />
+                    <Text style={styles.dayLabel}>Justification</Text>
+                    <TextInput
+                        style={styles.textStyleReason}
+                        placeholder="Justification Here"
+                        numberOfLines={4}
+                    />
+                    <View style={styles.submitView}>
+                        <Text style={styles.submitStyle} >Submit</Text>
+                    </View>
+                </View>
+                {/* 
+                
                 <Text>File-Upload</Text>
                 <View style={styles.submitView}>
                     <Text style={styles.submitStyle} >Submit</Text>
