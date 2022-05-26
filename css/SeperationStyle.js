@@ -19,12 +19,23 @@ export default StyleSheet.create({
         height: 40,
         paddingTop: 9,
         paddingLeft: 9,
-        // backgroundColor: 'white',
+        backgroundColor: 'white',
         color: 'black',
-        // textAlign: 'center'
-        // justifyContent: 'center',
-        // textAlign: 'center'
         flexDirection: 'row'
+    },
+    textStyleSkill: {
+        borderRadius: 5,
+        borderWidth: 2,
+        borderColor: 'skyblue',
+        marginTop: '1.1%',
+        marginBottom: '1.1%',
+        height: 40,
+        paddingTop: 9,
+        paddingLeft: 9,
+        backgroundColor: 'white',
+        color: 'black',
+        flexDirection: 'row',
+        width: '60%'
     },
     textboxStyle: {
         borderRadius: 9,
@@ -61,12 +72,43 @@ export default StyleSheet.create({
         // textAlign: 'center'
         flexDirection: 'row'
     },
+    cardStyle: {
+        padding: '4%',
+        marginLeft: '4.5%',
+        marginRight: '4.5%',
+        marginTop: '0.9%',
+        marginBottom: '0.9%',
+        borderRadius: 15
+    },
+    buttonView: {
+        backgroundColor: 'darkblue',
+        color: 'white',
+        padding: '2.5%',
+        margin: '0.4%',
+        fontSize: 20,
+        // height: 40,
+        borderRadius: 9,
+        width: '9%',
+        alignContent: 'center',
+        justifyContent: 'center'
+    },
+    textView: {
+        flexDirection: 'row'
+    },
     dayLabel: {
         color: 'darkblue',
         fontWeight: 'bold',
         marginTop: '4%',
         marginBottom: '0.9%',
         fontSize: 18
+    },
+    dayLabelSkill: {
+        color: 'darkblue',
+        fontWeight: 'bold',
+        marginTop: '4%',
+        marginBottom: '0.9%',
+        fontSize: 18,
+        width: '40%'
     },
     disableLabel: {
         color: 'grey',
@@ -98,6 +140,7 @@ export default StyleSheet.create({
         color: 'grey',
     },
     textStyleReason: {
+        backgroundColor: 'white',
         borderRadius: 9,
         borderWidth: 2,
         borderColor: 'skyblue',
