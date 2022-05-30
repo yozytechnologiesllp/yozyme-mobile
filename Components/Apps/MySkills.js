@@ -31,6 +31,8 @@ function MySkills() {
     const [edit, setEdit] = useState(false)
     const [skillId, setSkillId] = useState(0)
     const [technology, setTechnology] = useState("")
+    const [currentId, setCurrentId] = useState()
+    const [skillsLabel, setSkillsLabel] = useState([{ "SkillsLabel": "" }])
     useEffect(() => {
         refresh()
     }, []);
@@ -49,6 +51,9 @@ function MySkills() {
             "VerifiedDate": null
         })
         setRows(data)
+        let skills = [...skillsLabel];
+        skills.push({})
+        setSkillsLabel(skills)
         let label1 = [...label];
         label1.push({})
         setLabel(label1)
@@ -58,6 +63,9 @@ function MySkills() {
     }
 
     const handleDeleteRows = () => {
+        let skills = [...skillsLabel];
+        skills.pop()
+        setSkillsLabel(skills)
         let data = [...rows]
         data.pop()
         setRows(data)
@@ -92,6 +100,7 @@ function MySkills() {
             "VerifiedDate": null
         }])
         setEdit(false)
+        setSkillsLabel([{ "SkillsLabel": "" }])
         setLabel([{ "LastUsed": false }])
         setLevelLabel([{ "workingSince": false }])
         setTechnology("")
@@ -119,6 +128,9 @@ function MySkills() {
             "VerifiedDate": null
         })
         setRows(data)
+        let skills = [...skillsLabel];
+        skills.splice(id, 1, { "SkillsLabel": e.label })
+        setSkillsLabel(skills);
     }
 
     const LevelChange = (id, e) => {
@@ -138,47 +150,28 @@ function MySkills() {
     }
 
 
-    const WorkingSince = (id, selectedDate) => {
-        console.log(selectedDate, 'selected date')
-        const currentDate = selectedDate || moment(rows[id].WorkingSince).format("YYYY-MM-DD")
-        console.log('e ', currentDate)
-        let data = [...rows]
-        data.splice(id, 1, {
-            "EmpId": employee_Id,
-            "SkillCode": rows[id].SkillCode,
-            "ExpInMonths": (moment(moment(rows[id].LastUsed).add(1, 'days')).diff(moment(currentDate), "months")),
-            "Level": rows[id].Level,
-            "WorkingSince": moment(currentDate).format("YYYY-MM-DD"),
-            "LastUsed": rows[id].LastUsed,
-            "VerifiedBy": user_detail.level1managereid,
-            "IsVerified": null,
-            "VerifiedDate": null
-        })
-        setRows(data)
-        let levelLabel1 = [...levelLabel];
-        levelLabel1.splice(id, 1, { "workingSince": false, })
-        setLevelLabel(levelLabel1);
-    }
+    const LastUsed = (selectedDate) => {
+        console.log(selectedDate)
 
-    const LastUsed = (id, selectedDate) => {
-        const currentDate = selectedDate
-        //|| moment(rows[i].LastUsed).format("YYYY-MM-DD")
-        let data = [...rows]
-        data.splice(id, 1, {
-            "EmpId": employee_Id,
-            "SkillCode": rows[id].SkillCode,
-            "ExpInMonths": (moment(moment(currentDate).add(1, 'days')).diff(moment(rows[id].WorkingSince), "months")),
-            "Level": rows[id].Level,
-            "WorkingSince": rows[id].WorkingSince,
-            "LastUsed": moment(currentDate).format("YYYY-MM-DD"),
-            "VerifiedBy": user_detail.level1managereid,
-            "IsVerified": null,
-            "VerifiedDate": null
-        })
-        setRows(data)
-        let levelLabel1 = [...label];
-        levelLabel1.splice(id, 1, { "LastUsed": false, })
-        setLabel(levelLabel1);
+        if (selectedDate.type == "set") {
+            let levelLabel1 = [...label];
+            levelLabel1.splice(currentId, 1, { "LastUsed": false, })
+            setLabel(levelLabel1);
+            let data = [...rows]
+            data.splice(currentId, 1, {
+                "EmpId": employee_Id,
+                "SkillCode": rows[currentId].SkillCode,
+                "ExpInMonths": (moment(moment(selectedDate.nativeEvent.timestamp).add(1, 'days')).diff(moment(rows[currentId].WorkingSince), "months")),
+                "Level": rows[currentId].Level,
+                "WorkingSince": rows[currentId].WorkingSince,
+                "LastUsed": moment(selectedDate.nativeEvent.timestamp).format("YYYY-MM-DD"),
+                "VerifiedBy": user_detail.level1managereid,
+                "IsVerified": null,
+                "VerifiedDate": null
+            })
+            setRows(data)
+
+        }
     }
 
     function displayDateTimePicker(id) {
@@ -214,7 +207,7 @@ function MySkills() {
         if (rows.length != 0) {
             rows.map((e, i) => {
                 if (skillReport.filter(x => x.skillcode == e.SkillCode).length != 0) {
-                    alert("You are already added " + label[i]["SkillsLabel"] + ", please update using edit option")
+                    alert("You are already added " + skillsLabel[i]["SkillsLabel"] + ", If you want to update it, please update using yozyme website")
                 }
                 else if (e.SkillCode == "") {
                     alert("Please enter skill in row " + (i + 1))
@@ -247,8 +240,30 @@ function MySkills() {
             alert("please add skills to submit")
         }
     }
+    function WorkingSince(selectedDate) {
+        console.log(selectedDate.type, 'selected date')
+        if (selectedDate.type == "set") {
+            let levelLabel1 = [...levelLabel];
+            levelLabel1.splice(currentId, 1, { "workingSince": false, })
+            setLevelLabel(levelLabel1);
+            let data = [...rows]
+            data.splice(currentId, 1, {
+                "EmpId": employee_Id,
+                "SkillCode": rows[currentId].SkillCode,
+                "ExpInMonths": (moment(moment(rows[currentId].LastUsed).add(1, 'days')).diff(moment(selectedDate.nativeEvent.timestamp), "months")),
+                "Level": rows[currentId].Level,
+                "WorkingSince": moment(selectedDate.nativeEvent.timestamp).format("YYYY-MM-DD"),
+                "LastUsed": rows[currentId].LastUsed,
+                "VerifiedBy": user_detail.level1managereid,
+                "IsVerified": null,
+                "VerifiedDate": null
+            })
+            setRows(data)
 
-    console.log(rows, 'rows')
+        }
+    }
+
+
     return (
         <>
 
@@ -295,7 +310,10 @@ function MySkills() {
                         </View>
                         <View style={styles.textView}>
                             <Text style={styles.dayLabelSkill}>Working Since</Text>
-                            <Text style={styles.textStyleSkill} onPress={() => { displayDateTimePicker(i) }}>{moment(rows[i].WorkingSince).format("DD-MMM-YYYY")}</Text>
+                            <Text style={styles.textStyleSkill} onPress={() => {
+                                displayDateTimePicker(i)
+                                setCurrentId(i)
+                            }}>{moment(rows[i].WorkingSince).format("DD-MMM-YYYY")}</Text>
                         </View>
                         {
                             levelLabel[i].workingSince ?
@@ -304,14 +322,17 @@ function MySkills() {
                                     mode={'date'}
                                     disabled={false}
                                     value={new Date(rows[i].WorkingSince)}
-                                    onChange={(e) => { WorkingSince(i, e) }}
+                                    onChange={WorkingSince}
                                 />
                                 :
                                 null
                         }
                         <View style={styles.textView}>
                             <Text style={styles.dayLabelSkill}>Last Used</Text>
-                            <Text style={styles.textStyleSkill} onPress={() => { displayDateTimePickerLast(i) }}>{moment(rows[i].LastUsed).format("DD-MMM-YYYY")}</Text>
+                            <Text style={styles.textStyleSkill} onPress={() => {
+                                displayDateTimePickerLast(i)
+                                setCurrentId(i)
+                            }}>{moment(rows[i].LastUsed).format("DD-MMM-YYYY")}</Text>
                         </View>
                         {
                             label[i].LastUsed ?
@@ -320,7 +341,7 @@ function MySkills() {
                                     mode={'date'}
                                     disabled={false}
                                     value={new Date(rows[i].LastUsed)}
-                                    onChange={(e) => { LastUsed(i, e) }}
+                                    onChange={LastUsed}
                                 />
                                 :
                                 null
