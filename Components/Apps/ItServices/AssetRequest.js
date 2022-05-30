@@ -1,7 +1,10 @@
 import { Text, View ,TextInput,StyleSheet,ScrollView} from 'react-native'
 import HeaderView from '../../HeaderView'
 import DropDownPicker from 'react-native-dropdown-picker';
+import FontAwesome from 'react-native-vector-icons/FontAwesome'
+import moment from 'moment'
 import DateTimePicker from '@react-native-community/datetimepicker';
+
 import React, { useState, useEffect, useContext } from 'react'
 import Empcard from './Empcard';
 import axios from '../../../axios';
@@ -16,7 +19,11 @@ console.log(employee_Data,'ddddddddddddddddddd')
     const [assettype,Setassettype]=useState([])
     const [userassettype,Setuserassettype]=useState([])
     const [dropdownitem,setdropdownitem]=useState('')
+    const [showFrom, setShowFrom] = useState(false);
+    const [dropdownasset, setdropdownasset] = useState(false);
 
+
+    const [fromDate, setFromDate] = useState(new Date());
 
 
     const[selected,Setselected]=React.useState('');
@@ -53,6 +60,7 @@ function data(){
     })
    }
 
+   
    useEffect(()=>{
        
        data();
@@ -114,6 +122,9 @@ let asset=assettype.filter(x=>{
     label: item.Description,
     value: item.Description,
 }));
+items.push({label:'none' ,value:'none'})
+
+
     
 let d=userdata.map(x=>{
   return  <View>
@@ -134,24 +145,33 @@ console.log(d+'fffffffffffffffffffff');
 // }));
 
 function dropdownChange(item){
-Setselected(item.value)
 
+ 
 if(item.value=='Someone'){
     Setotheruser(true)
+    assetchange(dropdownitem)
+    getdataasset();
+
     data();
 
   
 
 }else if(item.value=='Self'){
+
   
-    Setotheruserid(employee_Data.EmpId)
+   
+    Setotheruserid(employee_Data.EmpId);
+
     Setuserassettype([])
     Setotheruser(false);
     Setuserdata([])
     getdataasset();
     assetchange(dropdownitem);
+    Setshowasset(true)
+
 
 }
+
 }
 
 function getdata(){
@@ -179,30 +199,38 @@ function getdataasset(){
 
 function reasonchange(item){
 
-    if(item.value==1102){
+    if(item.value==1101){
+      Setthuser(false)
         Setthuser(true)
     }else{
-        Setthuser(false)
+        
     }
 }
 function assetchange(item){
-    setdropdownitem(item)
-    if(item.value=='Laptop'){
+    
+    if(item.value){      
         getdataasset();
         Setshowasset(true)
+
+
     }else{
         Setshowasset(false)
     }
 
 }
+console.log(dropdownitem,'yhhhhhhhhhhhhyyygygygyy');
 
 
-
+const onChangeFromDate = (event, selectedDate) => {
+  const currentDate = selectedDate || fromDate;
+  setFromDate(currentDate);
+  setShowFrom(false)
+};
 
 
 let assetfilter=userassettype.filter(x=>{
   
-    if(x.isdeallocated!='Y'&&x.isaccessory!='Y'){
+    if(x.isdeallocated!='Y'&&x.isaccessory!='Y'&&x.assettype==dropdownitem){
       return x
     }
     
@@ -237,6 +265,7 @@ let assetfilter=userassettype.filter(x=>{
         <>
             <HeaderView />
             <ScrollView style={styles.formcontainer} >
+              <View style={{margin:'5%'}}>
                 <Text style={styles.heading}>REQUEST FORM</Text>
                
 
@@ -260,12 +289,14 @@ let assetfilter=userassettype.filter(x=>{
                     placeholder="Select"
                     onChangeItem={item => {
                         dropdownChange(item)
-
+                       
                         assetchange(dropdownitem)
+                        getdataasset()
                         
                             
                        
                     }}
+                    
                 />
                 
                
@@ -363,29 +394,70 @@ let assetfilter=userassettype.filter(x=>{
     <Text style={styles.labelStyle}>Asset Type :</Text>
                     <View style={{flex:1,
                     display:'flex'}}>
-                    <DropDownPicker
+                   <DropDownPicker
 
-                    items={items}
-                    
-                    labelStyle={{ color: 'black', }}
-                    style={styles.dropdownStyle}
-                
-                    
-                 
-                
-                   
-                    placeholder="Select"
-                    onChangeItem={item => assetchange(item)
-                   
-                    }
-                />
+items={items}
+
+labelStyle={{ color: 'black', }}
+style={styles.dropdownStyle}
+
+
+
+
+
+placeholder="Select"
+onChangeItem={item =>{
+  assetchange(item)
+  setdropdownitem(item.value);
+
+ 
+  
+} 
+
+
+}
+
+/>
                 
                    </View>
 
                    {showasset?assetofuser:null}
+                   <Text style={styles.labelStyle}>Justification:</Text>
+
+                   <TextInput 
+                   multiline={true}
+                   style={styles.messagebox}
+                   />
+                      <Text style={styles.labelStyle}>
+
+From Date:</Text>
+<View>
+<View style={styles.textStyle}>
+    <FontAwesome name='calendar' size={18} style={styles.textIconStyle} /><Text onPress={() => setShowFrom(true)}>{moment(fromDate).format("DD-MMM-YYYY")}</Text>
+</View>
+{showFrom && (
+    <DateTimePicker
+        testID="dateTimePicker"
+        // maximumDate={maximumDate}
+        // minimumDate={minimumDate}
+        value={fromDate}
+        mode={'date'}
+        is24Hour
+        onChange={onChangeFromDate}
+        disabled={false}
+    />
+)}
+</View>
+
+
+
+          <View style={styles.containerbutton}>
+           <Text style={styles.btns}>submit</Text>
+           <Text style={styles.btnr}>Reset</Text>
+           </View>
                    </View> 
                 
-               
+               </View>
             </ScrollView>
         </>
     )
@@ -395,11 +467,52 @@ const styles = StyleSheet.create({
     formcontainer:{
         display:'flex',
         flex:1,
-        margin:'5%',
-        height:'100%'
+     
+       
+       
+        backgroundColor:'white'
        
        
     },
+    btns:{
+      backgroundColor: '#007FFF',
+      color:'white',
+      borderRadius:5,
+      padding:10,
+            margin:7,
+            paddingRight:14,
+     
+
+    },
+
+    btnr:{
+      backgroundColor: 'red',
+      color:'white',
+      borderRadius:5,
+      padding:10,
+      margin:7,
+      paddingRight:14,
+     
+    },
+    textIconStyle: {
+      marginRight: 9,
+      marginLeft: 9,
+      color: 'black'
+  },
+    textStyle: {
+      borderRadius: 9,
+      borderWidth: 2,
+      borderColor: 'skyblue',
+      marginBottom: '2%',
+      padding: '2%',
+      // height: 45,
+      // backgroundColor: 'white',
+      color: 'black',
+      // textAlign: 'center'
+      // justifyContent: 'center',
+      // textAlign: 'center'
+      flexDirection: 'row'
+  },
     productcard:{
         margin:5,
         backgroundColor:'#F0F8FF',
@@ -422,6 +535,22 @@ const styles = StyleSheet.create({
 
 
 },
+containerbutton:{
+display:'flex',
+flexDirection:'row',
+justifyContent:'center',
+padding:'10%',
+
+},
+messagebox:{
+  borderWidth: 2,
+  borderColor:'#2d9afa',
+padding:5,
+  
+  margin:'2%',
+  height:100,
+  textAlignVertical:'top'
+},
 btn:{
   backgroundColor:'#2d9afa',
  color:'#fff',
@@ -429,6 +558,10 @@ btn:{
   display:'flex',
   borderRadius:50,
   textAlign:'center'
+},
+datePickerStyle: {
+  width: 200,
+  marginTop: 20,
 },
     heading:{
         fontWeight:'bold',
