@@ -12,9 +12,9 @@ import moment from 'moment'
 
 
 function MySkills() {
-    const { employeeId, user_detail } = useContext(StoreContext)
+    const { employee_Id, user_detail } = useContext(StoreContext)
     const [rows, setRows] = useState([{
-        "EmpId": employeeId,
+        "EmpId": employee_Id,
         "SkillCode": "",
         "ExpInMonths": 0,
         "Level": "",
@@ -26,8 +26,8 @@ function MySkills() {
     }])
     const [skill, setSkill] = useState([])
     const [skillReport, setSkillReport] = useState([])
-    const [label, setLabel] = useState([{ "SkillsLabel": "" }])
-    const [levelLabel, setLevelLabel] = useState([{ "LevelLabel": "" }])
+    const [label, setLabel] = useState([{ "LastUsed": false }])
+    const [levelLabel, setLevelLabel] = useState([{ "workingSince": false }])
     const [edit, setEdit] = useState(false)
     const [skillId, setSkillId] = useState(0)
     const [technology, setTechnology] = useState("")
@@ -38,7 +38,7 @@ function MySkills() {
     const handleAddRows = () => {
         let data = [...rows]
         data.push({
-            "EmpId": employeeId,
+            "EmpId": employee_Id,
             "SkillCode": "",
             "ExpInMonths": 0,
             "Level": "",
@@ -77,11 +77,11 @@ function MySkills() {
             .then(res => {
                 setSkill(res.data)
             })
-        axios.get('rpc/fun_empskillsreport?empid=' + employeeId).then(res => {
+        axios.get('rpc/fun_empskillsreport?empid=' + employee_Id).then(res => {
             setSkillReport(res.data)
         })
         setRows([{
-            "EmpId": employeeId,
+            "EmpId": employee_Id,
             "SkillCode": "",
             "ExpInMonths": 0,
             "Level": "",
@@ -92,12 +92,10 @@ function MySkills() {
             "VerifiedDate": null
         }])
         setEdit(false)
-        setLabel([{ "SkillsLabel": "" }])
-        setLevelLabel([{ "LevelLabel": "" }])
+        setLabel([{ "LastUsed": false }])
+        setLevelLabel([{ "workingSince": false }])
         setTechnology("")
     }
-
-    const skillOptions = skill.map((x) => { return { label: x.Technology, value: x.TechnologyId } })
 
     const optionsLevel = [{ label: "Beginner", value: "Beginner" },
     { label: "Advanced", value: "Advanced" },
@@ -106,86 +104,102 @@ function MySkills() {
     { label: "Expert", value: "Expert" },
     { label: "Champion", value: "Champion" }]
 
-    const SkillsChange = (e, name) => {
+    const SkillsChange = (id, e) => {
+        console.log(e, 'e')
         let data = [...rows]
-        data.splice(name.name, 1, {
-            "EmpId": employeeId,
+        data.splice(id, 1, {
+            "EmpId": employee_Id,
             "SkillCode": e.value,
-            "ExpInMonths": (moment(moment(rows[name.name].LastUsed).add(1, 'days')).diff(moment(rows[name.name].WorkingSince), "months")),
-            "Level": rows[name.name].Level,
-            "WorkingSince": rows[name.name].WorkingSince,
-            "LastUsed": rows[name.name].LastUsed,
+            "ExpInMonths": (moment(moment(rows[id].LastUsed).add(1, 'days')).diff(moment(rows[id].WorkingSince), "months")),
+            "Level": rows[id].Level,
+            "WorkingSince": rows[id].WorkingSince,
+            "LastUsed": rows[id].LastUsed,
             "VerifiedBy": user_detail.level1managereid,
             "IsVerified": null,
             "VerifiedDate": null
         })
         setRows(data)
-        let tech = [...technology]
-        tech.push(e.label)
-        setTechnology(tech)
-        let label1 = [...label];
-        label1.splice(name.name, 1, { "SkillsLabel": e.label })
-        setLabel(label1);
     }
-    console.log(technology)
-    const LevelChange = (e, name) => {
+
+    const LevelChange = (id, e) => {
         let data = [...rows]
-        data.splice(name.name, 1, {
-            "EmpId": employeeId,
-            "SkillCode": rows[name.name].SkillCode,
-            "ExpInMonths": (moment(moment(rows[name.name].LastUsed).add(1, 'days')).diff(moment(rows[name.name].WorkingSince), "months")),
+        data.splice(id, 1, {
+            "EmpId": employee_Id,
+            "SkillCode": rows[id].SkillCode,
+            "ExpInMonths": (moment(moment(rows[id].LastUsed).add(1, 'days')).diff(moment(rows[id].WorkingSince), "months")),
             "Level": e.value,
-            "WorkingSince": rows[name.name].WorkingSince,
-            "LastUsed": rows[name.name].LastUsed,
+            "WorkingSince": rows[id].WorkingSince,
+            "LastUsed": rows[id].LastUsed,
+            "VerifiedBy": user_detail.level1managereid,
+            "IsVerified": null,
+            "VerifiedDate": null
+        })
+        setRows(data)
+    }
+
+
+    const WorkingSince = (id, selectedDate) => {
+        console.log(selectedDate, 'selected date')
+        const currentDate = selectedDate || moment(rows[id].WorkingSince).format("YYYY-MM-DD")
+        console.log('e ', currentDate)
+        let data = [...rows]
+        data.splice(id, 1, {
+            "EmpId": employee_Id,
+            "SkillCode": rows[id].SkillCode,
+            "ExpInMonths": (moment(moment(rows[id].LastUsed).add(1, 'days')).diff(moment(currentDate), "months")),
+            "Level": rows[id].Level,
+            "WorkingSince": moment(currentDate).format("YYYY-MM-DD"),
+            "LastUsed": rows[id].LastUsed,
             "VerifiedBy": user_detail.level1managereid,
             "IsVerified": null,
             "VerifiedDate": null
         })
         setRows(data)
         let levelLabel1 = [...levelLabel];
-        levelLabel1.splice(name.name, 1, { "LevelLabel": e.label, })
+        levelLabel1.splice(id, 1, { "workingSince": false, })
         setLevelLabel(levelLabel1);
     }
 
-
-    const WorkingSince = (i, date) => {
+    const LastUsed = (id, selectedDate) => {
+        const currentDate = selectedDate
+        //|| moment(rows[i].LastUsed).format("YYYY-MM-DD")
         let data = [...rows]
-        data.splice(i, 1, {
-            "EmpId": employeeId,
-            "SkillCode": rows[i].SkillCode,
-            "ExpInMonths": (moment(moment(rows[i].LastUsed).add(1, 'days')).diff(moment(date), "months")),
-            "Level": rows[i].Level,
-            "WorkingSince": moment(date).format("YYYY-MM-DD"),
-            "LastUsed": rows[i].LastUsed,
+        data.splice(id, 1, {
+            "EmpId": employee_Id,
+            "SkillCode": rows[id].SkillCode,
+            "ExpInMonths": (moment(moment(currentDate).add(1, 'days')).diff(moment(rows[id].WorkingSince), "months")),
+            "Level": rows[id].Level,
+            "WorkingSince": rows[id].WorkingSince,
+            "LastUsed": moment(currentDate).format("YYYY-MM-DD"),
             "VerifiedBy": user_detail.level1managereid,
             "IsVerified": null,
             "VerifiedDate": null
         })
         setRows(data)
+        let levelLabel1 = [...label];
+        levelLabel1.splice(id, 1, { "LastUsed": false, })
+        setLabel(levelLabel1);
     }
 
-    const LastUsed = (i, date) => {
-        let data = [...rows]
-        data.splice(i, 1, {
-            "EmpId": employeeId,
-            "SkillCode": rows[i].SkillCode,
-            "ExpInMonths": (moment(moment(date).add(1, 'days')).diff(moment(rows[i].WorkingSince), "months")),
-            "Level": rows[i].Level,
-            "WorkingSince": rows[i].WorkingSince,
-            "LastUsed": moment(date).format("YYYY-MM-DD"),
-            "VerifiedBy": user_detail.level1managereid,
-            "IsVerified": null,
-            "VerifiedDate": null
-        })
-        setRows(data)
+    function displayDateTimePicker(id) {
+        let levelLabel1 = [...levelLabel];
+        levelLabel1.splice(id, 1, { "workingSince": true, })
+        setLevelLabel(levelLabel1);
     }
+
+    function displayDateTimePickerLast(id) {
+        let levelLabel1 = [...label];
+        levelLabel1.splice(id, 1, { "LastUsed": true, })
+        setLabel(levelLabel1);
+    }
+
 
     function submit() {
         let notificationData = {
             CreatedDate: moment()
                 .utcOffset("+05:30")
                 .format("YYYY-MM-DDTHH:mm:ss"),
-            CreatedBy: employeeId,
+            CreatedBy: employee_Id,
             NotifyTo: user_detail.level1managereid,
             AudienceType: "Individual",
             Priority: "High",
@@ -234,8 +248,10 @@ function MySkills() {
         }
     }
 
+    console.log(rows, 'rows')
     return (
         <>
+
             <HeaderView />
             <ScrollView>
                 <Text style={styles.titleStyle}>MySkills</Text>
@@ -248,6 +264,7 @@ function MySkills() {
                         <View style={styles.textView}>
                             <Text style={styles.dayLabelSkill}>Skills</Text>
                             <DropDownPicker
+                                id={i}
                                 className="myskill"
                                 placeholder="Select Skill"
                                 style={styles.dropdownStyle}
@@ -260,44 +277,61 @@ function MySkills() {
                                 }
                                 containerStyle={{ height: 40, width: '60%' }}
                                 labelStyle={{ color: 'black', flexWrap: 'wrap' }}
-                            // onChangeItems={SkillsChange}
+                                onChangeItem={(e) => { SkillsChange(i, e) }}
                             />
                         </View>
                         <View style={styles.textView}>
                             <Text style={styles.dayLabelSkill}>Level</Text>
                             <DropDownPicker
+                                id={i}
                                 className="myskill"
                                 placeholder="Select Level"
                                 items={optionsLevel}
                                 style={styles.dropdownStyle}
                                 containerStyle={{ height: 40, width: '60%' }}
                                 labelStyle={{ color: 'black', flexWrap: 'wrap' }}
-                            // onChangeItems={() => { LevelChange }}
+                                onChangeItem={(e) => { LevelChange(i, e) }}
                             />
                         </View>
                         <View style={styles.textView}>
                             <Text style={styles.dayLabelSkill}>Working Since</Text>
-                            <Text style={styles.textStyleSkill}>{moment().format("DD-MMM-YYYY")}</Text>
+                            <Text style={styles.textStyleSkill} onPress={() => { displayDateTimePicker(i) }}>{moment(rows[i].WorkingSince).format("DD-MMM-YYYY")}</Text>
                         </View>
-                        <DateTimePicker
-                            mode={'date'}
-                            disabled={false}
-                            value={new Date()}
-                        // onChange={WorkingSince()} 
-                        />
+                        {
+                            levelLabel[i].workingSince ?
+
+                                <DateTimePicker
+                                    mode={'date'}
+                                    disabled={false}
+                                    value={new Date(rows[i].WorkingSince)}
+                                    onChange={(e) => { WorkingSince(i, e) }}
+                                />
+                                :
+                                null
+                        }
                         <View style={styles.textView}>
                             <Text style={styles.dayLabelSkill}>Last Used</Text>
-                            <Text style={styles.textStyleSkill}>{moment().format("DD-MMM-YYYY")}</Text>
+                            <Text style={styles.textStyleSkill} onPress={() => { displayDateTimePickerLast(i) }}>{moment(rows[i].LastUsed).format("DD-MMM-YYYY")}</Text>
                         </View>
-                        <DateTimePicker
-                            mode={'date'}
-                            disabled={false}
-                            value={new Date()}
-                        // onChange={LastUsed} 
-                        />
+                        {
+                            label[i].LastUsed ?
+
+                                <DateTimePicker
+                                    mode={'date'}
+                                    disabled={false}
+                                    value={new Date(rows[i].LastUsed)}
+                                    onChange={(e) => { LastUsed(i, e) }}
+                                />
+                                :
+                                null
+                        }
                         <View style={styles.textView}>
                             <Text style={styles.dayLabelSkill}>Experience (Months)</Text>
-                            <TextInput style={styles.textStyleSkill} />
+                            <TextInput
+                                id={i}
+                                style={styles.textStyleSkill}
+                            >
+                                {rows[i].ExpInMonths}</TextInput>
                         </View>
                     </Card>
                 ))}
