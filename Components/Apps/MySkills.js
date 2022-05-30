@@ -33,6 +33,8 @@ function MySkills() {
     const [technology, setTechnology] = useState("")
     const [currentId, setCurrentId] = useState()
     const [skillsLabel, setSkillsLabel] = useState([{ "SkillsLabel": "" }])
+    const [skillOpen, setSkillOpen] = useState(false);
+    const [levelOpen, setLevelOpen] = useState(false);
     useEffect(() => {
         refresh()
     }, []);
@@ -280,6 +282,7 @@ function MySkills() {
                             <Text style={styles.dayLabelSkill}>Skills</Text>
                             <DropDownPicker
                                 id={i}
+                                open={skillOpen}
                                 className="myskill"
                                 placeholder="Select Skill"
                                 style={styles.dropdownStyle}
@@ -290,6 +293,7 @@ function MySkills() {
                                         disabled: (technology.includes(e.Technology))
                                     }))
                                 }
+                                setOpen={setSkillOpen}
                                 containerStyle={{ height: 40, width: '60%' }}
                                 labelStyle={{ color: 'black', flexWrap: 'wrap' }}
                                 onChangeItem={(e) => { SkillsChange(i, e) }}
@@ -299,9 +303,11 @@ function MySkills() {
                             <Text style={styles.dayLabelSkill}>Level</Text>
                             <DropDownPicker
                                 id={i}
+                                open={levelOpen}
                                 className="myskill"
                                 placeholder="Select Level"
                                 items={optionsLevel}
+                                setOpen={setLevelOpen}
                                 style={styles.dropdownStyle}
                                 containerStyle={{ height: 40, width: '60%' }}
                                 labelStyle={{ color: 'black', flexWrap: 'wrap' }}
