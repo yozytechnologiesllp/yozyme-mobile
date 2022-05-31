@@ -81,8 +81,11 @@ function MySkills() {
         tech.pop(0)
         setTechnology(tech)
     }
-
+    let controller;
+    let controllerLevel;
     function refresh() {
+        alert('refreshed')
+        setSkill([])
         axios.get('technology_master')
             .then(res => {
                 setSkill(res.data)
@@ -106,6 +109,8 @@ function MySkills() {
         setLabel([{ "LastUsed": false }])
         setLevelLabel([{ "workingSince": false }])
         setTechnology("")
+        controller.resetItems()
+        controllerLevel.reset()
     }
 
     const optionsLevel = [{ label: "Beginner", value: "Beginner" },
@@ -190,57 +195,58 @@ function MySkills() {
 
 
     function submit() {
-        let notificationData = {
-            CreatedDate: moment()
-                .utcOffset("+05:30")
-                .format("YYYY-MM-DDTHH:mm:ss"),
-            CreatedBy: employee_Id,
-            NotifyTo: user_detail.level1managereid,
-            AudienceType: "Individual",
-            Priority: "High",
-            Subject: "Skills Update",
-            Description: edit ? user_detail.firstname + " " + user_detail.lastname + " is updated skills and send for verification" : user_detail.firstname + " " + user_detail.lastname + " is added new skills and send for verification",
-            IsSeen: "N",
-            Status: "New",
-        };
+        refresh()
+        // let notificationData = {
+        //     CreatedDate: moment()
+        //         .utcOffset("+05:30")
+        //         .format("YYYY-MM-DDTHH:mm:ss"),
+        //     CreatedBy: employee_Id,
+        //     NotifyTo: user_detail.level1managereid,
+        //     AudienceType: "Individual",
+        //     Priority: "High",
+        //     Subject: "Skills Update",
+        //     Description: edit ? user_detail.firstname + " " + user_detail.lastname + " is updated skills and send for verification" : user_detail.firstname + " " + user_detail.lastname + " is added new skills and send for verification",
+        //     IsSeen: "N",
+        //     Status: "New",
+        // };
 
-        let len = 0;
+        // let len = 0;
 
-        if (rows.length != 0) {
-            rows.map((e, i) => {
-                if (skillReport.filter(x => x.skillcode == e.SkillCode).length != 0) {
-                    alert("You are already added " + skillsLabel[i]["SkillsLabel"] + ", If you want to update it, please update using yozyme website")
-                }
-                else if (e.SkillCode == "") {
-                    alert("Please enter skill in row " + (i + 1))
-                }
-                else if (e.Level == "") {
-                    alert("Please enter level in row " + (i + 1))
-                }
-                else if (e.ExpInMonths <= 0) {
-                    alert("please enter valid date for working since and last used date for row " + (i + 1))
-                }
-                else {
-                    len++;
-                    if (rows.length == len) {
-                        axios.post('skill_matrix', rows)
-                            .then((res) => {
-                                alert("Submitted")
-                                refresh()
-                                axios
-                                    .post("notification?NotifyTo=eq." + user_detail.level1managereid, notificationData)
-                                    .then((res) => console.log(res))
-                                    .catch((error) => console.log(error));
+        // if (rows.length != 0) {
+        //     rows.map((e, i) => {
+        //         if (skillReport.filter(x => x.skillcode == e.SkillCode).length != 0) {
+        //             alert("You are already added " + skillsLabel[i]["SkillsLabel"] + ", If you want to update it, please update using yozyme website")
+        //         }
+        //         else if (e.SkillCode == "") {
+        //             alert("Please enter skill in row " + (i + 1))
+        //         }
+        //         else if (e.Level == "") {
+        //             alert("Please enter level in row " + (i + 1))
+        //         }
+        //         else if (e.ExpInMonths <= 0) {
+        //             alert("please enter valid date for working since and last used date for row " + (i + 1))
+        //         }
+        //         else {
+        //             len++;
+        //             if (rows.length == len) {
+        //                 axios.post('skill_matrix', rows)
+        //                     .then((res) => {
+        //                         alert("Submitted")
+        //                         refresh()
+        //                         axios
+        //                             .post("notification?NotifyTo=eq." + user_detail.level1managereid, notificationData)
+        //                             .then((res) => console.log(res))
+        //                             .catch((error) => console.log(error));
 
-                            })
-                            .catch((e) => console.log(e))
-                    }
-                }
-            })
-        }
-        else if (rows.length == 0) {
-            alert("please add skills to submit")
-        }
+        //                     })
+        //                     .catch((e) => console.log(e))
+        //             }
+        //         }
+        //     })
+        // }
+        // else if (rows.length == 0) {
+        //     alert("please add skills to submit")
+        // }
     }
     function WorkingSince(selectedDate) {
         console.log(selectedDate.type, 'selected date')
@@ -266,6 +272,7 @@ function MySkills() {
     }
 
 
+
     return (
         <>
 
@@ -282,7 +289,7 @@ function MySkills() {
                             <Text style={styles.dayLabelSkill}>Skills</Text>
                             <DropDownPicker
                                 id={i}
-                                open={skillOpen}
+                                controller={instance => controller = instance}
                                 className="myskill"
                                 placeholder="Select Skill"
                                 style={styles.dropdownStyle}
@@ -293,7 +300,8 @@ function MySkills() {
                                         disabled: (technology.includes(e.Technology))
                                     }))
                                 }
-                                setOpen={setSkillOpen}
+                                labelProps={skillsLabel[i]["SkillsLabel"]}
+                                label={skillsLabel[i]["SkillsLabel"]}
                                 containerStyle={{ height: 40, width: '60%' }}
                                 labelStyle={{ color: 'black', flexWrap: 'wrap' }}
                                 onChangeItem={(e) => { SkillsChange(i, e) }}
@@ -303,15 +311,17 @@ function MySkills() {
                             <Text style={styles.dayLabelSkill}>Level</Text>
                             <DropDownPicker
                                 id={i}
-                                open={levelOpen}
+                                controller={instance => controllerLevel = instance}
                                 className="myskill"
                                 placeholder="Select Level"
                                 items={optionsLevel}
-                                setOpen={setLevelOpen}
+
+
                                 style={styles.dropdownStyle}
                                 containerStyle={{ height: 40, width: '60%' }}
                                 labelStyle={{ color: 'black', flexWrap: 'wrap' }}
                                 onChangeItem={(e) => { LevelChange(i, e) }}
+                                value={rows[i].Level}
                             />
                         </View>
                         <View style={styles.textView}>
