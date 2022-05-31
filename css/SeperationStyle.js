@@ -130,14 +130,36 @@ export default StyleSheet.create({
         //paddingLeft:18,
         //  fontSize: 30,
         color: 'black',
+        width: '60%',
+        marginBottom: '1.4%'
+    },
+    dropdown: {
+        height: 40,
+        borderWidth: 0.5,
+        borderRadius: 8,
+        paddingHorizontal: 8,
+        width: '100%',
+        marginBottom: '1.4%',
+        borderColor: 'skyblue',
+        borderWidth: 2,
+    },
+    placeholderStyle: {
+        fontSize: 16,
+    },
+    selectedTextStyle: {
+        fontSize: 16,
+        color: 'black'
     },
     disableDropdown: {
-        borderRadius: 9,
+        height: 40,
+        borderColor: 'gray',
+        borderWidth: 0.5,
+        borderRadius: 8,
+        paddingHorizontal: 8,
+        width: '100%',
+        marginBottom: '1.4%',
         borderWidth: 2,
-        borderColor: 'grey',
-        //paddingLeft:18,
-        //  fontSize: 30,
-        color: 'grey',
+        color: 'gray'
     },
     textStyleReason: {
         backgroundColor: 'white',

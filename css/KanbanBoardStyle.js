@@ -198,10 +198,10 @@ export default StyleSheet.create({
         // marginBottom: '2%',
         padding: '2%',
         // height: '15%',
-        width: '9%',
+        width: '40%',
         // backgroundColor: 'white',
         color: 'black',
-        textAlign: 'center',
+        // textAlign: 'center',
         // justifyContent: 'center',
         // textAlign: 'center'
         // flexDirection: 'row'

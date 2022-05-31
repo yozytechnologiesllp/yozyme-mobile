@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import moment from "moment";
 import { Text, View, TextInput, ScrollView } from "react-native";
 import DateTimePicker from '@react-native-community/datetimepicker';
-import DropDownPicker from "react-native-dropdown-picker";
+import { Dropdown } from "react-native-element-dropdown";
 import CheckBox from '@react-native-community/checkbox';
 import styles from '../../css/SeperationStyle'
 import HeaderView from '../HeaderView'
@@ -63,58 +63,90 @@ function MyTravel() {
                 <Text style={styles.titleStyle}>Raise Travel Request</Text>
                 <View>
                     <Text style={styles.dayLabel}>Travel Type</Text>
-                    <DropDownPicker
+                    <Dropdown
+                        labelField="label"
+                        valueField="value"
+                        maxHeight={160}
+                        value={""}
                         style={styles.dropdownStyle}
                         placeholder="Choose Travel Type"
-                        items={travelTypeOption}
-                        onChangeItem={(e) => { console.log(e.label) }}
+                        data={travelTypeOption}
+                        onChange={(e) => { console.log(e.label) }}
                     />
                     <Text style={styles.dayLabel}>Travel Mode</Text>
-                    <DropDownPicker
+                    <Dropdown
+                        labelField="label"
+                        valueField="value"
+                        maxHeight={160}
+                        value={""}
                         style={styles.dropdownStyle}
                         placeholder="Choose Travel Mode"
-                        items={travelModeOption}
-                        onChangeItem={(e) => { console.log(e.label) }}
+                        data={travelModeOption}
+                        onChange={(e) => { console.log(e.label) }}
                     />
                     <Text style={styles.dayLabel}>Travel Purpose</Text>
-                    <DropDownPicker
+                    <Dropdown
+                        labelField="label"
+                        valueField="value"
+                        maxHeight={160}
+                        value={""}
                         style={styles.dropdownStyle}
                         placeholder="Choose Travel Purpose"
-                        items={travelPurposeOption}
-                        onChangeItem={(e) => { console.log(e.label) }}
+                        data={travelPurposeOption}
+                        onChange={(e) => { console.log(e.label) }}
                     />
                     <Text style={styles.dayLabel}>Accomodation</Text>
                     <CheckBox></CheckBox>
                     <Text style={styles.dayLabel}>Duration Of Stay</Text>
-                    <DropDownPicker
+                    <Dropdown
+                        labelField="label"
+                        valueField="value"
+                        maxHeight={160}
+                        value={""}
                         style={styles.dropdownStyle}
                         placeholder="Choose Duration Of Stay "
-                        items={durationOfStayOption}
-                        onChangeItem={(e) => { console.log(e.label) }}
+                        data={durationOfStayOption}
+                        onChange={(e) => { console.log(e.label) }}
                     />
                     <Text style={styles.dayLabel}>Departure From (State)</Text>
-                    <DropDownPicker
+                    <Dropdown
+                        labelField="label"
+                        valueField="value"
+                        maxHeight={160}
+                        value={""}
                         style={styles.dropdownStyle}
                         placeholder="Choose Departure From State"
-                        items={[]}
+                        data={[]}
                     />
                     <Text style={styles.dayLabel}>Departure To (State)</Text>
-                    <DropDownPicker
+                    <Dropdown
+                        labelField="label"
+                        valueField="value"
+                        maxHeight={160}
+                        value={""}
                         style={styles.dropdownStyle}
                         placeholder="Choose Departure To State"
-                        items={[]}
+                        data={[]}
                     />
                     <Text style={styles.dayLabel}>Departure From</Text>
-                    <DropDownPicker
+                    <Dropdown
+                        labelField="label"
+                        valueField="value"
+                        maxHeight={160}
+                        value={""}
                         style={styles.dropdownStyle}
                         placeholder="Choose Departure From"
-                        items={[]}
+                        data={[]}
                     />
                     <Text style={styles.dayLabel}>Departure To</Text>
-                    <DropDownPicker
+                    <Dropdown
+                        labelField="label"
+                        valueField="value"
+                        maxHeight={160}
+                        value={""}
                         style={styles.dropdownStyle}
                         placeholder="Choose Departure To"
-                        items={[]}
+                        data={[]}
                     />
                     <Text style={styles.dayLabel}>Departure Date</Text>
                     <Text style={styles.textStyle}>{moment().format("DD-MMM-YYYY")}</Text>
@@ -134,18 +166,26 @@ function MyTravel() {
                         disabled={false}
                     ></DateTimePicker>
                     <Text style={styles.dayLabel}>Meal Type ( Travelling )</Text>
-                    <DropDownPicker
+                    <Dropdown
+                        labelField="label"
+                        valueField="value"
+                        maxHeight={160}
+                        value={""}
                         style={styles.dropdownStyle}
                         placeholder="Choose Meal Type"
-                        items={mealTypeOption}
-                        onChangeItem={(e) => { console.log(e.label) }}
+                        data={mealTypeOption}
+                        onChange={(e) => { console.log(e.label) }}
                     />
                     <Text style={styles.dayLabel}>Preferred Time ( Ticket Booking )</Text>
-                    <DropDownPicker
+                    <Dropdown
+                        labelField="label"
+                        valueField="value"
+                        maxHeight={160}
+                        value={""}
                         style={styles.dropdownStyle}
                         placeholder="Choose Preferred Time"
-                        items={preferredTimeOption}
-                        onChangeItem={(e) => { console.log(e.label) }}
+                        data={preferredTimeOption}
+                        onChange={(e) => { console.log(e.label) }}
                     />
                     <Text style={styles.dayLabel}>Justification</Text>
                     <TextInput

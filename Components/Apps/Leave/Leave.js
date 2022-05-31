@@ -3,7 +3,7 @@ import { View, Text, Button, ScrollView, TextInput, Alert } from 'react-native'
 import HeaderView from '../../HeaderView'
 import styles from '../../../css/LeaveStyle';
 // import DatePicker from 'react-native-date-picker'
-import DropDownPicker from 'react-native-dropdown-picker';
+import { Dropdown } from "react-native-element-dropdown";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment'
 import axios from '../../../axios'
@@ -13,6 +13,7 @@ import StoreContext from '../../../store/StoreContext';
 import MultiSelect from 'react-native-multiple-select';
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import { NavigationContainer } from '@react-navigation/native';
+import dropdownStyle from '../../../css/SeperationStyle'
 
 
 function Leave({ navigation }) {
@@ -221,58 +222,22 @@ function Leave({ navigation }) {
                     remLeave();
                 })
                 .catch((e) => alert(e));
-
             resetValue();
         }
         else if (leaveCodeId == null) {
             ToastAndroid.show('Please Choose Leave Type', ToastAndroid.SHORT)
-            // Alert.alert(
-            //     "Alert",
-            //     "Please Choose Leave Type"
-            //     [
-            //     { text: "OK", onPress: () => console.log("OK Pressed") }
-            //     ]
-            // );
         }
         else if (doesOverlap || doesInclude) {
             ToastAndroid.show('Already applied leave for this date', ToastAndroid.SHORT)
-            // Alert.alert(
-            //     "Alert",
-            //     "Already applied leave for this date"
-            //     [
-            //     { text: "OK", onPress: () => console.log("OK Pressed") }
-            //     ]
-            // );
         }
         else if (excludeHoliday == 0 || temp < 0) {
             ToastAndroid.show('Choose a valida days for leave without including weekend / holidays', ToastAndroid.SHORT)
-            // Alert.alert(
-            //     "Alert",
-            //     "Choose a valid days for leave without including weekend / holidays"
-            //     [
-            //     { text: "OK", onPress: () => console.log("OK Pressed") }
-            //     ]
-            // );
         }
         else if (leavesLeft.length === 0) {
             ToastAndroid.show(leaveTypeCodeInfo + ' is not applicable for you', ToastAndroid.SHORT)
-            // Alert.alert(
-            //     "Alert",
-            //     leaveTypeCodeInfo + " is not applicable for you"
-            //     [
-            //     { text: "OK", onPress: () => console.log("OK Pressed") }
-            //     ]
-            // );
         }
         else if (excludeHoliday > leavesLeft) {
             ToastAndroid.show('Allowed leaves are' + leavesLeft + ' only', ToastAndroid.SHORT)
-            // Alert.alert(
-            //     "Alert",
-            //     "Allowed leaves are " + leavesLeft + " only"
-            //     [
-            //     { text: "OK", onPress: () => console.log("OK Pressed") }
-            //     ]
-            // );
         }
     }
     console.log(user_detail.level1managereid, 'level1 manager')
@@ -472,16 +437,12 @@ function Leave({ navigation }) {
                 <Text style={styles.labelStyle}>Remaining Leaves:</Text>
                 <View style={styles.textStyle}><FontAwesome name='calendar-plus-o' size={18} style={styles.textIconStyle} /><Text>{leavesLeft}</Text></View>
                 <Text style={styles.labelStyle}>Leave Type:</Text>
-                <DropDownPicker
+                <Dropdown
                     // defaultValue={leaveCodeId}
-                    items={options}
-                    // value={leaveCodeId}
+                    data={options}
+                    value={leaveCodeId}
                     // containerStyle={{ height: 40, width: '99.5%' }}
-                    labelStyle={{ color: 'black', flexWrap: 'wrap' }}
-                    style={styles.dropdownStyle}
-                    itemStyle={{
-                        justifyContent: 'flex-start',
-                    }}
+                    style={dropdownStyle.dropdown}
                     // dropDownStyle={{
                     //     height: 100,
                     //     backgroundColor: 'white',
@@ -493,7 +454,10 @@ function Leave({ navigation }) {
                     // defaultValue={leaveTypeCodeInfo}
                     // containerStyle={styles.dropdownStyle}
                     placeholder="Select Leave"
-                    onChangeItem={item => dropdownChange(item)}
+                    labelField="label"
+                    valueField="value"
+                    maxHeight={160}
+                    onChange={item => dropdownChange(item)}
                 />
                 <Text style={styles.labelStyle}>Reason:</Text>
                 <TextInput

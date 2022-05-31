@@ -3,11 +3,11 @@ import { View, Text, Button, ScrollView, TextInput, Alert } from 'react-native'
 import HeaderView from '../HeaderView'
 import styles from '../../css/TimesheetStyle';
 // import DatePicker from 'react-native-date-picker'
-import DropDownPicker from 'react-native-dropdown-picker';
-import DateTimePicker from '@react-native-community/datetimepicker';
+import { Dropdown } from "react-native-element-dropdown";
 import moment from 'moment'
 import axios from '../../axios'
 import StoreContext from '../../store/StoreContext';
+import dropdownStyle from '../../css/SeperationStyle'
 
 
 function Leave({ navigation }) {
@@ -325,19 +325,20 @@ function Leave({ navigation }) {
                         {
                             monday.map((e, i) => (
                                 <View style={{ flexDirection: 'row', marginTop: '2%' }}>
-                                    <DropDownPicker
+                                    <Dropdown
                                         id={i}
                                         name={i}
-                                        items={dropdown.filter(x => x.OtherCodeID != 400006).map((x) => ({
+                                        data={dropdown.filter(x => x.OtherCodeID != 400006).map((x) => ({
                                             value: x.OtherCodeID, label: x.OtherCode,
                                             disabled: monday.map((e) => e.TimeCode).includes(x.OtherCodeID)
                                         }))}
-                                        containerStyle={{ height: 40, width: '45%' }}
-                                        labelStyle={{ color: 'black', flexWrap: 'wrap' }}
-                                        style={styles.dropdownStyle}
-                                        itemStyle={{ justifyContent: 'flex-start', }}
+                                        labelField="label"
+                                        valueField="value"
+                                        value={monday[i].TimeCode}
+                                        maxHeight={160}
+                                        style={[dropdownStyle.dropdown, { width: '40%' }]}
                                         placeholder="Select Project"
-                                        onChangeItem={item => { projectChange(i, item, "monday") }}
+                                        onChange={item => { projectChange(i, item, "monday") }}
                                     />
                                     <TextInput
                                         MyInput
@@ -357,19 +358,20 @@ function Leave({ navigation }) {
                         {
                             tuesday.map((e, i) => (
                                 <View style={{ flexDirection: 'row', marginTop: '2%' }}>
-                                    <DropDownPicker
+                                    <Dropdown
                                         id={i}
                                         name={i}
-                                        items={dropdown.filter(x => x.OtherCodeID != 400006).map((x) => ({
+                                        data={dropdown.filter(x => x.OtherCodeID != 400006).map((x) => ({
                                             value: x.OtherCodeID, label: x.OtherCode,
                                             disabled: tuesday.map((e) => e.TimeCode).includes(x.OtherCodeID)
                                         }))}
-                                        containerStyle={{ height: 40, width: '45%' }}
-                                        labelStyle={{ color: 'black', flexWrap: 'wrap' }}
-                                        style={styles.dropdownStyle}
-                                        itemStyle={{ justifyContent: 'flex-start', }}
+                                        labelField="label"
+                                        valueField="value"
+                                        value={tuesday[i].TimeCode}
+                                        maxHeight={160}
+                                        style={[dropdownStyle.dropdown, { width: '40%' }]}
                                         placeholder="Select Project"
-                                        onChangeItem={item => { projectChange(i, item, "tuesday") }}
+                                        onChange={item => { projectChange(i, item, "tuesday") }}
                                     />
                                     <TextInput
                                         id={i}
@@ -388,19 +390,20 @@ function Leave({ navigation }) {
                         {
                             wednesday.map((e, i) => (
                                 <View style={{ flexDirection: 'row', marginTop: '2%' }}>
-                                    <DropDownPicker
+                                    <Dropdown
                                         id={i}
                                         name={i}
-                                        items={dropdown.filter(x => x.OtherCodeID != 400006).map((x) => ({
+                                        data={dropdown.filter(x => x.OtherCodeID != 400006).map((x) => ({
                                             value: x.OtherCodeID, label: x.OtherCode,
                                             disabled: wednesday.map((e) => e.TimeCode).includes(x.OtherCodeID)
                                         }))}
-                                        containerStyle={{ height: 40, width: '45%' }}
-                                        labelStyle={{ color: 'black', flexWrap: 'wrap' }}
-                                        style={styles.dropdownStyle}
-                                        itemStyle={{ justifyContent: 'flex-start', }}
+                                        labelField="label"
+                                        valueField="value"
+                                        value={wednesday[i].TimeCode}
+                                        maxHeight={160}
+                                        style={[dropdownStyle.dropdown, { width: '40%' }]}
                                         placeholder="Select Project"
-                                        onChangeItem={item => { projectChange(i, item, "wednesday") }}
+                                        onChange={item => { projectChange(i, item, "wednesday") }}
                                     />
                                     <TextInput
                                         id={i}
@@ -419,19 +422,20 @@ function Leave({ navigation }) {
                         {
                             thursday.map((e, i) => (
                                 <View style={{ flexDirection: 'row', marginTop: '2%' }}>
-                                    <DropDownPicker
+                                    <Dropdown
                                         id={i}
                                         name={i}
-                                        items={dropdown.filter(x => x.OtherCodeID != 400006).map((x) => ({
+                                        data={dropdown.filter(x => x.OtherCodeID != 400006).map((x) => ({
                                             value: x.OtherCodeID, label: x.OtherCode,
                                             disabled: thursday.map((e) => e.TimeCode).includes(x.OtherCodeID)
                                         }))}
-                                        containerStyle={{ height: 40, width: '45%' }}
-                                        labelStyle={{ color: 'black', flexWrap: 'wrap' }}
-                                        style={styles.dropdownStyle}
-                                        itemStyle={{ justifyContent: 'flex-start', }}
+                                        labelField="label"
+                                        valueField="value"
+                                        value={thursday[i].TimeCode}
+                                        maxHeight={160}
+                                        style={[dropdownStyle.dropdown, { width: '40%' }]}
                                         placeholder="Select Project"
-                                        onChangeItem={item => { projectChangeThur(i, item, "thursday") }}
+                                        onChange={item => { projectChangeThur(i, item, "thursday") }}
                                     />
                                     <TextInput
                                         id={i}
@@ -450,19 +454,20 @@ function Leave({ navigation }) {
                         {
                             friday.map((e, i) => (
                                 <View style={{ flexDirection: 'row', marginTop: '2%' }}>
-                                    <DropDownPicker
+                                    <Dropdown
                                         id={i}
                                         name={i}
-                                        items={dropdown.filter(x => x.OtherCodeID != 400006).map((x) => ({
+                                        data={dropdown.filter(x => x.OtherCodeID != 400006).map((x) => ({
                                             value: x.OtherCodeID, label: x.OtherCode,
                                             disabled: friday.map((e) => e.TimeCode).includes(x.OtherCodeID)
                                         }))}
-                                        containerStyle={{ height: 40, width: '45%' }}
-                                        labelStyle={{ color: 'black', flexWrap: 'wrap' }}
-                                        style={styles.dropdownStyle}
-                                        itemStyle={{ justifyContent: 'flex-start', }}
+                                        labelField="label"
+                                        valueField="value"
+                                        value={friday[i].TimeCode}
+                                        maxHeight={160}
+                                        style={[dropdownStyle.dropdown, { width: '40%' }]}
                                         placeholder="Select Project"
-                                        onChangeItem={item => { projectChangeThur(i, item, "friday") }}
+                                        onChange={item => { projectChangeThur(i, item, "friday") }}
                                     />
                                     <TextInput
                                         id={i}
@@ -481,19 +486,20 @@ function Leave({ navigation }) {
                         {
                             saturday.map((e, i) => (
                                 <View style={{ flexDirection: 'row', marginTop: '2%' }}>
-                                    <DropDownPicker
+                                    <Dropdown
                                         id={i}
                                         name={i}
-                                        items={dropdown.filter(x => x.OtherCodeID == 400006).map((x) => ({
+                                        data={dropdown.filter(x => x.OtherCodeID == 400006).map((x) => ({
                                             value: x.OtherCodeID, label: x.OtherCode,
                                             disabled: saturday.map((e) => e.TimeCode).includes(x.OtherCodeID)
                                         }))}
-                                        containerStyle={{ height: 40, width: '45%' }}
-                                        labelStyle={{ color: 'black', flexWrap: 'wrap' }}
-                                        style={styles.dropdownStyle}
-                                        itemStyle={{ justifyContent: 'flex-start', }}
+                                        labelField="label"
+                                        valueField="value"
+                                        value={saturday[i].TimeCode}
+                                        maxHeight={160}
+                                        style={[dropdownStyle.dropdown, { width: '40%' }]}
                                         placeholder="Select Project"
-                                        onChangeItem={item => { projectChangeThur(i, item, "saturday") }}
+                                        onChange={item => { projectChangeThur(i, item, "saturday") }}
                                     />
                                     <TextInput
                                         id={i}
@@ -512,19 +518,20 @@ function Leave({ navigation }) {
                         {
                             sunday.map((e, i) => (
                                 <View style={{ flexDirection: 'row', marginTop: '2%' }}>
-                                    <DropDownPicker
+                                    <Dropdown
                                         id={i}
                                         name={i}
-                                        items={dropdown.filter(x => x.OtherCodeID == 400006).map((x) => ({
+                                        data={dropdown.filter(x => x.OtherCodeID == 400006).map((x) => ({
                                             value: x.OtherCodeID, label: x.OtherCode,
                                             disabled: sunday.map((e) => e.TimeCode).includes(x.OtherCodeID)
                                         }))}
-                                        containerStyle={{ height: 40, width: '45%' }}
-                                        labelStyle={{ color: 'black', flexWrap: 'wrap' }}
-                                        style={styles.dropdownStyle}
-                                        itemStyle={{ justifyContent: 'flex-start' }}
+                                        labelField="label"
+                                        valueField="value"
+                                        value={sunday[i].TimeCode}
+                                        maxHeight={160}
+                                        style={[dropdownStyle.dropdown, { width: '40%' }]}
                                         placeholder="Select Project"
-                                        onChangeItem={item => { projectChangeThur(i, item, "sunday") }}
+                                        onChange={item => { projectChangeThur(i, item, "sunday") }}
                                     />
                                     <TextInput
                                         id={i}

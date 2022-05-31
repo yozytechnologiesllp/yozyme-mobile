@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { View, Text, Button, ScrollView, TextInput, Alert, Modal, Pressable, ToastAndroid } from 'react-native'
 import HeaderView from '../../HeaderView'
 import styles from '../../../css/KanbanBoardStyle';
-import DropDownPicker from 'react-native-dropdown-picker';
+import { Dropdown } from "react-native-element-dropdown";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment'
 import axios from '../../../axios'
@@ -12,6 +12,7 @@ import StoreContext from '../../../store/StoreContext';
 import { Avatar } from 'react-native-paper'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import RenderHtml from 'react-native-render-html';
+import dropdownStyle from '../../../css/SeperationStyle'
 
 
 function EditPopup({ navigation, route }) {
@@ -327,18 +328,15 @@ function EditPopup({ navigation, route }) {
                     <Text
                         style={styles.labelStyle}
                     >Work Percentage</Text>
-                    <DropDownPicker
-                        defaultValue={percentagecount}
-                        items={options}
-                        // defaultValue={percentagecount}
-                        containerStyle={{ height: 40, width: '22.5%' }}
-                        labelStyle={{ color: 'black', flexWrap: 'wrap' }}
-                        style={styles.dropdownStyle}
-                        itemStyle={{
-                            justifyContent: 'flex-start',
-                        }}
+                    <Dropdown
+                        value={percentagecount}
+                        data={options}
+                        labelField="label"
+                        valueField="value"
+                        maxHeight={160}
+                        style={[dropdownStyle.dropdown, { width: '40%' }]}
                         placeholder="0%"
-                        onChangeItem={item => setPercentageCount(item.value)}
+                        onChange={item => setPercentageCount(item.value)}
                     />
                 </View>
                 <View style={{ flexDirection: 'row', margin: '2%' }}>

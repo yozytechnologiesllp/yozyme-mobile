@@ -1,10 +1,10 @@
 import React, { useState, useContext, useEffect } from 'react'
-import { View, Text } from 'react-native'
+import { View, Text, RefreshControl } from 'react-native'
 import HeaderView from '../HeaderView'
 import styles from '../../css/SeperationStyle'
 import { Card, TextInput } from 'react-native-paper'
 import StoreContext from '../../store/StoreContext'
-import DropDownPicker from 'react-native-dropdown-picker'
+import { Dropdown } from "react-native-element-dropdown";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import axios from '../../axios'
 import { ScrollView } from 'react-native-gesture-handler'
@@ -35,6 +35,7 @@ function MySkills() {
     const [skillsLabel, setSkillsLabel] = useState([{ "SkillsLabel": "" }])
     const [skillOpen, setSkillOpen] = useState(false);
     const [levelOpen, setLevelOpen] = useState(false);
+    const [refreshState, setRefreshState] = useState(false)
     useEffect(() => {
         refresh()
     }, []);
@@ -84,8 +85,6 @@ function MySkills() {
     let controller;
     let controllerLevel;
     function refresh() {
-        alert('refreshed')
-        setSkill([])
         axios.get('technology_master')
             .then(res => {
                 setSkill(res.data)
@@ -109,8 +108,8 @@ function MySkills() {
         setLabel([{ "LastUsed": false }])
         setLevelLabel([{ "workingSince": false }])
         setTechnology("")
-        controller.resetItems()
-        controllerLevel.reset()
+        // controller.resetItems()
+        // controllerLevel.reset()
     }
 
     const optionsLevel = [{ label: "Beginner", value: "Beginner" },
@@ -195,59 +194,65 @@ function MySkills() {
 
 
     function submit() {
-        refresh()
-        // let notificationData = {
-        //     CreatedDate: moment()
-        //         .utcOffset("+05:30")
-        //         .format("YYYY-MM-DDTHH:mm:ss"),
-        //     CreatedBy: employee_Id,
-        //     NotifyTo: user_detail.level1managereid,
-        //     AudienceType: "Individual",
-        //     Priority: "High",
-        //     Subject: "Skills Update",
-        //     Description: edit ? user_detail.firstname + " " + user_detail.lastname + " is updated skills and send for verification" : user_detail.firstname + " " + user_detail.lastname + " is added new skills and send for verification",
-        //     IsSeen: "N",
-        //     Status: "New",
-        // };
+        let notificationData = {
+            CreatedDate: moment()
+                .utcOffset("+05:30")
+                .format("YYYY-MM-DDTHH:mm:ss"),
+            CreatedBy: employee_Id,
+            NotifyTo: user_detail.level1managereid,
+            AudienceType: "Individual",
+            Priority: "High",
+            Subject: "Skills Update",
+            Description: edit ? user_detail.firstname + " " + user_detail.lastname + " is updated skills and send for verification" : user_detail.firstname + " " + user_detail.lastname + " is added new skills and send for verification",
+            IsSeen: "N",
+            Status: "New",
+        };
 
-        // let len = 0;
+        let len = 0;
 
-        // if (rows.length != 0) {
-        //     rows.map((e, i) => {
-        //         if (skillReport.filter(x => x.skillcode == e.SkillCode).length != 0) {
-        //             alert("You are already added " + skillsLabel[i]["SkillsLabel"] + ", If you want to update it, please update using yozyme website")
-        //         }
-        //         else if (e.SkillCode == "") {
-        //             alert("Please enter skill in row " + (i + 1))
-        //         }
-        //         else if (e.Level == "") {
-        //             alert("Please enter level in row " + (i + 1))
-        //         }
-        //         else if (e.ExpInMonths <= 0) {
-        //             alert("please enter valid date for working since and last used date for row " + (i + 1))
-        //         }
-        //         else {
-        //             len++;
-        //             if (rows.length == len) {
-        //                 axios.post('skill_matrix', rows)
-        //                     .then((res) => {
-        //                         alert("Submitted")
-        //                         refresh()
-        //                         axios
-        //                             .post("notification?NotifyTo=eq." + user_detail.level1managereid, notificationData)
-        //                             .then((res) => console.log(res))
-        //                             .catch((error) => console.log(error));
+        if (rows.length != 0) {
+            rows.map((e, i) => {
+                if (skillReport.filter(x => x.skillcode == e.SkillCode).length != 0) {
+                    alert("You are already added " + skillsLabel[i]["SkillsLabel"] + ", If you want to update it, please update using yozyme website")
+                }
+                else if (e.SkillCode == "") {
+                    alert("Please enter skill in row " + (i + 1))
+                }
+                else if (e.Level == "") {
+                    alert("Please enter level in row " + (i + 1))
+                }
+                else if (e.ExpInMonths <= 0) {
+                    alert("please enter valid date for working since and last used date for row " + (i + 1))
+                }
+                else {
+                    len++;
+                    if (rows.length == len) {
+                        axios.post('skill_matrix', rows)
+                            .then((res) => {
 
-        //                     })
-        //                     .catch((e) => console.log(e))
-        //             }
-        //         }
-        //     })
-        // }
-        // else if (rows.length == 0) {
-        //     alert("please add skills to submit")
-        // }
+                                alert("Submitted")
+                                setRefreshState(true)
+                                refresh()
+                                axios
+                                    .post("notification?NotifyTo=eq." + user_detail.level1managereid, notificationData)
+                                    .then((res) => {
+                                        console.log(res)
+                                        setRefreshState(false)
+                                    })
+                                    .catch((error) => console.log(error));
+
+                            })
+                            .catch((e) => console.log(e))
+                    }
+                }
+            })
+        }
+        else if (rows.length == 0) {
+            alert("please add skills to submit")
+        }
     }
+
+
     function WorkingSince(selectedDate) {
         console.log(selectedDate.type, 'selected date')
         if (selectedDate.type == "set") {
@@ -287,40 +292,35 @@ function MySkills() {
                     <Card style={styles.cardStyle} key={i}>
                         <View style={styles.textView}>
                             <Text style={styles.dayLabelSkill}>Skills</Text>
-                            <DropDownPicker
+                            <Dropdown
+                                style={[styles.dropdown, { width: '60%' }]}
                                 id={i}
-                                controller={instance => controller = instance}
-                                className="myskill"
                                 placeholder="Select Skill"
-                                style={styles.dropdownStyle}
-                                items={
+                                data={
                                     skill.map((e) => ({
                                         label: e.Technology,
                                         value: e.TechnologyId,
                                         disabled: (technology.includes(e.Technology))
                                     }))
                                 }
-                                labelProps={skillsLabel[i]["SkillsLabel"]}
-                                label={skillsLabel[i]["SkillsLabel"]}
-                                containerStyle={{ height: 40, width: '60%' }}
-                                labelStyle={{ color: 'black', flexWrap: 'wrap' }}
-                                onChangeItem={(e) => { SkillsChange(i, e) }}
+                                labelField="label"
+                                valueField="value"
+                                onChange={(e) => { SkillsChange(i, e) }}
+                                maxHeight={160}
+                                value={rows[i].SkillCode}
                             />
                         </View>
                         <View style={styles.textView}>
                             <Text style={styles.dayLabelSkill}>Level</Text>
-                            <DropDownPicker
+                            <Dropdown
+                                style={[styles.dropdown, { width: '60%' }]}
                                 id={i}
-                                controller={instance => controllerLevel = instance}
-                                className="myskill"
                                 placeholder="Select Level"
-                                items={optionsLevel}
-
-
-                                style={styles.dropdownStyle}
-                                containerStyle={{ height: 40, width: '60%' }}
-                                labelStyle={{ color: 'black', flexWrap: 'wrap' }}
-                                onChangeItem={(e) => { LevelChange(i, e) }}
+                                data={optionsLevel}
+                                labelField="label"
+                                valueField="value"
+                                onChange={(e) => { LevelChange(i, e) }}
+                                maxHeight={160}
                                 value={rows[i].Level}
                             />
                         </View>

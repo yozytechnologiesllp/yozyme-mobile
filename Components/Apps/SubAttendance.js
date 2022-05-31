@@ -3,7 +3,7 @@ import { View, Text, Button, ScrollView, TextInput, Alert } from 'react-native'
 import HeaderView from '../HeaderView'
 import styles from '../../css/SubAttendanceStyles';
 // import DatePicker from 'react-native-date-picker'
-import DropDownPicker from 'react-native-dropdown-picker';
+import { Dropdown } from "react-native-element-dropdown";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment'
 import axios from '../../axios'
@@ -11,6 +11,7 @@ import CheckBox from '@react-native-community/checkbox';
 import StoreContext from '../../store/StoreContext';
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
+import dropdownStyle from '../../css/SeperationStyle'
 
 
 function SubAttendance({ navigation }) {
@@ -476,20 +477,15 @@ function SubAttendance({ navigation }) {
                     <Text>{hoursDifference}&nbsp;&nbsp;hrs</Text>
                 </View>
                 <Text style={styles.labelStyle}>Reason Code:</Text>
-                <DropDownPicker
-                    items={options}
-                    // defaultValue={selected}
-                    containerStyle={{ height: 40, width: '99.5%' }}
-                    dropDownMaxHeight={90}
-                    labelStyle={{ color: 'black', flexWrap: 'wrap' }}
-                    style={styles.dropdownStyle}
-                    itemStyle={{
-                        justifyContent: 'flex-start',
-                        // maxHeight: 5,
-                        // minHeight: 5
-                    }}
+                <Dropdown
+                    data={options}
+                    value={selected}
+                    style={dropdownStyle.dropdown}
+                    labelField="label"
+                    valueField="value"
                     placeholder="Select Reason"
-                    onChangeItem={item => dropdownChange(item)}
+                    maxHeight={160}
+                    onChange={item => dropdownChange(item)}
                 />
                 <View style={styles.submitView}>
                     <Text style={styles.submitStyle} onPress={() => {

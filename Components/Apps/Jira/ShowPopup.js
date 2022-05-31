@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { View, Text, Button, ScrollView, TextInput, Alert, Modal, Pressable, ToastAndroid } from 'react-native'
 import HeaderView from '../../HeaderView'
 import styles from '../../../css/KanbanBoardStyle';
-import DropDownPicker from 'react-native-dropdown-picker';
+import { Dropdown } from "react-native-element-dropdown";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment, { updateLocale } from 'moment'
 import axios from '../../../axios'
@@ -199,18 +199,16 @@ function ShowPopup({ navigation, modalVisible, setModalVisible, stageDetails, ua
                             (currentIssue.length != 0 ? currentIssue.OriginalEstimate != null : false) || user_detail.rolecode == "ITMGR1" ?
                                 <View style={{ flexDirection: 'row', margin: '2%' }}>
                                     <Text style={styles.labelStyle}>Stage Update:</Text>
-                                    <DropDownPicker
-                                        defaultValue={currentIssue.length != 0 ? currentIssue.CurrentStage[0].StageCode : null}
-                                        items={stageDetailsDropdown}
+                                    <Dropdown
+                                        value={currentIssue.length != 0 ? currentIssue.CurrentStage[0].StageCode : null}
+                                        data={stageDetailsDropdown}
                                         // value={stageLabel}
-                                        containerStyle={{ height: 40, width: '45%' }}
-                                        labelStyle={{ color: 'black', flexWrap: 'wrap' }}
-                                        style={styles.dropdownStyle}
-                                        itemStyle={{
-                                            justifyContent: 'flex-start',
-                                        }}
-                                        // placeholder="Select Leave"
-                                        onChangeItem={item => {
+
+                                        style={[styles.dropdownStyle, { width: '40%' }]}
+                                        labelField="label"
+                                        valueField="value"
+                                        maxHeight={160}
+                                        onChange={item => {
                                             setStageLabel(item.value)
                                             setStageData(item)
                                         }}
@@ -223,18 +221,15 @@ function ShowPopup({ navigation, modalVisible, setModalVisible, stageDetails, ua
                             user_detail.rolecode == "ITMGR1" ?
                                 <View style={{ flexDirection: 'row', margin: '2%' }}>
                                     <Text style={styles.labelStyle}>Priority:</Text>
-                                    <DropDownPicker
-                                        defaultValue={currentIssue.length != 0 ? currentIssue.Priority : null}
-                                        items={PriorityOption}
+                                    <Dropdown
+                                        value={currentIssue.length != 0 ? currentIssue.Priority : null}
+                                        data={PriorityOption}
                                         // value={stageLabel}
-                                        containerStyle={{ height: 40, width: '45%' }}
-                                        labelStyle={{ color: 'black', flexWrap: 'wrap' }}
-                                        style={styles.dropdownStyle}
-                                        itemStyle={{
-                                            justifyContent: 'flex-start',
-                                        }}
-                                        // placeholder="Select Leave"
-                                        onChangeItem={item => { setPriority(item.value) }}
+                                        labelField="label"
+                                        valueField="value"
+                                        maxHeight={160}
+                                        style={[styles.dropdownStyle, { width: '40%' }]}
+                                        onChange={item => { setPriority(item.value) }}
                                     />
                                 </View>
                                 :
@@ -244,18 +239,16 @@ function ShowPopup({ navigation, modalVisible, setModalVisible, stageDetails, ua
                             user_detail.rolecode == "ITMGR1" && currentIssue.IssueType != "Epic" ?
                                 <View style={{ flexDirection: 'row', margin: '2%' }}>
                                     <Text style={styles.labelStyle}>Assigned To:</Text>
-                                    <DropDownPicker
-                                        defaultValue={currentIssue.length != 0 ? currentIssue.AssignedTo : null}
-                                        items={Assetoptions}
+                                    <Dropdown
+                                        value={currentIssue.length != 0 ? currentIssue.AssignedTo : null}
+                                        data={Assetoptions}
                                         // value={leaveCodeId}
-                                        containerStyle={{ height: 40, width: '45%' }}
-                                        labelStyle={{ color: 'black', flexWrap: 'wrap' }}
-                                        style={styles.dropdownStyle}
-                                        itemStyle={{
-                                            justifyContent: 'flex-start',
-                                        }}
+                                        labelField="label"
+                                        valueField="value"
+                                        style={[styles.dropdownStyle, { width: '40%' }]}
+                                        maxHeight={160}
                                         placeholder="Select Assigned To"
-                                        onChangeItem={item => {
+                                        onChange={item => {
                                             setAssignedData(item)
                                         }}
                                     />
@@ -267,19 +260,15 @@ function ShowPopup({ navigation, modalVisible, setModalVisible, stageDetails, ua
                             currentIssue.IssueType != "Epic" && uatDropdown.length != 0 ?
                                 <View style={{ flexDirection: 'row', margin: '2%' }}>
                                     <Text style={styles.labelStyle}>Assigned To UAT:</Text>
-                                    <DropDownPicker
-                                        defaultValue={currentIssue.length != 0 ? currentIssue.AssignedToUAT : null}
-                                        items={UatOptions}
-                                        // value={leaveCodeId}
-                                        containerStyle={{ height: 40, width: '45%' }}
-                                        // dropDownMaxHeight={150}
-                                        labelStyle={{ color: 'black', flexWrap: 'wrap' }}
-                                        style={styles.dropdownStyle}
-                                        itemStyle={{
-                                            justifyContent: 'flex-start',
-                                        }}
+                                    <Dropdown
+                                        value={currentIssue.length != 0 ? currentIssue.AssignedToUAT : null}
+                                        data={UatOptions}
+                                        labelField="label"
+                                        valueField="value"
+                                        style={[styles.dropdownStyle, { width: '40%' }]}
+                                        maxHeight={160}
                                         placeholder="Select Tester"
-                                        onChangeItem={item => setUatData(item)}
+                                        onChange={item => setUatData(item)}
                                     />
                                 </View>
                                 :

@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { View, Text, Button, ScrollView, TextInput, Alert, Modal } from 'react-native'
 import HeaderView from '../../HeaderView'
 import styles from '../../../css/KanbanBoardStyle';
-import DropDownPicker from 'react-native-dropdown-picker';
+import { Dropdown } from "react-native-element-dropdown";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment'
 import axios from '../../../axios'
@@ -153,19 +153,16 @@ function KanbanBoard({ navigation }) {
                     {
                         projectDetails.length != 0 ?
 
-                            <DropDownPicker
-                                defaultValue={projectCode}
-                                items={ProjectOption}
+                            <Dropdown
+                                value={projectCode}
+                                labelField="label"
+                                valueField="value"
+                                data={ProjectOption}
                                 // value={stageLabel}
-                                containerStyle={{ height: 40, width: '36%' }}
-                                labelStyle={{ color: 'black', flexWrap: 'wrap' }}
-                                style={styles.dropdownStyle}
-                                itemStyle={{
-                                    justifyContent: 'flex-start',
-                                    // height: 5
-                                }}
+                                style={[styles.dropdownStyle, { width: '36%' }]}
                                 placeholder="Select Project"
-                                onChangeItem={(item) => {
+                                maxHeight={160}
+                                onChange={(item) => {
                                     // setStageLabel(item.value)
                                     // setStageData(item)
                                     handleProject(item)
@@ -176,36 +173,30 @@ function KanbanBoard({ navigation }) {
                     }
                     {
                         user_detail.rolecode == "ITMGR1" ?
-                            <DropDownPicker
-                                items={Assetoptions}
-                                // value={leaveCodeId}
-                                containerStyle={{ height: 40, width: '45%', alignContent: 'flex-end' }}
-                                labelStyle={{ color: 'black', flexWrap: 'wrap' }}
-                                style={styles.dropdownStyle}
-                                itemStyle={{
-                                    justifyContent: 'flex-start',
-                                    // overflow: 'visible'
-                                }}
+                            <Dropdown
+                                data={Assetoptions}
+                                value={employeeFilter}
+                                labelField="label"
+                                valueField="value"
+                                style={[styles.dropdownStyle, { width: '36%' }]}
                                 placeholder="Select Employee"
-                                onChangeItem={item => {
+                                maxHeight={160}
+                                onChange={item => {
                                     setEmployeeFilter(item.value)
                                 }}
                             />
                             :
                             null
                     }
-                    <DropDownPicker
-                        items={PriorityOption}
-                        // value={leaveCodeId}
-                        containerStyle={{ height: 40, width: '45%', alignContent: 'flex-end' }}
-                        labelStyle={{ color: 'black', flexWrap: 'wrap' }}
-                        style={styles.dropdownStyle}
-                        itemStyle={{
-                            justifyContent: 'flex-start',
-                            // overflow: 'visible'
-                        }}
+                    <Dropdown
+                        data={PriorityOption}
+                        value={priority}
+                        labelField="label"
+                        valueField="value"
+                        style={[styles.dropdownStyle, { width: '36%' }]}
                         placeholder="Choose Priority"
-                        onChangeItem={item => {
+                        maxHeight={160}
+                        onChange={item => {
                             setPriority(item.value)
                         }}
                     />

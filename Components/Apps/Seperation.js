@@ -21,7 +21,7 @@ import { Menu, MenuItem } from 'react-native-material-menu'
 import StoreContext from '../../store/StoreContext';
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import HeaderView from '../HeaderView';
-import DropDownPicker from 'react-native-dropdown-picker';
+import { Dropdown } from "react-native-element-dropdown";
 import styles from '../../css/SeperationStyle'
 import moment from "moment"
 
@@ -214,15 +214,15 @@ function Seperation({ navigation }) {
                         <>
                             <Text style={
                                 seperationDetails.length != 0 && seperationDetails[0].IsFullyApproved == null && finalDate < 0 ? styles.disableLabel : styles.dayLabel}>Reason :</Text>
-                            <DropDownPicker
+                            <Dropdown
+                                labelField="label"
+                                valueField="value"
                                 disabled={seperationDetails.length != 0 && seperationDetails[0].IsFullyApproved == null && finalDate < 0}
-                                items={ReasonOptions}
-                                containerStyle={{ height: 40, width: '100%' }}
-                                labelStyle={{ color: 'black', flexWrap: 'wrap' }}
-                                style={seperationDetails.length != 0 && seperationDetails[0].IsFullyApproved == null && finalDate < 0 ? styles.disableDropdown : styles.dropdownStyle}
-                                itemStyle={{ justifyContent: 'flex-start', }}
+                                data={ReasonOptions}
+                                style={seperationDetails.length != 0 && seperationDetails[0].IsFullyApproved == null && finalDate < 0 ? styles.disableDropdown : styles.dropdown}
                                 placeholder="Select Reason"
-                                onChangeItem={item => { ReasonData(item) }}
+                                maxHeight={160}
+                                onChange={item => { ReasonData(item) }}
                             />
 
                             <Text style={styles.dayLabel}>Remarks :</Text>
