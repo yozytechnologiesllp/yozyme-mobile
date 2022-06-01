@@ -8,7 +8,7 @@ function MyData({ navigation }) {
             <HeaderView />
             <View>
                 <Text onPress={() => {
-                    // navigation.navigate('MyAssets')
+                    navigation.navigate('MyAssets')
                 }}>My Assets</Text>
                 <Text onPress={() => { navigation.navigate('MySkills') }}>My Skills</Text>
             </View>
