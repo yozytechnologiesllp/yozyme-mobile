@@ -177,6 +177,7 @@ function checkuserid(id){
    if(k==undefined){
      alert('enter valid user id')
    }
+   return k
 }
 
  
@@ -344,111 +345,249 @@ let assetfilter=userassettype.filter(x=>{
   
 function postreq(){
 
+  if(assetfilter[0]!==undefined&&reasoncode.value == 1102||assetfilter[0]!==undefined&&reasoncode.value == 1103){
 
-if(whois&&reasoncode&&dropdownitem&&message){
+    if(whois&&reasoncode&&dropdownitem&&message){
 
-  let t=userdata.find(data=>data.EmpId==parseInt(thuserid))
-  console.log(t,'tttttttttttt')
-  const User_requestData = {
-    RequestType: "ASR",
-    RequestedBy: parseInt(employee_Data.EmpId),
-    ProjectId: 300001,
-    AssignedGroup: "ITSM",
-    AssignedTo: 600001,
-    DepartmentCode: null,
-    SubmittedDate: moment().format("yyyy-MM-DD"),
-    ReasonCode: reasoncode.value ,
-    ItemType: dropdownitem.value,
-    UserJustification: message,
-    NewAssignee: reasoncode.value == 1102 ? parseInt(thuserid) : null,
-    ExpectedDate: fromDate,
-    IsRequireApproval: null,
-    ApprovalLevel1: 100005,
-    Level1ApprovedDate: null,
-    ApprovalLevel1Remarks: null,
-    IsApprovedByLevel1: null,
-    ApprovalLevel2: 600001,
-    Level2ApprovedDate: null,
-    ApprovalLevel2Remarks: null,
-    IsApprovedByLevel2: null,
-    IsFullyApproved: null,
-    IsOnhold: null,
-    IsWithdrawn: null,
-    WithdrawnDate: null,
-    WithdrawnRemarks: null,
-    Attachments: null,
-    FulfillmentReference: null,
-    IsRequestFulfilled: null,
-    UpdateNotes: null,
-    IsActive: null,
-    Status: null,
-    UpdateNotes: [
-      {
-        NoteSno: null,
-        DateTime: null,
-        NoteUpdatedBy: null,
-        NoteUpdatedByFN: null,
-        NotesDetails: null,
-      },
-    ],
+      let t=userdata.find(data=>data.EmpId==parseInt(thuserid))
+      console.log(t,'tttttttttttt')
+      const User_requestData = {
+        RequestType: "ASR",
+        RequestedBy: parseInt(employee_Data.EmpId),
+        ProjectId: 300001,
+        AssignedGroup: "ITSM",
+        AssignedTo: 600001,
+        DepartmentCode: null,
+        SubmittedDate: moment().format("yyyy-MM-DD"),
+        ReasonCode: reasoncode.value ,
+        ItemType: dropdownitem.value,
+        UserJustification: message,
+        NewAssignee: reasoncode.value == 1102 ? parseInt(thuserid) : null,
+        ExpectedDate: fromDate,
+        IsRequireApproval: null,
+        ApprovalLevel1: 100005,
+        Level1ApprovedDate: null,
+        ApprovalLevel1Remarks: null,
+        IsApprovedByLevel1: null,
+        ApprovalLevel2: 600001,
+        Level2ApprovedDate: null,
+        ApprovalLevel2Remarks: null,
+        IsApprovedByLevel2: null,
+        IsFullyApproved: null,
+        IsOnhold: null,
+        IsWithdrawn: null,
+        WithdrawnDate: null,
+        WithdrawnRemarks: null,
+        Attachments: null,
+        FulfillmentReference: null,
+        IsRequestFulfilled: null,
+        UpdateNotes: null,
+        IsActive: null,
+        Status: null,
+        UpdateNotes: [
+          {
+            NoteSno: null,
+            DateTime: null,
+            NoteUpdatedBy: null,
+            NoteUpdatedByFN: null,
+            NotesDetails: null,
+          },
+        ],
+            
+      
+        ReferenceDetails: {
+          AssetType: reasoncode.value !== 1101 ? assetfilter[0].assettype : null,
+          AssetId: reasoncode.value !== 1101 ? assetfilter[0].assetid : null,
+          AssetSerial: reasoncode.value !== 1101 ? assetfilter[0].serialnumber: null,
+        },
+        NewAssigneeDetails: {
+          EmpName:reasoncode.value == 1102? t.Firstname +' '+t.Lastname : null,
+          EmpLevel: reasoncode.value == 1102? userlevel : null,
+          EmpDesig:reasoncode.value == 1102 ?userposition  : null,
+        },
+        IsSelfRequest:who,
+        RaisingOnBehalfDetails:
+          who === "N" ? parseInt(otheruserid) : null,
+        IsAcknowledged: null,
+        SentForVerification: null,
+        IsReworkRequired: null,
+      };
+      
+      let notificationData = {
+        CreatedDate: moment().utcOffset("+05:30").format("YYYY-MM-DDTHH:mm:ss"),
+        CreatedBy: employee_Data.EmpId,
+        NotifyTo: 500001,
+        AudienceType: "Individual",
+        Priority: "High",
+        Subject: "Request for Asset",
+        Description: "Requested for Asset by  " + employee_Data.EmpId,
+        IsSeen: "N",
+        Status: "New",
+      };
+      
+      // console.log(User_requestData,'postdata');
+      
+      
+      axios
+      .post(`itrequest_details?RequestedBy=eq.${employee_Data.EmpId}`, User_requestData)
+      .then((res) => {
+        alert("Asset Request Submitted");
+        console.log(User_requestData);
         
-  
-    ReferenceDetails: {
-      AssetType: reasoncode.value !== 1101 ? assetfilter[0].assettype : null,
-      AssetId: reasoncode.value !== 1101 ? assetfilter[0].assetid : null,
-      AssetSerial: reasoncode.value !== 1101 ? assetfilter[0].serialnumber: null,
-    },
-    NewAssigneeDetails: {
-      EmpName:reasoncode.value == 1102? t.Firstname +' '+t.Lastname : null,
-      EmpLevel: reasoncode.value == 1102? userlevel : null,
-      EmpDesig:reasoncode.value == 1102 ?userposition  : null,
-    },
-    IsSelfRequest:who,
-    RaisingOnBehalfDetails:
-      who === "N" ? parseInt(otheruserid) : null,
-    IsAcknowledged: null,
-    SentForVerification: null,
-    IsReworkRequired: null,
-  };
-  
-  let notificationData = {
-    CreatedDate: moment().utcOffset("+05:30").format("YYYY-MM-DDTHH:mm:ss"),
-    CreatedBy: employee_Data.EmpId,
-    NotifyTo: 500001,
-    AudienceType: "Individual",
-    Priority: "High",
-    Subject: "Request for Asset",
-    Description: "Requested for Asset by  " + employee_Data.EmpId,
-    IsSeen: "N",
-    Status: "New",
-  };
-  
-  // console.log(User_requestData,'postdata');
-  
-  
-  axios
-  .post(`itrequest_details?RequestedBy=eq.${employee_Data.EmpId}`, User_requestData)
-  .then((res) => {
-    alert("Asset Request Submitted");
-    console.log(User_requestData);
-    
-  })
-  .then((res) => {
-    axios
-      .post("notification?NotifyTo=eq." + 500001, notificationData)
-      .then((res) => console.log(res))
-      .catch((error) => console.log(error));
-  })
-  .catch((e) => console.log(e));
-  
+      })
+      .then((res) => {
+        axios
+          .post("notification?NotifyTo=eq." + 500001, notificationData)
+          .then((res) => console.log(res))
+          .catch((error) => console.log(error));
+      })
+      .catch((e) => console.log(e));
+
+
+      reeset()
+      
+      }else{
+        alert('please fill the fields')
+      }
+
+  }else if(assetfilter[0]==undefined&&reasoncode.value == 1102){
+    alert('this user have no asset to transfer')
+  }else if(assetfilter[0]==undefined&&reasoncode.value == 1103){
+
+    alert('this user have no asset to replace')
   }else{
-    alert('please fill the fields')
+
+
+    if(whois&&reasoncode&&dropdownitem&&message){
+
+      let t=userdata.find(data=>data.EmpId==parseInt(thuserid))
+      console.log(t,'tttttttttttt')
+      const User_requestData = {
+        RequestType: "ASR",
+        RequestedBy: parseInt(employee_Data.EmpId),
+        ProjectId: 300001,
+        AssignedGroup: "ITSM",
+        AssignedTo: 600001,
+        DepartmentCode: null,
+        SubmittedDate: moment().format("yyyy-MM-DD"),
+        ReasonCode: reasoncode.value ,
+        ItemType: dropdownitem.value,
+        UserJustification: message,
+        NewAssignee: reasoncode.value == 1102 ? parseInt(thuserid) : null,
+        ExpectedDate: fromDate,
+        IsRequireApproval: null,
+        ApprovalLevel1: 100005,
+        Level1ApprovedDate: null,
+        ApprovalLevel1Remarks: null,
+        IsApprovedByLevel1: null,
+        ApprovalLevel2: 600001,
+        Level2ApprovedDate: null,
+        ApprovalLevel2Remarks: null,
+        IsApprovedByLevel2: null,
+        IsFullyApproved: null,
+        IsOnhold: null,
+        IsWithdrawn: null,
+        WithdrawnDate: null,
+        WithdrawnRemarks: null,
+        Attachments: null,
+        FulfillmentReference: null,
+        IsRequestFulfilled: null,
+        UpdateNotes: null,
+        IsActive: null,
+        Status: null,
+        UpdateNotes: [
+          {
+            NoteSno: null,
+            DateTime: null,
+            NoteUpdatedBy: null,
+            NoteUpdatedByFN: null,
+            NotesDetails: null,
+          },
+        ],
+            
+      
+        ReferenceDetails: {
+          AssetType: reasoncode.value !== 1101 ? assetfilter[0].assettype : null,
+          AssetId: reasoncode.value !== 1101 ? assetfilter[0].assetid : null,
+          AssetSerial: reasoncode.value !== 1101 ? assetfilter[0].serialnumber: null,
+        },
+        NewAssigneeDetails: {
+          EmpName:reasoncode.value == 1102? t.Firstname +' '+t.Lastname : null,
+          EmpLevel: reasoncode.value == 1102? userlevel : null,
+          EmpDesig:reasoncode.value == 1102 ?userposition  : null,
+        },
+        IsSelfRequest:who,
+        RaisingOnBehalfDetails:
+          who === "N" ? parseInt(otheruserid) : null,
+        IsAcknowledged: null,
+        SentForVerification: null,
+        IsReworkRequired: null,
+      };
+      
+      let notificationData = {
+        CreatedDate: moment().utcOffset("+05:30").format("YYYY-MM-DDTHH:mm:ss"),
+        CreatedBy: employee_Data.EmpId,
+        NotifyTo: 500001,
+        AudienceType: "Individual",
+        Priority: "High",
+        Subject: "Request for Asset",
+        Description: "Requested for Asset by  " + employee_Data.EmpId,
+        IsSeen: "N",
+        Status: "New",
+      };
+      
+      // console.log(User_requestData,'postdata');
+      
+      
+      axios
+      .post(`itrequest_details?RequestedBy=eq.${employee_Data.EmpId}`, User_requestData)
+      .then((res) => {
+        alert("Asset Request Submitted");
+        console.log(User_requestData);
+        
+      })
+      .then((res) => {
+        axios
+          .post("notification?NotifyTo=eq." + 500001, notificationData)
+          .then((res) => console.log(res))
+          .catch((error) => console.log(error));
+      })
+      .catch((e) => console.log(e));
+
+
+      reeset()
+      
+      }else{
+        alert('please fill the fields')
+      }
+
+
+    
   }
 
 
 
 
 
+
+
+}
+
+
+
+function reeset(){
+
+
+  setwhois("");
+  Setmessage(' ');
+  Setotheruserid('');
+ setdropdownitem('');
+  setreasoncode('');
+  Setsearch(false);
+  Setsearch2(false);
+  Setthuserid('');
+  Setotheruser(false);
+  Setthuser(false);
 }
 
 
@@ -688,21 +827,48 @@ maxHeight={160}
           <View style={styles.containerbutton}>
            <Text style={styles.btns} onPress={()=>{
 
+             
+            
+             if(whois.value=='Someone'&& reasoncode.value == 1102){
+
+              let check1= checkuserid(otheruserid);
+              let check2= checkuserid(thuserid);
+
+              if(check1===undefined&&check2==undefined){
+                alert('check the employee id')
+              }else{
+                postreq();
+              }
+
+             }else if(whois.value=='Someone'){
+               if(otheruserid==undefined){
+                 alert('enter employee id ')
+               }else{
+                let check= checkuserid(otheruserid);
+                if(check == undefined){
+  
+                }else{
+                  postreq();
+                }
+               }
+             
+             }else if(reasoncode.value == 1102){
+              let check= checkuserid(thuserid);
+              if(check == undefined){
+
+              }else{
+                postreq();
+              }
+             }else{
               postreq();
+             }
+
+    
             
            }}>submit</Text>
            <Text style={styles.btnr}  onPress={()=>{
            
-          setwhois("");
-          Setmessage(' ');
-          Setotheruserid('');
-         setdropdownitem('');
-          setreasoncode('');
-          Setsearch(false);
-          Setsearch2(false);
-          Setthuserid('');
-          Setotheruser(false);
-          Setthuser(false);
+        reeset()
 
            }}>Reset</Text>
            </View>
