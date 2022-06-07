@@ -6,7 +6,11 @@ function ItServices({ navigation }) {
     return (
         <>
             <HeaderView />
-            <Text onPress={() => { navigation.navigate('AssetRequest') }}>ItServices</Text>
+            
+            {/* AssetRequest */}
+            <Text onPress={() => { navigation.navigate('AssetRequest') }}>Asset Request</Text>
+            <Text onPress={() => { navigation.navigate('AcessRequest') }}>acess request</Text>
+
         </>
     )
 }

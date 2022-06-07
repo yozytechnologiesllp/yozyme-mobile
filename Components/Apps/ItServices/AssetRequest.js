@@ -452,7 +452,7 @@ function postreq(){
 
   }else if(assetfilter[0]==undefined&&reasoncode.value == 1102){
     alert('this user have no asset to transfer')
-  }else if(assetfilter[0]==undefined&&reasoncode.value == 1103){
+  }else if(assetfilter[0]!==undefined&&reasoncode.value == 1103){
 
     alert('this user have no asset to replace')
   }else{

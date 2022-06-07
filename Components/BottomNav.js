@@ -31,7 +31,7 @@ import ItServices from './Apps/ItServices/ItServices';
 import AssetRequest from './Apps/ItServices/AssetRequest';
 import MySkills from './Apps/MySkills';
 import MyData from './Apps/MyData';
-
+import AcessRequest from './Apps/ItServices/AcessRequest';
 
 function AppsFunc({ route }) {
 
@@ -117,6 +117,11 @@ function AppsFunc({ route }) {
         <NavStack.Screen
           name="AssetRequest"
           component={AssetRequest}
+          options={{ headerShown: false }}
+        />
+        <NavStack.Screen
+          name="AcessRequest"
+          component={AcessRequest}
           options={{ headerShown: false }}
         />
         <NavStack.Screen
