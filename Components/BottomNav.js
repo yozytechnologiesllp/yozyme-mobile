@@ -32,7 +32,7 @@ import AssetRequest from './Apps/ItServices/AssetRequest';
 import MySkills from './Apps/MySkills';
 import MyData from './Apps/MyData';
 import AcessRequest from './Apps/ItServices/AcessRequest';
-
+import GenericRequest from './Apps/ItServices/GenericRequest';
 function AppsFunc({ route }) {
 
   const NavStack = createStackNavigator();
@@ -122,6 +122,11 @@ function AppsFunc({ route }) {
         <NavStack.Screen
           name="AcessRequest"
           component={AcessRequest}
+          options={{ headerShown: false }}
+        />
+        <NavStack.Screen
+          name="GenericRequest"
+          component={GenericRequest}
           options={{ headerShown: false }}
         />
         <NavStack.Screen
