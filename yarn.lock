@@ -6174,10 +6174,10 @@
   "resolved" "https://registry.npmjs.org/react-native-easy-rating/-/react-native-easy-rating-0.2.1.tgz"
   "version" "0.2.1"
 
-"react-native-element-dropdown@^1.8.11":
-  "integrity" "sha512-7IdQr/XP/t8ErAk5XU2yE8evB5EbYgLhhLafbGMeJEMb3LjRYQDYkm/fr/IhWI0SHgnneEUzj49PhUK/XpcOAA=="
-  "resolved" "https://registry.npmjs.org/react-native-element-dropdown/-/react-native-element-dropdown-1.8.11.tgz"
-  "version" "1.8.11"
+"react-native-element-dropdown@^1.8.12":
+  "integrity" "sha512-tADlqE9YK08t9d+wgT9Zfvlt3xjqGMv3qgDkbyqfz3TUy8y1R9itPrhiZmH2zVs3b7utfQmpzDGvl1V5mvtKjA=="
+  "resolved" "https://registry.npmjs.org/react-native-element-dropdown/-/react-native-element-dropdown-1.8.12.tgz"
+  "version" "1.8.12"
   dependencies:
     "lodash" "*"
 

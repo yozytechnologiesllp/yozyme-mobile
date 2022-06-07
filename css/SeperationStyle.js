@@ -217,6 +217,16 @@ export default StyleSheet.create({
 
 
     },
+    heading: {
+        fontWeight: 'bold',
+        fontSize: 20,
+        textAlign: 'center',
+        backgroundColor: '#007FFF',
+        color: 'white',
+        padding: '3%',
+        margin: '5%',
+        marginTop: '5%',
+    },
     submitView: {
         marginTop: '2%',
         alignItems: 'center'
