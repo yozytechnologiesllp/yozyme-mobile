@@ -46,6 +46,8 @@ function HeaderView({ navigation }) {
             {/* <Ionicons name="ios-notifications" color="darkblue" size={33} style={styles.notificationStyle} onPress={() => { navigation.navigate('Notification') }} /> */}
             <View style={styles.headerText}>
                 <Text style={{ color: 'darkblue', fontWeight: 'bold' }}>{employee_Data.Firstname}</Text>
+                                {/* <Text style={{ color: 'darkblue', fontWeight: 'bold' }}>{'James'}</Text> */}
+
                 <Text style={{ color: 'darkblue', fontWeight: 'bold' }}>{employee_Data.EmpId}</Text>
             </View>
             <Menu

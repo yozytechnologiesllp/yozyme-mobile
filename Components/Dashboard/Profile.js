@@ -94,11 +94,14 @@ function Profile({ }) {
                             <Avatar.Image size={150} source={require('../../images/download.png')} /></Text>
                 }
                 <Text style={styles.titleStyle}>{employee_Data.Firstname + " " + employee_Data.Lastname + " ( " + user_detail.empid + " ) "}</Text>
+                              {/* <Text style={styles.titleStyle}>{'James'}</Text> */}
                 <Text style={styles.titleStyle}>{user_detail.designation}</Text>
                 {/* <Text onPress={() => selectFile}>Edit</Text>
                 <Text>Update</Text> */}
                 <View>
                     <View style={styles.viewStyle}><Feather size={20} name="mail" style={styles.iconStyle} color="darkblue" /><Text style={styles.textStyle}>{employee_Data.PersonalMail}</Text></View>
+                    {/* <View style={styles.viewStyle}><Feather size={20} name="mail" style={styles.iconStyle} color="darkblue" /><Text style={styles.textStyle}>{'james@yahoo.co.in'}</Text></View> */}
+
                     <View style={styles.viewStyle}><FontAwesome5 size={20} name="phone-alt" style={styles.iconStyle} color="darkblue" /><Text style={styles.textStyle}>{employee_Data.PhoneNumber}</Text></View>
                     <View style={styles.viewStyle}><FontAwesome5 size={20} name="birthday-cake" style={styles.iconStyle} color="darkblue" /><Text style={styles.textStyle}>{moment(employee_Data.DOB).format("DD MMM YYYY")}</Text></View>
                     <View style={styles.viewStyle}><FontAwesome5 size={20} name="calendar-check" style={styles.iconStyle} color="darkblue" /><Text style={styles.textStyle}>{moment(employee_Data.DOJ).format("DD MMM YYYY")}</Text></View>

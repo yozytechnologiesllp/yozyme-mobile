@@ -13,8 +13,7 @@ import {DataTable} from 'react-native-paper';
 function AcessRequest({navigation}) {
   const [whois, setwhois] = useState('');
   const [who, setwho] = useState('');
-  const {employee_Data, user_detail, employee_Image, tokenData} =
-    useContext(StoreContext);
+  const {employee_Data, user_detail, employee_Image, tokenData} = useContext(StoreContext);
   const [valid, setvalid] = React.useState(false);
 
   const [otheruser, Setotheruser] = React.useState(false);
