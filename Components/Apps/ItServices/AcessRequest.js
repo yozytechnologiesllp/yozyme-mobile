@@ -406,7 +406,7 @@ function AcessRequest({navigation}) {
 
                   checkuserid(otheruserid);
                 }}>
-                get info
+                Fetch
               </Text>
             </View>
 

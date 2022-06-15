@@ -451,7 +451,7 @@ alert('submited')
 
                   checkuserid(otheruserid);
                 }}>
-                get info
+                Fetch
               </Text>
             </View>
 

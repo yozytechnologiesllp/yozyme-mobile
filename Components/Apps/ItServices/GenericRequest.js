@@ -345,7 +345,7 @@ function reset(){
 
                   checkuserid(otheruserid);
                 }}>
-                get info
+                Fetch
               </Text>
             </View>
 

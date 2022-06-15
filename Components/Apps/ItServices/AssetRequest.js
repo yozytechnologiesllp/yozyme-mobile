@@ -660,7 +660,7 @@ function reeset(){
             data();
             checkuserid(otheruserid);
 
-        }}>get info</Text>
+        }}>Fetch</Text>
         </View>
     
     {search?<Empcard userdata={userdata} userid={otheruserid}/>
@@ -747,7 +747,7 @@ function reeset(){
 
 
             
-        }}>get info</Text>
+        }}>Fetch</Text>
         </View>
     
     {search2?<Empcard userdata={userdata} userid={thuserid}/>
