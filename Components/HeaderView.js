@@ -48,11 +48,15 @@ function HeaderView({ navigation }) {
                 <Text style={{ color: 'darkblue', fontWeight: 'bold' }}>{employee_Data.Firstname}</Text>
                                 {/* <Text style={{ color: 'darkblue', fontWeight: 'bold' }}>{'James'}</Text> */}
 
+
+                {/* <Text style={{ color: 'darkblue', fontWeight: 'bold' }}>{700032}</Text> */}
                 <Text style={{ color: 'darkblue', fontWeight: 'bold' }}>{employee_Data.EmpId}</Text>
+
             </View>
             <Menu
                 visible={visible}
                 anchor={<Text onPress={showMenu}><Avatar.Image size={40} source={{ uri: employee_Image }} /></Text>}
+                            //    anchor={<Text onPress={showMenu}><Avatar.Image size={40} source={{ uri: 'https://cdn.pixabay.com/photo/2017/11/02/14/27/model-2911332_1280.jpg' }} /></Text>}
                 onRequestClose={hideMenu}
             >
                 <MenuItem onPress={logout}>Logout</MenuItem>

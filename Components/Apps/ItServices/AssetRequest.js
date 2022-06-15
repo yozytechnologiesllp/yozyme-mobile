@@ -633,6 +633,7 @@ function reeset(){
           onChangeText={value =>{
             Setotheruserid(value)
             Setsearch(false)
+   
             
 
           }
@@ -641,8 +642,11 @@ function reeset(){
         value={otheruserid}
          keyboardType="numeric"
 
-        // onPressOut={()=>{
-        //   Sethidenav(false)
+        // onPressIn={()=>{
+        //   Setsearch(true);
+        //   getdataasset();
+        //   data();
+        //   checkuserid(otheruserid);
           
         // }}
         
@@ -680,7 +684,18 @@ function reeset(){
                 
                    
                     placeholder="Select"
-                    onChange={item => reasonchange(item)}
+                    onChange={item =>{
+                      reasonchange(item)
+                    
+                      if(otheruser==true){
+                        Setsearch(true);
+                      getdataasset();
+                      data();
+                      checkuserid(otheruserid)
+                     
+                       }
+                    } 
+                    }
                     value={reasoncode.value}
                     labelField='label'
                     valueField='value'
@@ -766,7 +781,20 @@ onChange={item =>{
   setdropdownitem(item);
   
   assetchange(dropdownitem)
-
+if(thuser==true){
+  Setsearch2(true);
+  getdataasset();
+  data();
+  checkuserid(thuserid);
+  axios.get(`rpc/fun_empdesignation?empid=${thuserid}&select=designation,emplevel`)
+  .then((res) => {
+    console.log('hhhhhhhhhhhhhhh',res.data)
+    Setuserposition(res.data[0].designation);
+    Setuserlevel(res.data[0].emplevel)
+  }).catch(e=>{
+    console.log(e,'position errorrrrrrrrrrrrrrrrrrrr')
+  })
+}
   
 } 
 
@@ -827,7 +855,8 @@ maxHeight={160}
           <View style={styles.containerbutton}>
            <Text style={styles.btns} onPress={()=>{
 
-             
+           
+        
             
              if(whois.value=='Someone'&& reasoncode.value == 1102){
 
@@ -841,6 +870,7 @@ maxHeight={160}
               }
 
              }else if(whois.value=='Someone'){
+           
                if(otheruserid==undefined){
                  alert('enter employee id ')
                }else{

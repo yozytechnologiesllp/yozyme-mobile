@@ -193,7 +193,7 @@ function KanbanBoard({ navigation }) {
                         value={priority}
                         labelField="label"
                         valueField="value"
-                        style={[styles.dropdownStyle, { width: '36%' }]}
+                        style={[styles.dropdownStyle, { width: '50%' ,marginLeft:5}]}
                         placeholder="Choose Priority"
                         maxHeight={160}
                         onChange={item => {

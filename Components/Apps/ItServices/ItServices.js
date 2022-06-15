@@ -88,8 +88,8 @@ const styles=StyleSheet.create({
             <View style={styles.tabdiv}><Text style={styles.tabf}  onPress={()=>{setselected(false)}}>Request Something</Text><Text   onPress={()=>{setselected(true)}}style={styles.tabs}>Raise an Incident</Text></View>
             <View style={[styles.buttoncontainer]}>
                 {!selected?<><Text style={[styles.heading,styles.elevation]} onPress={() => { navigation.navigate('AssetRequest') }}>Asset Request</Text>
-            <Text style={[styles.heading,styles.elevation]} onPress={() => { navigation.navigate('AcessRequest') }}>Acess request</Text>
-            <Text style={[styles.heading,styles.elevation]} onPress={() => { navigation.navigate('GenericRequest') }}>Generic request</Text></>:<Text style={[styles.heading,styles.elevation]} onPress={() => {  }}>Raise an Incident</Text>}
+            <Text style={[styles.heading,styles.elevation]} onPress={() => { navigation.navigate('AcessRequest') }}>Access request</Text>
+            <Text style={[styles.heading,styles.elevation]} onPress={() => { navigation.navigate('GenericRequest') }}>Generic request</Text></>:<Text style={[styles.heading,styles.elevation]} onPress={() => { navigation.navigate('Raiseanincident') }}>Raise an Incident</Text>}
             
             
 

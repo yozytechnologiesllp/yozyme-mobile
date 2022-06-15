@@ -727,7 +727,7 @@ function AcessRequest({navigation}) {
           onPress={() => {
             if (carddaata.length != 0) {
               submit();
-              alert('submited');
+              alert('sucessfully submitted');
             } else {
               alert('there is no request to submit');
             }
@@ -738,7 +738,7 @@ function AcessRequest({navigation}) {
           style={styles.btnr}
           onPress={() => {
             reset();
-            alert('reseted sucessfully');
+            alert('sucessfully reset');
           }}>
           Reset
         </Text>
