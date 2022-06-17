@@ -187,11 +187,11 @@ function sub(){
         return x.IncidentId;
       })
       
-      let iid=Math.max(...ids)
+      let iid=Math.max(...ids)+Math.floor(Math.random() * 100)
 
   let postdata = {
     "CreatedBy": employee_Data.EmpId,
-    "IncidentId": iid+1,
+    "IncidentId": iid,
     "CreatedByDetails": {
         "FN": employee_Data.Firstname,
         "LN": employee_Data.Lastname
@@ -249,7 +249,7 @@ function sub(){
     "RaisingOnBehalfDetails": whois.label == "Someone" ? otheruserid : null
 }
 let patchdatai = {
-    "IncidentId": iid+1,
+    "IncidentId": iid,
     "IncidentPriority": priority.label,
     "IsSLAApplicable": "Y",
     "IsSLAHolidayApplicable": "N"
