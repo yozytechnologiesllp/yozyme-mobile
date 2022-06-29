@@ -34,6 +34,7 @@ import MyData from './Apps/MyData';
 import AcessRequest from './Apps/ItServices/AcessRequest';
 import GenericRequest from './Apps/ItServices/GenericRequest';
 import Raiseanincident from './Apps/ItServices/Raiseanincident'
+import Userdetail from './Userdetail';
 function AppsFunc({ route }) {
 
   const NavStack = createStackNavigator();
@@ -145,6 +146,32 @@ function AppsFunc({ route }) {
           component={MySkills}
           options={{ headerShown: false }}
         />
+     
+        
+      </NavStack.Navigator>
+    </NavigationContainer>
+  );
+}
+
+
+function profilefun({ route }) {
+
+  const NavStack = createStackNavigator();
+  return (
+    <NavigationContainer independent={true}>
+      <NavStack.Navigator initialRouteName={Profile}>
+        <NavStack.Screen
+          name="Profile"
+          component={Profile}
+          options={{ headerShown: false }}
+        />
+
+        <NavStack.Screen
+          name="Userdetail"
+          component={Userdetail}
+          options={{ headerShown: false }}
+        />
+
       </NavStack.Navigator>
     </NavigationContainer>
   );
@@ -207,7 +234,7 @@ function Tabs({ navigation }) {
       <Tab.Screen name="Apps" component={AppsFunc}
         options={{ headerShown: false }}
       />
-      <Tab.Screen name="Profile" component={Profile}
+      <Tab.Screen name="Profile" component={profilefun}
         options={{ headerShown: false }}
       />
       <Tab.Screen name="Notification" component={Notification}
