@@ -36,7 +36,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 // import axios1 from'axios'
 
 function Userdetail() {
-  const {employee_Image, user_detail, employee_Data, tokenData} =
+  const {employee_Image, user_detail, employee_Data, tokenData,ChangeEmployeeImage} =
     useContext(StoreContext);
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -183,9 +183,10 @@ return formData
       } else {
         console.log(res,'imageresponse')
         function changeimg(){
-          setimgurl('data:image/jpeg;base64,' + res.assets[0].base64)
-          console.log(employee_Image,"new")
-          RNRestart.Restart();
+          ChangeEmployeeImage('data:image/jpeg;base64,' + res.assets[0].base64)
+          // setimgurl('data:image/jpeg;base64,' + res.assets[0].base64)
+         
+          // RNRestart.Restart(); // console.log(employee_Image,"new")
         }
 
         const formData = new FormData();
@@ -195,13 +196,18 @@ return formData
             uri: res.assets[0].path,
         });
         console.log(formData,"formmmm ")
-        changeimg();
+        // changeimg();
         let webApiUrl2 = '/filesystem/EmployeeImage';
 
         axios.post(webApiUrl2,{data:res,EmpId:employee_Data.EmpId}).then(res=>{
 
           
-          console.log(res,'reeeeeeee')
+          console.log(res,'reeetest')
+          if(res.status==200){
+            changeimg();
+          }else{
+            alert("unable to upload image")
+          }
 
         })
 
@@ -390,9 +396,8 @@ return formData
       <View style={styles.userdiv}>
         <Image
           source={
-            imgurl
-              ? {uri: imgurl}
-              : {
+            
+              {
                   uri:
                     employee_Image == ''
                       ? 'https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png'

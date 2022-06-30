@@ -37,9 +37,9 @@ function Profile({ navigation }) {
     const { employee_Image, user_detail,employee_Data ,tokenData} = useContext(StoreContext)
 
 const[profileimg,Setprofileimg]=useState('')
-    console.log(user_detail);
-    console.log(employee_Data);
-    console.log('employee_Image',employee_Image)
+    // console.log(user_detail);
+    // console.log(employee_Data);
+    // console.log('employee_Image',employee_Image)
 
 
     useEffect(()=>{
