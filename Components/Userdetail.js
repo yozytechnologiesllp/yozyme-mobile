@@ -48,6 +48,7 @@ function Userdetail() {
   const [pancard, setpancard] = useState(employee_Data.PAN);
 
   console.log(employee_Data, 'data');
+  console.log(employee_Image, 'dataimg');
   console.log(phno);
   const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
   let regno = /^(\+\d{1,3}[- ]?)?\d{10}$/;
@@ -164,46 +165,51 @@ return formData
 
 }
   const gallery = () => {
-    // let options = {
-    //   StorageOption: {
-    //     path: 'images',
-    //     mediaType: 'photo',
-        
-    //     includeBase64: false,
-    //   },
-     
-    //   selectionLimit:1,
-    // };
-    // launchImageLibrary(options, res => {
-    //   console.log(res, 'response');
-    //   if (res.didCancel) {
-    //     console.log('user cancled');
-    //   } else if (res.error) {
-    //     console.log('picker error');
-    //   } else if (res.customButton) {
-    //     console.log('user pressed custon button');
-    //   } else {
-    //     console.log(res,'imageresponse')
+    let options = {
+      StorageOption: {
+        path: 'images',
+        mediaType: 'photo',
+      },
+      includeBase64: true,
+    };
+    launchImageLibrary(options, res => {
+      console.log(res, 'response');
+      if (res.didCancel) {
+        console.log('user cancled');
+      } else if (res.error) {
+        console.log('picker error');
+      } else if (res.customButton) {
+        console.log('user pressed custon button');
+      } else {
+        console.log(res,'imageresponse')
+        function changeimg(){
+          setimgurl('data:image/jpeg;base64,' + res.assets[0].base64)
+          console.log(employee_Image,"new")
+          RNRestart.Restart();
+        }
 
-    //     const formData = new FormData();
-    //     formData.append("file",{
-    //       name:employee_Data.EmpId,
-    //         type: res.assets[0].type,
-    //         uri: res.assets[0].path,
-    //     });
-    //     console.log(formData,"formmmm ")
+        const formData = new FormData();
+        formData.append("file",{
+          name:employee_Data.EmpId,
+            type: res.assets[0].type,
+            uri: res.assets[0].path,
+        });
+        console.log(formData,"formmmm ")
+        changeimg();
+        let webApiUrl2 = '/filesystem/EmployeeImage';
 
-    //     let webApiUrl2 = 'http://10.0.2.2:2000/filesystem/EmployeeImage';
+        axios.post(webApiUrl2,{data:res,EmpId:employee_Data.EmpId}).then(res=>{
 
-    //     axios1.post(webApiUrl2,formData,{ headers: { "Content-Type": "multipart/form-data" }}).then(res=>{
-    //       console.log(res,'reeeeeeee')
-    //     })
+          
+          console.log(res,'reeeeeeee')
+
+        })
 
 
-    //   }
+      }
     
     
-    // })
+    })
     //     // const source={uri:'data:image/jpeg;base64,'+ res.data}
     //     // const source={uri:res.path}
     //     // setimgurl(res);
@@ -307,28 +313,28 @@ return formData
     // });
 
 
-    ImagePicker.openPicker({
-      width: 300,
-      height: 400,
-      cropping: true
-    }).then(image => {
-      console.log(image);
-   const a=abc(image);
-   console.log(a,"aaaaaaa");
+  //   ImagePicker.openPicker({
+  //     width: 300,
+  //     height: 400,
+  //     cropping: true
+  //   }).then(image => {
+  //     console.log(image);
+  //  const a=abc(image);
+  //  console.log(a,"aaaaaaa");
 
-     let webApiUrl2 = 'http://10.0.2.2:2000/filesystem/EmployeeImage';
+  //    let webApiUrl2 = 'http://10.0.2.2:2000/filesystem/EmployeeImage';
 
-        axios1.post(webApiUrl2,a,{
-          headers: {
+  //       axios1.post(webApiUrl2,a,{
+  //         headers: {
                      
-                    'Content-Type': 'multipart/form-data',
-                    }
-        }
-      ).then(res=>{
-          console.log(res,'reeeeeeee')
-        })
+  //                   'Content-Type': 'multipart/form-data',
+  //                   }
+  //       }
+  //     ).then(res=>{
+  //         console.log(res,'reeeeeeee')
+  //       })
 
-    });
+  //   });
 
 
   };
@@ -384,8 +390,8 @@ return formData
       <View style={styles.userdiv}>
         <Image
           source={
-            imgurl.path
-              ? {uri: imgurl.data}
+            imgurl
+              ? {uri: imgurl}
               : {
                   uri:
                     employee_Image == ''
@@ -405,7 +411,7 @@ return formData
             //  setModalVisible(!modalVisible)
             // alert('pressed')
             // camera()
-            // gallery();
+            gallery();
           }}>
           <AntDesign
             name="edit"
