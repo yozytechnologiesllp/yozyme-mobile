@@ -193,7 +193,7 @@ function Userdetail() {
         });
       
         let webApiUrl2 = '/filesystem/EmployeeImage';
-      if(res.assets[0].fileSize<15000){
+      if(res.assets[0].fileSize<17000){
 try{
           axios.post(webApiUrl2,{data:res,EmpId:employee_Data.EmpId}).then(res=>{
 
