@@ -79,7 +79,7 @@ function Userdetail() {
       adhar.toString().length > 9 &&
       adhar.toString().length < 13
     ) {
-      alert('sucess');
+      alert('submitted');
       // console.log(employee_Data, 'data');
 
       // console.log(phno);
@@ -164,9 +164,9 @@ function Userdetail() {
        
       },
       includeBase64: true,
-      quality:0.5,
-      maxWidth:500,
-      maxHeight:500,
+      quality:1,
+      maxWidth:640,
+      maxHeight:480,
     };
     launchImageLibrary(options, res => {
       console.log(res, 'response');
@@ -193,7 +193,7 @@ function Userdetail() {
         });
       
         let webApiUrl2 = '/filesystem/EmployeeImage';
-      if(res.assets[0].fileSize<17000){
+      if(res.assets[0].fileSize<250000){
 try{
           axios.post(webApiUrl2,{data:res,EmpId:employee_Data.EmpId}).then(res=>{
 
