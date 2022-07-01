@@ -23,7 +23,7 @@ import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import Entypo from 'react-native-vector-icons/Entypo';
 import {Card, List, Avatar} from 'react-native-paper';
 import axios from '../axios';
-import fs from 'react-native-fs'
+// import fs from 'react-native-fs'
 // import styles from '../css/ProfileStyle';
 import RNRestart from 'react-native-restart';
 import {Menu, MenuItem} from 'react-native-material-menu';
@@ -155,22 +155,18 @@ function Userdetail() {
       }
     });
   };
-const abc=(res)=>{
-  const formData = new FormData()
-  formData.append('file',fs.read(res.path)
-  ,employee_Data.EmpId+".jpg")
-return formData
 
-  
-
-}
   const gallery = () => {
     let options = {
       StorageOption: {
         path: 'images',
         mediaType: 'photo',
+       
       },
       includeBase64: true,
+      quality:0.5,
+      maxWidth:500,
+      maxHeight:500,
     };
     launchImageLibrary(options, res => {
       console.log(res, 'response');
@@ -182,11 +178,11 @@ return formData
         console.log('user pressed custon button');
       } else {
         console.log(res,'imageresponse')
+      
+        console.log(res.assets[0].fileSize,"sizeeeeeeeeeee")
         function changeimg(){
           ChangeEmployeeImage('data:image/jpeg;base64,' + res.assets[0].base64)
-          // setimgurl('data:image/jpeg;base64,' + res.assets[0].base64)
-         
-          // RNRestart.Restart(); // console.log(employee_Image,"new")
+          
         }
 
         const formData = new FormData();
@@ -195,167 +191,42 @@ return formData
             type: res.assets[0].type,
             uri: res.assets[0].path,
         });
-        console.log(formData,"formmmm ")
-        // changeimg();
+      
         let webApiUrl2 = '/filesystem/EmployeeImage';
-
-        axios.post(webApiUrl2,{data:res,EmpId:employee_Data.EmpId}).then(res=>{
+      if(res.assets[0].fileSize<15000){
+try{
+          axios.post(webApiUrl2,{data:res,EmpId:employee_Data.EmpId}).then(res=>{
 
           
-          console.log(res,'reeetest')
-          if(res.status==200){
-            changeimg();
-          }else{
-            alert("unable to upload image")
-          }
+            console.log(res,'reeetest')
+          
+            if(res.status==200){
+              changeimg();
+            }else if(res.status==413){
+              alert("image too big")
+            }else{
+              alert("unable to upload image")
+            }
+  
+          })
+        }catch(err) {
+          console.log(err)
+        }
 
-        })
 
-
+      }else{
+        alert("image size is too big")
       }
+      }
+        
     
     
     })
-    //     // const source={uri:'data:image/jpeg;base64,'+ res.data}
-    //     // const source={uri:res.path}
-    //     // setimgurl(res);
-    //     // console.log(imgurl);
-    //     console.log(res,'imageresponse')
-        
-    //     // let temp = {
-    //     //   name: res.fileName,
-    //     //   EmpId: employee_Data.EmpId,
-    //     //   type: res.type,
-    //     //   path: res.path,
-    //     //   uri: res.uri,
-    //     //   data: res.data,
-    //     // };
-    //     // res.fileName=employee_Data.EmpId;
-    //     // console.log(res,"dataaaaaaaa")
-
-    //     // console.log(temp)
-        
-    //   //   console.log(formData,'dddddddddaaaaaaaaaa')
-    //   //   const d =  axios1({
-    //   //   method: "post",
-    //   //   url: "https://files.yozytech.com/filesystem/EmployeeImage",
-    //   //   data: formData,
-    //   //   headers: { "Content-Type": "multipart/form-data" },
-    //   // }).then.
-    //   // d.then(res=>{
-    //   //   console.log(res)
-    //   // }).catch(function (response) {
-    //   //   //handle error
-    //   //   console.log(response);
-    //   // });
-     
-      
-    //     // let res =  fetch(
-    //     //   'https://files.yozytech.com/filesystem/EmployeeImage',
-    //     //   {
-    //     //     method: 'post',
-    //     //     body: formData,
-    //     //     headers: {
-    //     //       'Content-Type': 'multipart/form-data; ',
-    //     //     },
-    //     //   }
-    //     // );
-    //     // res.then(res=>{
-    //     //   console.log(res.data,'yoyo')
-    //     // })
-
-    //     // let webApiUrl = `https://files.yozytech.com/EmployeeImages/${user_detail.level1managereid}.jpg`;
-    //     // axios1
-    //     //   .post("https://files.yozytech.com/filesystem/EmployeeImage",formData, headers: { "Authorization": `Bearer ${tokenData}` } )
-    //     //   .then((res) => {
-    //     //     // setRefresh(true);
-    //     //     // console.log(res)
-    //     //     alert('sucess')
-    //     //   })
-    //     //   .catch((error) => console.log(error));
-
-
-
-      
-
-
-
-    //     // const response =  fetch(webApiUrl2, {
-    //     //   method: 'POST', // *GET, POST, PUT, DELETE, etc.
-        
-    //     //   headers: {
-    //     //     "content-type": "multipart/form-data",
-    //     //     // 'Content-Type': 'application/x-www-form-urlencoded',
-    //     //   },
-    //     //   body: JSON.stringify(formData._parts) // body data type must match "Content-Type" header
-    //     // });
-    //     // response.then(res=>{
-    //     //   console.log(res,'fetch data')
-    //     // })
-        
-      
-      
-
-
-
-  
-    //     // axios1
-    //     //   .post(webApiUrl2, {
-    //     //     headers: {
-    //     //       Authorization: `Bearer ${tokenData}`,
-    //     //       'Content-Type': 'multipart/form-data',
-    //     //     },
-    //     //     body: formData,
-    //     //   })
-    //     //   .then(res => {
-    //     //     console.log(res);
-    //     //   })
-    //     //   .catch(e => {
-    //     //     console.log(e);
-    //     //   });
-      
-    //     // console.log(formData,"form daaata")
-    //   }
-    // });
-
-
-  //   ImagePicker.openPicker({
-  //     width: 300,
-  //     height: 400,
-  //     cropping: true
-  //   }).then(image => {
-  //     console.log(image);
-  //  const a=abc(image);
-  //  console.log(a,"aaaaaaa");
-
-  //    let webApiUrl2 = 'http://10.0.2.2:2000/filesystem/EmployeeImage';
-
-  //       axios1.post(webApiUrl2,a,{
-  //         headers: {
-                     
-  //                   'Content-Type': 'multipart/form-data',
-  //                   }
-  //       }
-  //     ).then(res=>{
-  //         console.log(res,'reeeeeeee')
-  //       })
-
-  //   });
-
+    
+    
 
   };
-  const createFormData = () => {
-    // const data = new FormData();
-    // data.append('file', {
-    //   name: employee_Data.EmpId,
-    //   type: 'image/jpeg',
-    //   uri:imgurl
-    //  });
-    //  console.log(data,'jjjjjjjjjjjjjjjj')
-    //  return data;
-  };
-
-  // console.log(imgurl)
+ 
 
   return (
     <ScrollView style={{backgroundColor: 'white'}}>
@@ -424,7 +295,7 @@ return formData
             color="grey"
             style={{borderRadius: 100, padding: '2%'}}
           />
-          edit
+          Edit
         </Text>
       </View>
       <View style={styles.inputs}>
