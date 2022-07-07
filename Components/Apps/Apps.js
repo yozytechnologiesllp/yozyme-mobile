@@ -69,7 +69,13 @@ function Apps({ navigation }) {
             }
             if (MenuId == 6) {
                 //Performance Review
-                display.push({ "name": "Performance View", "value": "PerformanceReview", "iconName": "theater-masks", "color": "green" })
+                if(user_detail.rolecode!="ITEMP"){
+                    display.push({ "name": "Performance Review", "value": "PerformanceReviewhome", "iconName": "theater-masks", "color": "green" })
+
+                }else{
+                    display.push({ "name": "Performance Review", "value": "PerformanceReview", "iconName": "theater-masks", "color": "green" })
+
+                }
             }
             if (MenuId == 7) {
                 //My Finance

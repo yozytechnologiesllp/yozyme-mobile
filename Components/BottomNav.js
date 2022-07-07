@@ -35,6 +35,9 @@ import AcessRequest from './Apps/ItServices/AcessRequest';
 import GenericRequest from './Apps/ItServices/GenericRequest';
 import Raiseanincident from './Apps/ItServices/Raiseanincident'
 import Userdetail from './Userdetail';
+import PerformanceReviewhome from './Apps/PerformanceReviewhome';
+import PerformanceManagerfeedback from './Apps/PerformanceManagerfeedback';
+import Seereview from './Apps/Seereview';
 function AppsFunc({ route }) {
 
   const NavStack = createStackNavigator();
@@ -146,7 +149,23 @@ function AppsFunc({ route }) {
           component={MySkills}
           options={{ headerShown: false }}
         />
-     
+         <NavStack.Screen
+          name="PerformanceReviewhome"
+          component={PerformanceReviewhome}
+          options={{ headerShown: false }}
+        />
+        
+        <NavStack.Screen
+          name="PerformanceManagerfeedback"
+          component={PerformanceManagerfeedback}
+          options={{ headerShown: false }}
+        />
+        
+        <NavStack.Screen
+          name="Seereview"
+          component={Seereview}
+          options={{ headerShown: false }}
+        />
         
       </NavStack.Navigator>
     </NavigationContainer>

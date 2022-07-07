@@ -205,7 +205,9 @@ try{
             }else if(res.status==413){
               alert("image too big")
             }else{
-              alert("unable to upload image")
+
+                  alert("unable to upload image")
+                  
             }
   
           })

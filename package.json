@@ -41,6 +41,7 @@
     "react-native-network-logger": "^1.12.0",
     "react-native-paper": "^4.11.2",
     "react-native-push-notification": "^8.1.1",
+    "react-native-ratings": "^8.1.0",
     "react-native-reanimated": "^2.4.1",
     "react-native-render-html": "^6.3.4",
     "react-native-responsive-layout": "^1.2.0",
