@@ -1,35 +1,32 @@
 import React, { useState, useEffect, useContext } from "react"
 import { DataTable } from 'react-native-paper';
-import {Dropdown} from 'react-native-element-dropdown';
 import axios from "../../axios";
+import Entypo from 'react-native-vector-icons/Entypo'
+
 
 import { View, Text,StyleSheet,ScrollView ,TextInput} from "react-native"
 
 import HeaderView from "../HeaderView";
+import StoreContext from "../../store/StoreContext";
 
 
 
 
-function PerformanceManagerfeedback({ navigation }) {
+function PerformanceManagerfeedback({ navigation, }) {
+  const { employee_Data } = useContext(StoreContext);
+  const[count,setcount]=useState(0)
 
-    const[rating,Setrating]=useState([])
-    const[selectedrating,Setselectedrating]=useState({})
-    const[feedbackdata,setfeedbackdata]=useState([])
-    const[feedbackmsg,Setfeedbackmsg]=useState("")
-    
+  const[feedbackdata,setfeedbackdata]=useState([])
+// if(route.params.a!=undefined){
+//   // refresh();
+//   // alert("hi")
+// }else{
+
+// }
+  // refresh();
     useEffect(()=>{
     
-        axios
-        .get(`performance_rating_master`)
-        .then(res => {
-          //   Setuserassettype(res.data);
-    
-          console.log(res.data, 'dddddddddddddddddddddddddd');
-
-          let b=res.data.map(x=>{
-            return {label:x.RatingInfo,value:x.Rating}
-          })
-          Setrating(b)
+      refresh();
         
           
         //   let b=parseInt(new Date().getFullYear());
@@ -49,31 +46,67 @@ function PerformanceManagerfeedback({ navigation }) {
 
     
           // console.log(res.data, 'tester detail')
-        })
-        .catch(e => {
-          // console.log(e);
-        }); 
+      
+      
+    
+    
+    },[0])
+    function refresh(){
+      let d=new Date().getFullYear()
+      let c=new Date().getMonth()+1
+
+    
+      let k= c==7?"H1":"H2"
+ 
+      axios
+      .get(`rpc/fun_performancereviewreport?managerid=${employee_Data.EmpId}&reviewyear=eq.${d}&reviewperiod=eq.${k}`)
+      .then(res => {
+        //   Setuserassettype(res.data);
+  
+        console.log(res.data, 'dddddddddddddddddddddddddd');
+
+ 
+          let b=res.data.filter(x=>{
+            if(x.isdiscussionover!='Y'){
+              return x
+            }
+          })
+          setfeedbackdata(b)
+
+// let b=res.data.filter(x=>{
+//   if(x.reviewyear==d&&x.isdiscussionover!='Y'){
+    
+//     if(c==6){
+//       if(x.reviewperiod=="H1"){
+       
+//         // setfeedbackdata(x)
+//         return x
+
+//       }
+      
+//     }else if(c==12){
+//        if(x.reviewperiod=="H2"){
+//         return x
+//         // setfeedbackdata(x)
+//       }
+      
+//     }
+    
+//   }
+// })
+
+
+setfeedbackdata(b)
+
         
-        axios
-        .get(`rpc/fun_performancereviewreport?managerid=${100005}`)
-        .then(res => {
-          //   Setuserassettype(res.data);
-    
-          console.log(res.data, 'dddddddddddddddddddddddddd');
-          setfeedbackdata(res.data)
-         
-        })
-        .catch(e => {
-          // console.log(e);
-        }); 
-    
-    
-    },[])
-    let manrating=[];
-    let manfeedback=[];
-    function go(item){
-      return item
-     }
+       
+      })
+      .catch(e => {
+        // console.log(e);
+      }); 
+
+    }
+ 
 
 function submit(id,rating,msg){
   alert(id)
@@ -83,11 +116,101 @@ function submit(id,rating,msg){
 
 
 }
+const styles=StyleSheet.create({
+  heading:{
+     fontWeight:'bold',
+     fontSize:20,
+     textAlign:'center',
+     backgroundColor: '#007FFF',
+     color:'white',
+     padding:'3%',
+     margin:'5%',
+  //    marginTop:'5%',
+  marginBottom:"0%"
+
+    },
+    nftitle:{
+      fontSize:20,
+      fontWeight:'bold',
+      margin:1,
+       },
+    
+    labelStyle:{
+      margin:'1%',
+      fontSize:16,
+      color:'darkblue',
+      
+  },
+    containerbutton: {
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'center',
+    },
+    btns:{
+      backgroundColor: '#007FFF',
+      color:'white',
+      borderRadius:5,
+      padding:10,
+            margin:7,
+            paddingRight:14,
+            fontSize:20,
+            width:'50%',
+            textAlign:'center',
+            opacity:btnopa?'1':'0.5'
+            
+    },
+    table:{
+      display:'flex',
+      justifyContent:'center',
+    
+      backgroundColor:'#F0F8FF',
+      padding:"5%",
+      borderRadius:10,
+      marginTop:"3%"
+
+    },
+    dropdownStyle: {
+      borderRadius: 9,
+      borderWidth: 2,
+      borderColor: 'skyblue',
+      // paddingLeft:18,
+      //  fontSize: 30,
+      color: 'black',
+      display:'flex',
+      padding:5,
+      // marginBottom:'25%',
+      height:'auto',
+      marginTop:5,
+     
+      
+    
+  },
+  notfound:{
+    display:'flex',
+    flexDirection:'column',
+    justifyContent:'center',
+    alignItems:'center',
+    width:'60%',
+    textAlign:'center',
+    marginLeft:'auto',
+    marginRight:'auto',
+    marginTop:50,
+    
+    
+     }
+})
   return (
  <View style={{backgroundColor:'white',display:"flex",flex:1,}}>
  <HeaderView/>
  <Text style={styles.heading}>Feedback Request</Text>
  <ScrollView style={{display:'flex',flex:1,margin:"5%",}}>
+  {feedbackdata.length<=0? <View style={styles.notfound}> 
+  {/* emoji-happy */}
+    <Entypo name="check" size={100} color="#fff" style={{backgroundColor:'#3DED97',borderRadius:50}}/>
+    <Text style={styles.nftitle}> All Review completed</Text>
+     
+   
+   </View>:null}
 
 {feedbackdata.map(x=>{
 
@@ -121,7 +244,15 @@ function submit(id,rating,msg){
 
 <View style={styles.containerbutton}>
 <Text style={styles.btns} onPress={()=>{
-  navigation.navigate('Seereview',{data:x})
+  
+    // setbtnopa(true);
+    navigation.navigate('Seereview',{data:x,refresh:refresh})
+
+
+
+
+  
+ 
 }}>See Review</Text>
 {/* <Text style={styles.btns}>Give Feedback</Text> */}
 </View>
@@ -189,78 +320,9 @@ Feedback:
  
  </View>
   )
+  
 }
 
-const styles=StyleSheet.create({
-    heading:{
-       fontWeight:'bold',
-       fontSize:20,
-       textAlign:'center',
-       backgroundColor: '#007FFF',
-       color:'white',
-       padding:'3%',
-       margin:'5%',
-    //    marginTop:'5%',
-    marginBottom:"0%"
 
-      },
-      messagebox:{
-        borderWidth: 2,
-        borderColor:'skyblue',
-      padding:5,
-        borderRadius:5,
-        margin:'2%',
-        height:100,
-        textAlignVertical:'top'
-      },
-      labelStyle:{
-        margin:'1%',
-        fontSize:16,
-        color:'darkblue',
-        
-    },
-      containerbutton: {
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'center',
-      },
-      btns:{
-        backgroundColor: '#007FFF',
-        color:'white',
-        borderRadius:5,
-        padding:10,
-              margin:7,
-              paddingRight:14,
-              fontSize:20,
-              width:'50%',
-              textAlign:'center'
-      },
-      table:{
-        display:'flex',
-        justifyContent:'center',
-      
-        backgroundColor:'#F0F8FF',
-        padding:"5%",
-        borderRadius:10,
-        marginTop:"3%"
-
-      },
-      dropdownStyle: {
-        borderRadius: 9,
-        borderWidth: 2,
-        borderColor: 'skyblue',
-        // paddingLeft:18,
-        //  fontSize: 30,
-        color: 'black',
-        display:'flex',
-        padding:5,
-        // marginBottom:'25%',
-        height:'auto',
-        marginTop:5,
-       
-        
-      
-    }
-})
 
 export default PerformanceManagerfeedback
