@@ -54,7 +54,7 @@ navigation.navigate('PerformanceReview')
              navigation.navigate('PerformanceManagerfeedback')
          
              }else{
-               alert("Unlocks on June and December")
+               alert("Performance Review Unlocks on June and December")
              }
 
 

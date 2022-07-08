@@ -156,7 +156,7 @@ const styles=StyleSheet.create({
             fontSize:20,
             width:'50%',
             textAlign:'center',
-            opacity:btnopa?'1':'0.5'
+            
             
     },
     table:{
