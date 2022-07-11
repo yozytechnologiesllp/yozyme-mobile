@@ -84,10 +84,10 @@ function Apps({ navigation }) {
             if (MenuId == 8) {
                 //Finance
                 if (user_detail.rolecode == "FINMGR") {
-                    display.push({ "name": "Finance", "value": "Dashboard", "iconName": "wallet", "color": "red" })
+                    display.push({ "name": "PettyCash", "value": "PettyCash", "iconName": "wallet", "color": "red" })
                 }
                 else {
-                    display.push({ "name": "Finance", "value": "Dashboard", "iconName": "wallet", "color": "red" })
+                    display.push({ "name": "PettyCash", "value": "PettyCash", "iconName": "wallet", "color": "red" })
                 }
             }
             if (MenuId == 9) {

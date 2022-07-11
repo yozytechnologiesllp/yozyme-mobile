@@ -38,6 +38,7 @@ import Userdetail from './Userdetail';
 import PerformanceReviewhome from './Apps/PerformanceReviewhome';
 import PerformanceManagerfeedback from './Apps/PerformanceManagerfeedback';
 import Seereview from './Apps/Seereview';
+import PettyCash from './Apps/PettyCash';
 function AppsFunc({ route }) {
 
   const NavStack = createStackNavigator();
@@ -166,7 +167,11 @@ function AppsFunc({ route }) {
           component={Seereview}
           options={{ headerShown: false }}
         />
-        
+          <NavStack.Screen
+          name="PettyCash"
+          component={PettyCash}
+          options={{ headerShown: false }}
+        />
       </NavStack.Navigator>
     </NavigationContainer>
   );
@@ -188,6 +193,13 @@ function profilefun({ route }) {
         <NavStack.Screen
           name="Userdetail"
           component={Userdetail}
+          options={{ headerShown: false }}
+        />
+        
+        
+        <NavStack.Screen
+          name="PettyCash"
+          component={PettyCash}
           options={{ headerShown: false }}
         />
 
