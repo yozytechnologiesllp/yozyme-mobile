@@ -125,7 +125,7 @@ function submit(){
 
 
   }else{
-    alert('enter value');
+    alert('Please Fill The Details');
   }
   
 }
@@ -140,13 +140,13 @@ function submit(){
      </View>
      <ScrollView style={styles.para}>
         <Text style={styles.label}>What Went Well:</Text>
-        <Text style={{textAlign:"justify",padding:1}}>{userreview[0].WhatWentWell}</Text>
+        <Text style={styles.paratext}>{userreview[0].WhatWentWell}</Text>
         <Text style={styles.label}>What Could Have Done Better:</Text>
-        <Text style={{textAlign:"justify",padding:1}}>{userreview[1].WhatCouldHaveDoneBetter}</Text>
+        <Text style={styles.paratext}>{userreview[1].WhatCouldHaveDoneBetter}</Text>
         <Text style={styles.label}>Way Forward:</Text>
-        <Text style={{textAlign:"justify",padding:1}}>{userreview[2].WayForward}</Text>
+        <Text style={styles.paratext}>{userreview[2].WayForward}</Text>
         <Text style={styles.label}>Overall Comments:</Text>
-        <Text style={{textAlign:"justify",padding:1}}>{userreview[3].OverallComments}</Text>
+        <Text style={styles.paratext}>{userreview[3].OverallComments}</Text>
 
       
 <View style={{marginTop:'2%'}}>
@@ -212,7 +212,7 @@ readonly={true}
 </View>
 
 </View>
-<View style={{marginTop:'2%'}}>
+<View style={{marginTop:'2%',marginRight:'4%'}}>
 <Text style={styles.label}>
 Overall Rating:
 </Text>
@@ -226,7 +226,7 @@ Overall Rating:
      
    
    }}
-   value={"yoyo"}
+   value={selectedrating.value}
    labelField="label"
    valueField="value"
    maxHeight={160}
@@ -270,6 +270,7 @@ const styles=StyleSheet.create({
     },
     para:{
         margin:'5%',
+      
 
     },
     
@@ -278,10 +279,14 @@ const styles=StyleSheet.create({
         borderColor:'skyblue',
       padding:5,
         borderRadius:5,
-        margin:'2%',
+        margin:'1%',
         height:100,
         textAlignVertical:'top'
       }
+    ,
+    paratext:{
+      textAlign:"justify",padding:1,marginRight:'4%'
+    }
     ,
     btns:{
       backgroundColor: '#007FFF',
