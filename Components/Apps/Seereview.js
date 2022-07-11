@@ -74,7 +74,7 @@ function submit(){
   if(name.empid&&selectedrating&&feedbackmsg){
     let json = {
     
-      ManagerReviewFeedback: feedbackmsg,
+      ManagerReviewFeedback: {ManagerReview:feedbackmsg},
       ReviewCompletionDate: moment()
         .utcOffset("+05:30")
         .format("YYYY-MM-DDTHH:mm:ss"),
