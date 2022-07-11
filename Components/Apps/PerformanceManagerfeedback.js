@@ -56,7 +56,7 @@ function PerformanceManagerfeedback({ navigation, }) {
       let c=new Date().getMonth()+1
 
     
-      let k= c==7?"H1":"H2"
+      let k= c==6?"H1":"H2"
  
       axios
       .get(`rpc/fun_performancereviewreport?managerid=${employee_Data.EmpId}&reviewyear=eq.${d}&reviewperiod=eq.${k}`)
